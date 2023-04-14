@@ -1,6 +1,8 @@
-package model.people.fighter.soldier;
+package model.people.fighter.soldier.specialsoldiers;
 
-public class Engineer extends Soldier{
+import model.people.fighter.soldier.Soldier;
+
+public class Engineer extends Soldier {
     public Engineer(int xCoordinate, int yCoordinate) {
         super(xCoordinate, yCoordinate);
     }

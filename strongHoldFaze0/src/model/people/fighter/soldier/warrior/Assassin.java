@@ -1,5 +1,7 @@
 package model.people.fighter.soldier.warrior;
 
+import model.people.fighter.Type;
+
 public class Assassin extends Warrior{
 
     private boolean isShowForEnemy;

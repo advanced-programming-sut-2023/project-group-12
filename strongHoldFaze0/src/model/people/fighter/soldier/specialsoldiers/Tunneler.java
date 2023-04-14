@@ -1,6 +1,8 @@
-package model.people.fighter.soldier;
+package model.people.fighter.soldier.specialsoldiers;
 
-public class Tunneler extends Soldier{
+import model.people.fighter.soldier.Soldier;
+
+public class Tunneler extends Soldier {
     public Tunneler(int xCoordinate, int yCoordinate) {
         super(xCoordinate, yCoordinate);
     }

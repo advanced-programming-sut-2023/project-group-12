@@ -1,4 +1,6 @@
-package model.people.fighter.soldier.warrior;
+package model.people.fighter;
+
+import java.lang.ref.PhantomReference;
 
 public enum Type {
     ARABIAN_SWORDSMEN(0, 0, 0, 0, 0),
@@ -15,13 +17,25 @@ public enum Type {
     ARCHER_BOW(0, 0, 0, 0, 0),
     SLINGERS(0, 0, 0, 0, 0),
     FIRE_THROWER(0, 0, 0, 0, 0),
-    SLAVE(0, 0, 0, 0, 0);
+    SLAVE(0, 0, 0, 0, 0),
+    ENGINEER(0, 0, 0, 0, 0),
+    LADDERMAN(0, 0, 0, 0, 0),
+    TUNNELER(0, 0, 0, 0, 0),
+    COUNTERWEIGHT_TREBUCHET(0, 0, 0, 0, 0),
+    STONE_TREBUCHET(0, 0, 0, 0, 0),
+    FIRE_TREBUCHET(0, 0, 0, 0, 0);
 
     private int life;
     private int hitpoint;
     private int rangeFrom;
     private int rangeTo;
     private int speed;
+    private int goldCost;
+    private int armourCost;
+    private int maceCost;
+    private int swordCost;
+    private int spearCost;
+    private int engineerCost;
 
     Type(int life, int hitpoint, int rangeFrom, int rangeTo, int speed) {
         this.life = life;

@@ -1,6 +1,8 @@
-package model.people.fighter.soldier;
+package model.people.fighter.soldier.specialsoldiers;
 
-public class Ladderman extends Soldier{
+import model.people.fighter.soldier.Soldier;
+
+public class Ladderman extends Soldier {
     //laddermen
     public Ladderman(int xCoordinate, int yCoordinate) {
         super(xCoordinate, yCoordinate);
