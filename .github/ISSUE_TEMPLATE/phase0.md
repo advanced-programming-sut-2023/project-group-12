@@ -50,7 +50,8 @@ assignees: Arman17Babaei
 
   **نام و نام خانوادگی:** متین محمدی
 <details>
-  <summary>تسک مربوطه</summary>
+  <summary>طراحی UML برای منطق پروژه</summary>
+  <summary>راه‌اندازی مخزن GItHub</summary>
 
   <div dir="ltr" align='right'>
 
@@ -64,7 +65,8 @@ assignees: Arman17Babaei
 
   **نام و نام خانوادگی:** محمد داودآبادی فراهانی
 <details>
-  <summary>تسک مربوطه</summary>
+  <summary>طراحی UML برای منطق پروژه</summary>
+  <summary>راه‌اندازی مخزن GItHub</summary>
 
   <div dir="ltr" align='right'>
 
@@ -76,9 +78,10 @@ assignees: Arman17Babaei
 
 ## تسک‌های نفر سوم
 
-  **نام و نام خانوادگی:**
+  **نام و نام خانوادگی:** مهدی شاه مرادی رامشه
 <details>
-  <summary>تسک مربوطه</summary>
+  <summary>طراحی UML برای منطق پروژه</summary>
+  <summary>راه‌اندازی GitHub Issue</summary>
 
   <div dir="ltr" align='right'>
 
