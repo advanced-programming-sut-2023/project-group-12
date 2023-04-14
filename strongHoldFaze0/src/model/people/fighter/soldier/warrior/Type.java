@@ -14,7 +14,8 @@ public enum Type {
     HORSE_ARCHER(0, 0, 0, 0, 0),
     ARCHER_BOW(0, 0, 0, 0, 0),
     SLINGERS(0, 0, 0, 0, 0),
-    FIRE_THROWER(0, 0, 0, 0, 0);
+    FIRE_THROWER(0, 0, 0, 0, 0),
+    SLAVE(0, 0, 0, 0, 0);
 
     private int life;
     private int hitpoint;

@@ -6,4 +6,8 @@ public class BatteringRam extends Fighter {
     public BatteringRam(int xCoordinate, int yCoordinate) {
         super(xCoordinate, yCoordinate);
     }
+
+    public void breakGate(int xCoordinate, int yCoordinate) {
+
+    }
 }
