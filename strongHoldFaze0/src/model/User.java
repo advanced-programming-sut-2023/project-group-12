@@ -1,13 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+
 public class User {
+    private ArrayList<Map> maps;
     private String username;
     private String password;
     private String nickname;
     private String email;
-    //security question and answer
-    // enum 3 questions
-    // 3 answer
     private String answer1;
     private String answer2;
     private String answer3;
@@ -17,12 +17,79 @@ public class User {
     private int currentScore;
     private int rank;
     // the part where we show the user's information
+    private Kingdom kingdom;
 
-    public User(String username, String password, String nickname, String email) {
+    public void setHighScore(int highScore) {
+        this.highScore = highScore;
+    }
+
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
+    }
+
+    public Kingdom getKingdom() {
+        return kingdom;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public void setKingdom(Kingdom kingdom) {
+        this.kingdom = kingdom;
+    }
+
+    public User(String username, String password, String nickname, String email, int questionsNumber, String answer) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
+        if (questionsNumber == 1) {
+            answer1 = answer;
+        }
+        else if (questionsNumber == 2) {
+            answer2= answer;
+        }
+        else if (questionsNumber == 3) {
+            answer3 = answer;
+        }
+
+    }
+
+    public ArrayList<Map> getMaps() {
+        return maps;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAnswer1() {
+        return answer1;
+    }
+
+    public String getAnswer2() {
+        return answer2;
+    }
+
+    public String getAnswer3() {
+        return answer3;
+    }
+
+    public int getCurrentScore() {
+        return currentScore;
     }
 
     public int getHighScore() {
@@ -68,4 +135,6 @@ public class User {
         return "";
     }
     // TODO: create a file for user info and encode it
+
+
 }
