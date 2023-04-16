@@ -55,7 +55,6 @@ assignees: Arman17Babaei
   2. [x] در حال انجام
   3. [ ] تمام شده
   </div>
-  <summary>تسک مربوطه</summary>
   طراحی regex منوهای ثبت نام و ورود
   <div dir="ltr" align='right'>
 
