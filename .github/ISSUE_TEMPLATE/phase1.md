@@ -45,10 +45,10 @@ assignees: Arman17Babaei
 
 ## تسک‌های نفر اول
 
-  **نام و نام خانوادگی:**
+  **نام و نام خانوادگی: متین محمدی**
 <details>
   <summary>تسک مربوطه</summary>
-
+  
   <div dir="ltr" align='right'>
 
   1. [ ] شروع نشده
