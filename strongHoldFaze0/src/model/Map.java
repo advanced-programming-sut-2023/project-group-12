@@ -12,4 +12,8 @@ public class Map {
         // show the map
         return "";
     }
+
+    public ArrayList<ArrayList<Cell>> getGameField() {
+        return gameField;
+    }
 }

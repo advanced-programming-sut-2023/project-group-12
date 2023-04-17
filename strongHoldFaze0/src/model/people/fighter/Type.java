@@ -3,28 +3,28 @@ package model.people.fighter;
 import java.lang.ref.PhantomReference;
 
 public enum Type {
-    ARABIAN_SWORDSMEN(0, 0, 0, 0, 0),
-    BLACK_MONK(0, 0, 0, 0, 0),
-    KNIGHT(0, 0, 0, 0, 0),
-    SWORDSMEN(0, 0, 0, 0, 0),
-    MACEMEN(0, 0, 0, 0, 0),
-    PIKEMEN(0, 0, 0, 0, 0),
-    SPEARMEN(0, 0, 0, 0, 0),
-    ASSASSIN(0, 0, 0, 0, 0),
-    ARCHER(0, 0, 0, 0, 0),
-    CROSSBOWMAN(0, 0, 0, 0, 0),
-    HORSE_ARCHER(0, 0, 0, 0, 0),
-    ARCHER_BOW(0, 0, 0, 0, 0),
-    SLINGERS(0, 0, 0, 0, 0),
-    FIRE_THROWER(0, 0, 0, 0, 0),
-    SLAVE(0, 0, 0, 0, 0),
-    ENGINEER(0, 0, 0, 0, 0),
-    LADDERMAN(0, 0, 0, 0, 0),
-    TUNNELER(0, 0, 0, 0, 0),
-    COUNTERWEIGHT_TREBUCHET(0, 0, 0, 0, 0),
-    STONE_TREBUCHET(0, 0, 0, 0, 0),
-    FIRE_TREBUCHET(0, 0, 0, 0, 0);
-
+//    ARABIAN_SWORDSMEN(0, 0, 0, 0, 0),
+//    BLACK_MONK(0, 0, 0, 0, 0),
+//    KNIGHT(0, 0, 0, 0, 0),
+//    SWORDSMEN(0, 0, 0, 0, 0),
+//    MACEMEN(0, 0, 0, 0, 0),
+//    PIKEMEN(0, 0, 0, 0, 0),
+//    SPEARMEN(0, 0, 0, 0, 0),
+//    ASSASSIN(0, 0, 0, 0, 0),
+//    ARCHER(0, 0, 0, 0, 0),
+//    CROSSBOWMAN(0, 0, 0, 0, 0),
+//    HORSE_ARCHER(0, 0, 0, 0, 0),
+//    ARCHER_BOW(0, 0, 0, 0, 0),
+//    SLINGERS(0, 0, 0, 0, 0),
+//    FIRE_THROWER(0, 0, 0, 0, 0),
+//    SLAVE(0, 0, 0, 0, 0),
+//    ENGINEER(0, 0, 0, 0, 0),
+//    LADDERMAN(0, 0, 0, 0, 0),
+//    TUNNELER(0, 0, 0, 0, 0),
+//    COUNTERWEIGHT_TREBUCHET(0, 0, 0, 0, 0),
+//    STONE_TREBUCHET(0, 0, 0, 0, 0),
+//    FIRE_TREBUCHET(0, 0, 0, 0, 0);
+;
     private int life;
     private int hitpoint;
     private int rangeFrom;

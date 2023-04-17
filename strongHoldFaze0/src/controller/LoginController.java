@@ -1,9 +1,16 @@
 package controller;
 
+import java.util.regex.Matcher;
+
 public class LoginController {
-    private static int incorrectPassword;
-    public String login () {
+    public String login (String username, String password) {
         return "";
     }
-    // TODO : a method to delay logging in by that time
+
+    public String changePassword(String password){
+        return null;
+    }
+    public String forgotPassword (String username, String answer, String newPassword) {
+     return null;
+    }
 }

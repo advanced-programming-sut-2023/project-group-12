@@ -7,4 +7,7 @@ public class SiegeTower extends Fighter {
     public SiegeTower(int xCoordinate, int yCoordinate, Type type) {
         super(xCoordinate, yCoordinate, type);
     }
+    public void moveToTop (int x, int y, Fighter fighter) {
+
+    }
 }
