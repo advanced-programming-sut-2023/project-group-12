@@ -1,7 +1,3 @@
-package org.example;
-
-import org.example.Main;
-
 import java.util.Random;
 
 //TODO: access modifiers
@@ -57,23 +53,23 @@ public class Captcha {
             "            "
     };
     public static String[] five = {
+            " #####      ",
+            " #          ",
+            " #          ",
             " #######    ",
-            " #          ",
-            " #          ",
-            " ######     ",
             "       #    ",
-            " #     #    ",
-            "  #####     ",
+            "       #    ",
+            "  ######    ",
             "            "
     };
     public static String[] six = {
-            "  #####     ",
+            " #######    ",
             " #     #    ",
             " #          ",
-            " ######     ",
+            " #######    ",
             " #     #    ",
             " #     #    ",
-            "  #####     ",
+            " #######    ",
             "            "
     };
     public static String[] seven = {
@@ -144,15 +140,21 @@ public class Captcha {
     }
 
     private String[][] createdCaptcha = new String[captchaSize][];
-
+    private int[] numbers = new int[captchaSize];
     public Captcha() {
         Random random = new Random();
         for (int i = 0; i < captchaSize; i++) {
-            createdCaptcha[i] = createNoise(random.nextInt(captchaSize));
+            int index = random.nextInt(captchaSize);
+            createdCaptcha[i] = createNoise(index);
+            numbers[i] = index;
         }
     }
 
     public String[][] getCreatedCaptcha() {
         return createdCaptcha;
+    }
+
+    public int[] getNumbers() {
+        return numbers;
     }
 }
