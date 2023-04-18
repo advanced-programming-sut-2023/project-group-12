@@ -23,22 +23,22 @@ public class Captcha {
             "          "
     };
     public static String[] two = {
-            "  #####     ",
-            " #     #    ",
+            "   #####    ",
             "       #    ",
-            "  #####     ",
-            " #          ",
-            " #          ",
+            "       #    ",
             " #######    ",
+            " #          ",
+            " #          ",
+            " #####      ",
             "            "
     };
     public static String[] three = {
             "  #####     ",
-            " #     #    ",
+            "       #    ",
             "       #    ",
             "  #####     ",
             "       #    ",
-            " #     #    ",
+            "       #    ",
             "  #####     ",
             "            "
     };
@@ -59,7 +59,7 @@ public class Captcha {
             " #######    ",
             "       #    ",
             "       #    ",
-            "  ######    ",
+            "    ####    ",
             "            "
     };
     public static String[] six = {
@@ -83,13 +83,13 @@ public class Captcha {
             "            "
     };
     public static String[] eight = {
-            "  #####     ",
+            " #######    ",
             " #     #    ",
             " #     #    ",
-            "  #####     ",
+            " #######    ",
             " #     #    ",
             " #     #    ",
-            "  #####     ",
+            " #######    ",
             "            "
     };
     public static String[] nine = {
@@ -98,8 +98,8 @@ public class Captcha {
             " #     #    ",
             "  ######    ",
             "       #    ",
-            " #     #    ",
-            "  #####     ",
+            "       #    ",
+            "    ###     ",
             "            "
     };
     public static String[][] digits = new String[10][];
