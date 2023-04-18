@@ -51,16 +51,16 @@ assignees: Arman17Babaei
   طراحی کپچا
   <div dir="ltr" align='right'>
 
-  1. [ ] شروع نشده
+  1. [x] شروع نشده
   2. [x] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
   </div>
   طراحی regex منوهای ثبت نام و ورود
   <div dir="ltr" align='right'>
 
   1. [x] شروع نشده
   2. [x] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
   </div>
   طراحی منوی لاگین
   <div dir="ltr" align='right'>
