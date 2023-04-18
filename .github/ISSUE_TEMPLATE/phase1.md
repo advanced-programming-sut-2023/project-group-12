@@ -25,7 +25,7 @@ assignees: Arman17Babaei
   <div dir="ltr" align='right'>
 
   1. [ ] شروع نشده
-  2. [ ] در حال انجام
+  2. [x] در حال انجام
   3. [ ] تمام شده
   </div>
 </details>
@@ -37,7 +37,7 @@ assignees: Arman17Babaei
   
   <div  dir="ltr" align='right'>
   
-  1. [ ] شروع نشده
+  1. [x] شروع نشده
   2. [ ] در حال انجام
   3. [ ] تمام شده
      </div>
@@ -80,14 +80,21 @@ assignees: Arman17Babaei
 
 ## تسک‌های نفر سوم
 
-  **نام و نام خانوادگی:**
+  **نام و نام خانوادگی: مهدی شاه مرادی رامشه **
 <details>
   <summary>تسک مربوطه</summary>
-
+طراحی منوی پروفایل
   <div dir="ltr" align='right'>
 
   1. [ ] شروع نشده
-  2. [ ] در حال انجام
+  2. [x] در حال انجام
+  3. [ ] تمام شده
+  </div>
+  کار با فایل
+  <div dir="ltr" align='right'>
+
+  1. [ ] شروع نشده
+  2. [x] در حال انجام
   3. [ ] تمام شده
   </div>
 </details>
