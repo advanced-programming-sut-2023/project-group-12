@@ -62,7 +62,6 @@ assignees: Arman17Babaei
   2. [x] در حال انجام
   3. [ ] تمام شده
   </div>
-  <summary>تسک مربوطه</summary>
   طراحی منوی لاگین
   <div dir="ltr" align='right'>
 
