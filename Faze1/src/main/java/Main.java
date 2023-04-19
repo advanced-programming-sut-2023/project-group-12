@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) {
         while (true) {
-            Scanner scanner = new Scanner(System.in);
             Captcha captcha = new Captcha();
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < captcha.getCreatedCaptcha().length; j++) {
@@ -29,4 +28,5 @@ public class Main {
             }
         }
     }
+    public static Scanner scanner = new Scanner(System.in);
 }
