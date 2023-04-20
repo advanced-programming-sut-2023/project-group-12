@@ -4,7 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum ProfileMenuCommands {
-    PROFILE_CHANGE("^profile change(( -u (?<username>(\"[^\"]+\")|\\S+))|( -n (?<nickname>(\"[^\"]+\")|\\S+))|( -e (?<email>(\"[^\"]+\")|\\S+)))$"),
+    PROFILE_CHANGE_USERNAME("^profile change -u (?<username>(\"[^\"]+\")|\\S+)$"),
+    PROFILE_CHANGE_EMAIL("^profile change -e (?<email>(\"[^\"]+\")|\\S+)$"),
+    PROFILE_CHANGE_NICKNAME("^profile change  -n (?<nickname>(\"[^\"]+\")|\\S+)$"),
     PROFILE_CHANGE_PASSWORD("(?=.*-o)(?=.*-n)^profile change password(( -o (?<oldPassword>(\"[^\"]+\")|\\S+))|( -n (?<newPassword>(\"[^\"]+\")|\\S+))){2}$"),
     PROFILE_CHANGE_SLOGAN("^profile change slogan -s (?<slogan>(\"[^\"]+\")|\\S+))$"),
     PROFILE_REMOVE_SLOGAN("^Profile remove slogan$"),
