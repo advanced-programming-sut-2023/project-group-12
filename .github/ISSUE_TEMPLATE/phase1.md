@@ -69,8 +69,7 @@ assignees: Arman17Babaei
   2. [x] در حال انجام
   3. [ ] تمام شده
   </div>
-  </div>
-  طراحی باقیمانده منو ها و regex هایشان
+  طراحی باقیمانده منو ها و regex های آنها 
   <div dir="ltr" align='right'>
 
   1. [x] شروع نشده
