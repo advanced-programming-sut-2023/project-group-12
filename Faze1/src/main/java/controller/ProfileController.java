@@ -1,3 +1,7 @@
+package controller;
+
+import model.User;
+import model.UserDatabase;
 
 public class ProfileController {
 
@@ -27,7 +31,7 @@ public class ProfileController {
     }
 
     public String changePassword(String oldPassword, String newPassword){
-        if (oldPassword.equals(User.getPassword)) {
+        if (oldPassword.equals(currentUser.getPassword())) {
             if (true //isWeakPassword(password))
             ) {
                 if (!newPassword.equals(oldPassword)) {

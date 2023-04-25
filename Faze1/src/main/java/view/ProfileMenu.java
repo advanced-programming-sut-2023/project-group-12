@@ -1,6 +1,10 @@
+package view;
 
 import Commands.ProfileMenuCommands;
+import controller.ProfileController;
+import model.UserDatabase;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class ProfileMenu {
@@ -8,9 +12,9 @@ public class ProfileMenu {
     private ProfileController controller;
 
 
-    public void run() {
+    public void run(Scanner scanner) {
         controller = new ProfileController(UserDatabase.getCurrentUser());
-        String input = Main.scanner.nextLine();
+        String input = scanner.nextLine();
         Matcher matcher;
         while (true) {
             if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_EMAIL)) != null)

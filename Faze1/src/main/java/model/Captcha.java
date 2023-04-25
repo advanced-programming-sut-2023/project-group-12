@@ -1,3 +1,5 @@
+package model;
+
 import java.util.Random;
 
 //TODO: access modifiers
