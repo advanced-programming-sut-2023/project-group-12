@@ -10,6 +10,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class LoginMenu {
+    private int numberOfWrongPasswords = 0;
+
     public void run(Scanner scanner) {
         LoginMenuController controller = new LoginMenuController();
         String input;
@@ -25,8 +27,26 @@ public class LoginMenu {
                 if (userLogin.group("stay") != null) {
                     stayLoggedIn = true;
                 }
-                System.out.println(controller.login(username, password, stayLoggedIn));
-                if (controller.login(username, password, stayLoggedIn).equals("now you must answer the captcha")) {
+                String output = controller.login(username, password, stayLoggedIn);
+                System.out.println(output);
+                if (output.equals("Username and password didn't match!")) {
+                    numberOfWrongPasswords++;
+                    System.out.println("Please wait " + numberOfWrongPasswords * 5 + " seconds.");
+                    if (numberOfWrongPasswords <= 3) {
+                        for (int i = 0; i < 5 * numberOfWrongPasswords; i++) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                            System.out.println(5 * numberOfWrongPasswords - i);
+                        }
+                    }
+                    else {
+                        System.out.println("Too many attempts, Please try again later");
+                        return;
+                    }
+                } else if (controller.login(username, password, stayLoggedIn).equals("now you must answer the captcha")) {
                     while (true) {
                         Captcha captcha = new Captcha();
                         for (int i = 0; i < 8; i++) {
@@ -95,11 +115,9 @@ public class LoginMenu {
                 } else {
                     System.out.println("Invalid command!");
                 }
-            }
-            else if (input.equals("back")) {
+            } else if (input.equals("back")) {
                 return;
-            }
-            else {
+            } else {
                 System.out.println("Invalid command!");
             }
         }
