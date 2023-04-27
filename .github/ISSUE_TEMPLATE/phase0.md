@@ -20,7 +20,7 @@ assignees: Arman17Babaei
 
   1. [ ] شروع نشده
   2. [ ] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
   </div>
 </details>
 
@@ -31,7 +31,7 @@ assignees: Arman17Babaei
   
   1. [ ] شروع نشده
   2. [ ] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
      </div>
 </details>
 
@@ -40,51 +40,83 @@ assignees: Arman17Babaei
   
   <div  dir="ltr" align='right'>
   
+<div dir="ltr" align='right'>
+
   1. [ ] شروع نشده
   2. [ ] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
+  </div>
      </div>
 </details>
 
 ## تسک‌های نفر اول
 
-  **نام و نام خانوادگی:**
+  **نام و نام خانوادگی:** متین محمدی
 <details>
-  <summary>تسک مربوطه</summary>
-
+  <summary>طراحی UML برای منطق پروژه</summary>
   <div dir="ltr" align='right'>
 
   1. [ ] شروع نشده
   2. [ ] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
+  </div>
+</details>
+<details>
+  <summary>راه‌اندازی مخزن GItHub</summary>
+
+  <div dir="ltr" align='right'>
+<div dir="ltr" align='right'>
+
+  1. [ ] شروع نشده
+  2. [ ] در حال انجام
+  3. [x] تمام شده
+  </div>
   </div>
 </details>
 
 ## تسک‌های نفر دوم
 
-  **نام و نام خانوادگی:**
+  **نام و نام خانوادگی:** محمد داودآبادی فراهانی
 <details>
-  <summary>تسک مربوطه</summary>
+  <summary>طراحی UML برای منطق پروژه</summary>
+  <div dir="ltr" align='right'>
+
+  1. [ ] شروع نشده
+  2. [ ] در حال انجام
+  3. [x] تمام شده
+  </div>
+</details>
+<details>
+  <summary>راه‌اندازی مخزن GItHub</summary>
 
   <div dir="ltr" align='right'>
 
   1. [ ] شروع نشده
   2. [ ] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
   </div>
 </details>
 
 ## تسک‌های نفر سوم
 
-  **نام و نام خانوادگی:**
+  **نام و نام خانوادگی:** مهدی شاه مرادی رامشه
 <details>
-  <summary>تسک مربوطه</summary>
+  <summary>طراحی UML برای منطق پروژه</summary>
+  <div dir="ltr" align='right'>
+
+  1. [ ] شروع نشده
+  2. [ ] در حال انجام
+  3. [x] تمام شده
+  </div>
+</details>
+<details>
+  <summary>راه‌اندازی GitHub Issue</summary>
 
   <div dir="ltr" align='right'>
 
   1. [ ] شروع نشده
   2. [ ] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
   </div>
 </details>
 </div>
