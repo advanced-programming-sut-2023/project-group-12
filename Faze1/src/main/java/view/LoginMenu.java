@@ -10,6 +10,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class LoginMenu {
+    // todo : check if after forgot password you should consider stay logged in
     private int numberOfWrongPasswords = 0;
 
     public void run(Scanner scanner) {
@@ -27,7 +28,8 @@ public class LoginMenu {
                 if (userLogin.group("stay") != null) {
                     stayLoggedIn = true;
                 }
-                String output = controller.login(username, password, stayLoggedIn);
+                System.out.println(userLogin.group("stay"));
+                String output = controller.login(username, password);
                 System.out.println(output);
                 if (output.equals("Username and password didn't match!")) {
                     numberOfWrongPasswords++;
@@ -46,7 +48,7 @@ public class LoginMenu {
                         System.out.println("Too many attempts, Please try again later");
                         return;
                     }
-                } else if (controller.login(username, password, stayLoggedIn).equals("now you must answer the captcha")) {
+                } else if (output.equals("now you must answer the captcha")) {
                     while (true) {
                         Captcha captcha = new Captcha();
                         for (int i = 0; i < 8; i++) {
@@ -57,10 +59,11 @@ public class LoginMenu {
                         }
                         System.out.println("Please enter the captcha");
                         input = scanner.nextLine();
-                        String output = controller.isCaptchaCorrect(captcha, input);
+                        output = controller.isCaptchaCorrect(captcha, input);
                         System.out.println(output);
                         if (output.equals("user logged in successfully!")) {
                             UserDatabase.setCurrentUser(UserDatabase.getUserByUsername(username));
+                            UserDatabase.getUserByUsername(username).setStayLoggedIn(stayLoggedIn);
                             MainMenu menu = new MainMenu();
                             menu.run(scanner);
                             return;

@@ -1,5 +1,8 @@
 import model.Captcha;
+import model.User;
+import model.UserDatabase;
 import view.EnterMenu;
+import view.MainMenu;
 
 import java.util.Scanner;
 /* TODO list :
@@ -12,30 +15,18 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-//        while (true) {
-//            Captcha captcha = new Captcha();
-//            for (int i = 0; i < 8; i++) {
-//                for (int j = 0; j < captcha.getCreatedCaptcha().length; j++) {
-//                    System.out.print(captcha.getCreatedCaptcha()[j][i]);
-//                }
-//                System.out.println();
-//            }
-//            System.out.println("type in the captcha");
-//            String string = scanner.nextLine();
-//            int A = 0;
-//            for (int i = 0; i < captcha.getCreatedCaptcha().length; i++) {
-//                if (string.charAt(i) - '0' != captcha.getNumbers()[i]) {
-//                    System.out.println("incorrect captcha");
-//                    A++;
-//                    break;
-//                }
-//            }
-//            if (A == 0) {
-//                System.out.println("correct you can continue");
-//            }
-//        }
+        UserDatabase.loadUsers();
+        for (User user:UserDatabase.getUsers()) {
+            if (user.isStayLoggedIn()) {
+                UserDatabase.setCurrentUser(user);
+                user.setStayLoggedIn(false);// ?????
+                MainMenu menu = new MainMenu();
+                menu.run(scanner);
+            }
+        }
         EnterMenu menu = new EnterMenu();
         menu.run(scanner);
+        UserDatabase.saveUsers();
     }
     public static Scanner scanner = new Scanner(System.in);
 }

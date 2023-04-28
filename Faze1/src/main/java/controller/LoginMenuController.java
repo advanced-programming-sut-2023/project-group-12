@@ -7,14 +7,11 @@ import model.UserDatabase;
 import java.util.regex.Matcher;
 
 public class LoginMenuController {
-    public String login (String username, String password,boolean stayLoggedIn) {
+    public String login (String username, String password) {
         if (UserDatabase.getUserByUsername(username) == null){
-            //user doesn't exist
             return "Username and password didn't match!";
         }
         if (!(UserDatabase.getUserByUsername(username).getPassword().equals(password))) {
-            // wrong password
-            //TODO: delay the program for n * 5 seconds
             return "Username and password didn't match!";
         }
         return "now you must answer the captcha";
@@ -56,8 +53,8 @@ public class LoginMenuController {
             UserDatabase.getUserByUsername(username).setPassword(newPass);
             return "password changed successfully. Here is your new password:\n" + newPass;
         }
-        if (RegisterMenuController.isPasswordWeak(password)) {
-            return "Password is weak. Try again.";
+        if (!RegisterMenuController.isPasswordWeak(password).equals("true")) {
+            return RegisterMenuController.isPasswordWeak(password);
         }
         if (!password.equals(passwordRepeat)) {
             return "password and password confirm don't match.";

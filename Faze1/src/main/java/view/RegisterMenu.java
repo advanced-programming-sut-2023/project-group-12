@@ -11,48 +11,78 @@ import java.util.regex.Matcher;
 public class RegisterMenu {
     public void run(Scanner scanner) {
         String input;
-        Matcher userCreate, questionPick, readCaptcha;
+        Matcher userCreate, questionPick, user_create_with_random_password;
         RegisterMenuController controller = new RegisterMenuController();
         while (true) {
             input = scanner.nextLine();
             userCreate = RegisterMenuCommands.getMatcher(input, RegisterMenuCommands.USER_CREATE);
+            user_create_with_random_password = RegisterMenuCommands.getMatcher(input, RegisterMenuCommands.USER_CREATE);
             // todo: add show current menu
             if (userCreate.find()) {
                 // todo : handle empty fields
                 boolean chooseSuggestedUsername = false;
                 String username = userCreate.group("username");
-                String password = userCreate.group("password");
-                String passwordRepeat = userCreate.group("passwordRepeat");
+                String password;
+                String passwordRepeat;
                 String email = userCreate.group("email");
                 String nickname = userCreate.group("nickname");
                 String slogan = "";
                 if (userCreate.group("slogan") != null) {
                     slogan = userCreate.group("slogan");
+                    if (slogan.equals("random")) {
+                        slogan = RegisterMenuController.generateRandomSlogan();
+                    }
+                }
+                if (userCreate.group("password") != null) {
+                    password = userCreate.group("password");
+                    passwordRepeat = userCreate.group("passwordRepeat");
+                }
+                else {
+                    password = RegisterMenuController.generateRandomPassword();
+                    passwordRepeat = password;
                 }
                 String output = controller.register(username, password, passwordRepeat, email, nickname, slogan);
                 System.out.println(output);
-                if (output.equals("A player with this username already exist! but you might these interesting:\n")) {
+                if (output.equals("A player with this username already exist! but you might find these interesting:")) {
                     String[] toAdds = new String[3];
                     toAdds[0] = "king";
                     toAdds[1] = "007";
                     toAdds[2] = "haj";
                     for (int i = 0; i < 3; i++) {
-                        if (UserDatabase.getUserByUsername(toAdds[i] + username) != null) {
-                            System.out.println((i + 1) + ")" + toAdds + username + "\n");
-                        }
+                        System.out.println((i + 1) + ")" + toAdds[i] + username);
                     }
                     System.out.println("please choose your favorite username.If you don't have one please type in anything else");
                     input = scanner.nextLine();
-                    for (int i = 1; i < 4; i++) {
-                        if (Integer.parseInt(input) == i) {
-                            String answer = controller.register(toAdds + username, password, passwordRepeat, email, nickname, slogan);
-                            if (answer.equals("register successfully!")) {
-                                chooseSuggestedUsername = true;
+                    if (input.equals("1") || input.equals("2") || input.equals("3")) {
+                        for (int i = 1; i < 4; i++) {
+                            if (Integer.parseInt(input) == i) {
+                                String answer = controller.register(toAdds[i] + username, password, passwordRepeat, email, nickname, slogan);
+                                if (answer.equals("register successfully!")) {
+                                    chooseSuggestedUsername = true;
+                                }
                             }
                         }
                     }
                 }
                 if (output.equals("register successfully!") || chooseSuggestedUsername) {
+                    if (userCreate.group("random")!= null) {
+                        System.out.println("This is your password: " + password);
+                        System.out.println("Please confirm it: ");
+                        while (true) {
+                            input = scanner.nextLine();
+                            if (!input.equals(password)) {
+                                System.out.println("The confirmation doesn't match the password, please try again");
+                            }
+                            else if (input.equals(password)) {
+                                System.out.println("Password confirmed successfully");
+                                break;
+                            }
+                        }
+                    }
+                    if (userCreate.group("slogan")!= null && userCreate.group("slogan").equals("random")) {
+                        System.out.println("This is your slogan:");
+                        System.out.println(slogan);
+                    }
                     System.out.print(controller.showQuestions());
                     while (true) {
                         input = scanner.nextLine();
@@ -89,10 +119,10 @@ public class RegisterMenu {
                                     }
                                 }
                             }
-                            return;
+                            break;
                         }
                         else if (input.equals("back")) {
-                            return;
+                            break;
                         }
                         else {
                             System.out.println("Please answer the question");
