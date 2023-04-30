@@ -1,4 +1,4 @@
-package org.example;
+package model.map;
 
 public enum Type {
     EARTH(true),
