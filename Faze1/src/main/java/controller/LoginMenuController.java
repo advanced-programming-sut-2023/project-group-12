@@ -11,6 +11,7 @@ public class LoginMenuController {
         if (UserDatabase.getUserByUsername(username) == null){
             return "Username and password didn't match!";
         }
+        // todo: password to SHA
         if (!(UserDatabase.getUserByUsername(username).getPassword().equals(password))) {
             return "Username and password didn't match!";
         }
@@ -59,6 +60,7 @@ public class LoginMenuController {
         if (!password.equals(passwordRepeat)) {
             return "password and password confirm don't match.";
         }
+        // todo : password to SHA
         UserDatabase.getUserByUsername(username).setPassword(password);
         return "password changed successfully.";
     }

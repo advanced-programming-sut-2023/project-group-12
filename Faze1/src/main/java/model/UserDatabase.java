@@ -37,6 +37,11 @@ public class UserDatabase {
     private static final String DATA_BASE = "database.json";
     private static final Gson gson = new Gson();
     private static ArrayList<User> users = new ArrayList<>();
+
+    public static ArrayList<User> getPlayers() {
+        return players;
+    }
+
     private static ArrayList<User> players = new ArrayList<>();// should be cleared after each game
 
     public static ArrayList<User> getUsers() {
@@ -97,6 +102,14 @@ public class UserDatabase {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static boolean existsEmail (String email) {
+        for (User user:users) {
+            if (user.getEmail().toUpperCase().equals(email.toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

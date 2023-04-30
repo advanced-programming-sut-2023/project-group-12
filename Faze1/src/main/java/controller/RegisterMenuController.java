@@ -32,6 +32,7 @@ public class RegisterMenuController {
         if (!isEmailFormatCorrect(emailToUpper)) {
             return "email format is incorrect!";
         }
+        // todo : password to SHA256
         userRegister = new User(username, password, nickname, email, slogan);
         return "register successfully!";
     }
@@ -60,7 +61,7 @@ public class RegisterMenuController {
         UserDatabase.addUser(userRegister);
     }
 
-    public static String  isPasswordWeak(String password) {
+    public static String isPasswordWeak(String password) {
         Pattern capitalLetterPattern = Pattern.compile("[A-Z]");
         Pattern smallLetterPattern = Pattern.compile("[a-z]");
         Pattern digitPattern = Pattern.compile("[0-9]");
@@ -84,17 +85,17 @@ public class RegisterMenuController {
     }
 
     public static boolean isCorrectUsername(String username) {
-        String usernameValid = "^[a-zA-Z0-9|\\_]+$";
+        String usernameValid = "^[a-zA-Z0-9|_]+$";
         return Pattern.matches(usernameValid, username);
     }
 
-    private boolean isEmailFormatCorrect(String email) {
+    public static boolean isEmailFormatCorrect(String email) {
         String emailValid = "^[A-Z0-9_.]+@[A-Z0-9_]+\\.[A-Z0-9_.]+$";
         return Pattern.matches(emailValid, email);
     }
 
     public static String generateRandomPassword() {
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             list.add(i);
         }
@@ -124,7 +125,8 @@ public class RegisterMenuController {
         }
         return sb.toString();
     }
-    public static String generateRandomSlogan () {
+
+    public static String generateRandomSlogan() {
         ArrayList<String> slogans = new ArrayList<>();
         String slogan;
         slogan = "I don't die unless, well unless I die!";

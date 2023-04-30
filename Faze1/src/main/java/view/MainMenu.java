@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 public class MainMenu {
     // private User currentUser;
     public void run(Scanner scanner) {
+        System.out.println("Welcome to main menu");
         String input;
         Matcher mapMenu, profileMenu, startMenu, userLogout;
         while (true) {
@@ -20,8 +21,8 @@ public class MainMenu {
                 MapMenu menu = new MapMenu();
                 menu.run(scanner);
             } else if (profileMenu.find()) {
-                // view.ProfileMenu menu = new view.ProfileMenu();
-                //menu .run();
+                 view.ProfileMenu menu = new view.ProfileMenu();
+                menu .run(scanner);
             } else if (startMenu.find()) {
                 StartMenu menu = new StartMenu();
                 menu.run(scanner);
