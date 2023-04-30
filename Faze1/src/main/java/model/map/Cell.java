@@ -48,4 +48,8 @@ public class Cell {
     public void moveUnit(Unit unit) {
         units.remove(unit);
     }
+
+    public void setUnits(ArrayList<Unit> units) {
+        this.units = units;
+    }
 }
