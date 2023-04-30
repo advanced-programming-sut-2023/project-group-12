@@ -1,16 +1,23 @@
 package view;
 
 import Commands.MapMenuCommands;
-import controller.MapMenuController;
+import controller.mapmenu.MapMenuController;
+import model.map.Map;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class MapMenu {
+
+    private Map map;
+    public MapMenu(int size) {
+        map = new Map(size);
+    }
+
     public void run (Scanner scanner) {
         String input;
         Matcher setCellTexture, setCellsTexture, clear, dropRock, dropTree;
-        MapMenuController controller = new MapMenuController();
+        MapMenuController controller = new MapMenuController(map);
         while (true) {
             input = scanner.nextLine();
             setCellTexture = MapMenuCommands.getMatcher(input, MapMenuCommands.SET_TEXTURE_OF_CELL);
