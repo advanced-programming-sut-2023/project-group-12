@@ -2,6 +2,7 @@ package controller.mapmenu;
 
 import model.map.Map;
 import model.map.Type;
+import model.people.Unit;
 
 public class MapMenuController {
 
@@ -119,5 +120,70 @@ public class MapMenuController {
         for (int i = x1; i <= x2; i++)
             for (int j = y2; j <= y1; j++)
                 map.getMap()[i - 1][j - 1].setType(type);
+    }
+
+    public void showMap(int x, int y) {
+        System.out.println();
+        for (int i = y + 5; i >= y - 5 && i >= 0; i--) {
+            if (i >= map.getMap().length)
+                continue;
+            for (int j = x - 5; j <= x + 5 && j <= map.getMap().length; j++) {
+                if (j <= 0)
+                    continue;
+                showCell(j, i);
+            }
+            System.out.println();
+        }
+    }
+
+    private void showCell(int x, int y) {
+        map.setLastX(x);
+        map.setLastY(y);
+        String building = ".";
+        String soldier = ".";
+        String tree = ".";
+        if (map.getMap()[x][y].getBuilding() != null)
+            building = "B";
+        if (!map.getMap()[x][y].getUnits().isEmpty())
+            soldier = "S";
+        if (map.getMap()[x][y].getTree() != null)
+            tree = "T";
+        int backgroundTheme = 0;
+        for (Type type : Type.values()) {
+            if (map.getMap()[x][y].getType().name().equals(type.name())) {
+                System.out.print(backgroundTheme);
+                backgroundTheme %= 8;
+                backgroundTheme += 39;
+                break;
+            }
+            backgroundTheme++;
+        }
+        System.out.print(backgroundTheme + map.getMap()[x][y].getType().name());
+        System.out.print("\033[" + backgroundTheme + "m" + building + soldier + tree + "|" + "\033[0m");
+    }
+
+    private void mapUp(String direction, int value) {
+        if (direction.equals("n")) {
+            showMap(map.getLastX(), map.getLastY() + value);
+        } else if (direction.equals("e")) {
+            showMap(map.getLastX() + value, map.getLastY());
+        } else if (direction.equals("w")) {
+            showMap(map.getLastX() - value, map.getLastY());
+        } else if (direction.equals("s")) {
+           showMap(map.getLastX(), map.getLastY() - value);
+        }
+    }
+
+    private String showDetail(int x, int y) {
+        //todo : getBuilding.toString and unit.toString is its name
+        if (isCorrectCoordinate(x, y)) {
+            System.out.println("Building : " + map.getMap()[x - 1][y - 1].getBuilding().toString());
+            System.out.println("Tree : " + map.getMap()[x - 1][y - 1].getTree().name());
+            System.out.println("Texture : " + map.getMap()[x - 1][y - 1].getType().name());
+            System.out.println("Soldiers : ");
+            for (Unit unit : map.getMap()[x - 1][y - 1].getUnits()) {
+                System.out.println(unit.toString());
+            }
+        } return "your coordinate is incorrect";
     }
 }

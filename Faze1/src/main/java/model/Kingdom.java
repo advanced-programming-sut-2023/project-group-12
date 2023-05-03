@@ -1,6 +1,7 @@
 package model;
 
 import model.Building.Building;
+import model.map.Cell;
 import model.people.Unit;
 
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ public class Kingdom {
     private ArrayList<Unit> people;
     private ArrayList<Building>buildings;
     private User owner;
+
+    private Cell headquarter;
     private int fearRate;
     private int texRate;
     private int foodRate;
