@@ -18,7 +18,8 @@ public class MainMenu {
             startMenu = MainMenuCommands.getMatcher(input, MainMenuCommands.GO_TO_START_MENU);
             userLogout = MainMenuCommands.getMatcher(input, MainMenuCommands.USER_LOGOUT);
             if (mapMenu.find()) {
-                MapMenu menu = new MapMenu(Integer.parseInt(mapMenu.group("size")));
+                MapMenu menu = new MapMenu(Integer.parseInt(mapMenu.group("size")),
+                        Integer.parseInt(mapMenu.group("kingdomNumber")));
                 menu.run(scanner);
             } else if (profileMenu.find()) {
                  view.ProfileMenu menu = new view.ProfileMenu();

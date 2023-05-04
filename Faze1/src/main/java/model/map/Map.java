@@ -1,16 +1,54 @@
 package model.map;
 
+import model.Kingdom;
+
+import java.util.ArrayList;
+
 public class Map {
 
     private int dimension;
     private Cell[][] map;
 
+    private ArrayList<Cell> headSquares;
+    private ArrayList<Kingdom> kingdoms;
+
     private int lastX;
     private int lastY;
 
-    public Map(int dimension) {
+    public Map(int dimension, int kingdomNumber) {
         map = new Cell[dimension][dimension];
         dimension = dimension;
+        kingdoms = new ArrayList<>();
+        headSquares = new ArrayList<>();
+        for (int i = 0; i < kingdomNumber; i++) {
+            kingdoms.add(new Kingdom());
+            switch (i) {
+                case 0 :
+                    headSquares.add(map[0][0]);
+                    break;
+                case 1 :
+                    headSquares.add(map[dimension - 1][dimension - 1]);
+                    break;
+                case 2 :
+                    headSquares.add(map[0][dimension - 1]);
+                    break;
+                case 3 :
+                    headSquares.add(map[dimension - 1][0]);
+                    break;
+                case 4 :
+                    headSquares.add(map[0][dimension / 2]);
+                    break;
+                case 5 :
+                    headSquares.add(map[dimension / 2][0]);
+                    break;
+                case 6 :
+                    headSquares.add(map[dimension][dimension / 2]);
+                    break;
+                case 7 :
+                    headSquares.add(map[dimension / 2][dimension]);
+                    break;
+            }
+        }
     }
 
     public Cell[][] getMap() {

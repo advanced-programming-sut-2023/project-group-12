@@ -10,9 +10,10 @@ import java.util.regex.Matcher;
 public class MapMenu {
 
     private Map map;
-    public MapMenu(int size) {
-        map = new Map(size);
+    public MapMenu(int size, int kingdomNumber) {
+        map = new Map(size, kingdomNumber);
     }
+
 
     public void run (Scanner scanner) {
         String input;

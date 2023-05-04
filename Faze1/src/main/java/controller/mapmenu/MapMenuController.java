@@ -153,7 +153,7 @@ public class MapMenuController {
             if (map.getMap()[x][y].getType().name().equals(type.name())) {
                 System.out.print(backgroundTheme);
                 backgroundTheme %= 8;
-                backgroundTheme += 39;
+                backgroundTheme += 40;
                 break;
             }
             backgroundTheme++;
