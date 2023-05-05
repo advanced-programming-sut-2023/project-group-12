@@ -1,10 +1,6 @@
 package model.Building;
 
 import model.Kingdom;
-import model.people.Unit;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProductionCenter extends Building{
     private int productionRate;
