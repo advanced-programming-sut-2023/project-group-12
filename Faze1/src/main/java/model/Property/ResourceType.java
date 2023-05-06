@@ -1,14 +1,14 @@
-package model;
+package model.Property;
 
 public enum ResourceType {
-    WHEAT("wheat",3,4),
+    WHEAT("wheat",3,4),//gandom
     FLOUR("flour",4,6),
-    HOPS("hops",5,8),
-    ALE("ale",7,10),
+    BARELY("barely",5,8),//jo
+    ALE("ale",7,10),//abjo
     STONE("stone",10,16),
     IRON("iron",14,20),
     WOOD("wood",8,12),
-    PITCH("pitch",11,15);
+    PITCH("pitch",11,15);//ghir
     private String name;
     private int sellPrice;
     private int buyPrice;
@@ -38,4 +38,6 @@ public enum ResourceType {
         }
         return null;
     }
+
+
 }

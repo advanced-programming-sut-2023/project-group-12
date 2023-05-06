@@ -1,7 +1,7 @@
 package model.people;
 
-import model.people.soldier.DefenseType;
-import model.people.soldier.WeaponType;
+import model.Property.DefenseType;
+import model.Property.WeaponType;
 
 public enum UnitType {
     //name, hitPoint, attackPower, defensePower, rangeFrom, rangeTo, moveSpeed, attackSpeed, attackAccuracy,
