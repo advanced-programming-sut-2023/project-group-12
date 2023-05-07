@@ -28,6 +28,9 @@ public class ProductionCenter extends Building{
                 product2 = new Weapon(WeaponType.PIKE, 1);
                 source = buildingType.getResources();
                 break;
+            case OX_TETHER:
+                //todo
+                break;
             default:
                 product1 = buildingType.getOutputProperty();
                 product2 = null;

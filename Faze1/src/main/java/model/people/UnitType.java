@@ -26,7 +26,7 @@ public enum UnitType {
     SWORDS_MAN(350, 400, 0.32, 1, 2, 0, 45, 0, 3, WeaponType.SWORD, DefenseType.METAL_ARMOR, false, true, false, "swordsman"),
     KNIGHT(800, 450, 0.4, 4, 4, 0, 125, 0, 0, WeaponType.SWORD, DefenseType.METAL_ARMOR, false, false, false, "knight"),
     TUNNELER(300, 150, 0.15, 3, 1, 0, 35, 0, 2, null, null, false, true, false, "tunneler"),
-    SOLDIER_ENGINEER(280, 150, 0.1, 2, 1, 0, 0, 0, 0, WeaponType.OIL, null, false, false, false, "oil engineer"),
+    SOLDIER_ENGINEER(280, 150, 0.1, 2, 1, 0, 0, 0, 0, WeaponType.PETROLEUM, null, false, false, false, "oil engineer"),
     ARCHER(400,150,0.2,4,10,4,17,0.3,0, WeaponType.BOW, null,false,false,false,"archer"),
     SPEAR_MAN(350, 230, 0.15, 3 ,2, 0, 13, 0.1, 2, WeaponType.SPEAR, null, true, true, false, "spear man"),
     ENGINEER(280, 0, 0.1, 3, 0, 0, 35, 0, 3, null, null, false, true, false, "engineer"),

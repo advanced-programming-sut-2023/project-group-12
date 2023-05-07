@@ -4,6 +4,7 @@ package model.Building;
 import model.Kingdom;
 import model.Property.*;
 import model.TextureType;
+import model.people.Unit;
 
 public enum BuildingType {
     //name, class, hitPoint, goldPrice, resourcePrice, resourceCount, workerCount, engineerCount
@@ -26,15 +27,15 @@ public enum BuildingType {
     MILL("mill", ProductionCenter.class, 300, 0, ResourceType.WOOD, 20, 3, 0, false, new Resources(ResourceType.WHEAT, 2), new Resources(ResourceType.FLOUR, 1)), //ASIYAB
     IRON_MINE("iron mine", ProductionCenter.class, 100, 0, ResourceType.WOOD, 20, 2, 0,false, null, new Resources(ResourceType.IRON, 10)), //MADAN AHAN
     MARKET("market", Building.class, 300, 0, ResourceType.WOOD, 5, 1, 0, false, null, null), //FORUSHGAH
-    OX_TETHER("ox tether", Storage.class, 100, 0, ResourceType.WOOD, 5, 1, 0, false, null, null), // AFSAR GAV
+    OX_TETHER("ox tether", ProductionCenter.class, 100, 0, ResourceType.WOOD, 5, 1, 0, false, null, null), // AFSAR GAV
     PITCH_RIG("pitch rig", ProductionCenter.class, 100, 0, ResourceType.WOOD, 20, 1, 0,false, null, new Resources(ResourceType.PITCH, 3)), //DACAL GHIR
     QUARRY("quarry", ProductionCenter.class, 300, 0, ResourceType.WOOD, 20, 3, 0, false, null, new Resources(ResourceType.STONE, 10)), //MADAN SANG
     STOCKPILE("stockpile", Storage.class, 500, 0, null, 0, 0, 0, false, null, null), //ANBAR
     WOODCUTTER("woodcutter", ProductionCenter.class,100, 0, ResourceType.WOOD, 3,  1, 0, false, null, new Resources(ResourceType.WOOD, 10)), //CHOOB BOR
     //todo any idea about unemployed human maybe resource
-    HOVEL("hovel", ProductionCenter.class, 100, 0, ResourceType.WOOD, 6, 0 ,0, false, null, null), //KHANE
-    CHURCH("church",ProductionCenter.class, 800, 250, null, 0, 0, 0, false, null, null), //KELISA
-    CATHEDRAL("cathedral", ProductionCenter.class,1200, 1000, null, 0,0,0, false, null, null), //KELISA JAME
+    HOVEL("hovel", UnitCreation.class, 100, 0, ResourceType.WOOD, 6, 0 ,0, false, null, null), //KHANE
+    CHURCH("church", UnitCreation.class, 800, 250, null, 0, 0, 0, false, null, null), //KELISA
+    CATHEDRAL("cathedral", UnitCreation.class,1200, 1000, null, 0,0,0, false, null, null), //KELISA JAME
     ARMOURER("armourer", ProductionCenter.class,300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.IRON, 6), new DefensiveWeapon(DefenseType.METAL_ARMOR, 1)), //ZEREH SAZI
     //todo : what about blackSmith?
     BLACKSMITH("blacksmith", ProductionCenter.class, 300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.IRON, 6), null), //SAKHTEMAN AHANGARY
