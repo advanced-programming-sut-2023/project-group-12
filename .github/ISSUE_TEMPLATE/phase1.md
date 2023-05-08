@@ -67,7 +67,7 @@ assignees: Arman17Babaei
 
   1. [x] شروع نشده
   2. [x] در حال انجام
-  3. [ ] تمام شده
+  3. [x] تمام شده
   </div>
   طراحی باقیمانده منو ها و regex های آنها 
   <div dir="ltr" align='right'>
