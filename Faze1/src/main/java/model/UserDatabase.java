@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -111,5 +113,31 @@ public class UserDatabase {
         }
         return false;
     }
+    public static String hashPassword(String password, byte[] salt) throws NoSuchAlgorithmException {
+        // Concatenate the salt and password
+        byte[] saltedPassword = new byte[salt.length + password.getBytes().length];
+        System.arraycopy(salt, 0, saltedPassword, 0, salt.length);
+        System.arraycopy(password.getBytes(), 0, saltedPassword, salt.length, password.getBytes().length);
+
+        // Hash the salted password using SHA256
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        messageDigest.update(saltedPassword);
+        byte[] hashedPassword = messageDigest.digest();
+
+        // Convert the hashed password to a hexadecimal string and return it
+        StringBuilder stringBuilder = new StringBuilder();
+        for (byte b : hashedPassword) {
+            stringBuilder.append(String.format("%02x", b));
+        }
+        return stringBuilder.toString();
+    }
+    public static boolean verifyPassword(String password, String storedHash, byte[] storedSalt) throws NoSuchAlgorithmException {
+        // Hash the entered password using the stored salt
+        String enteredHash = hashPassword(password, storedSalt);
+
+        // Compare the entered hash to the stored hash
+        return enteredHash.equals(storedHash);
+    }
+
 }
 

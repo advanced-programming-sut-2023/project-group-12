@@ -137,6 +137,13 @@ public class User {
         this.answer = answer;
     }
     // TODO: create a file for user info and encode it
+    private byte[] salt;
 
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
 
+    public byte[] getSalt() {
+        return salt;
+    }
 }

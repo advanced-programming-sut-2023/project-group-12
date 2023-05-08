@@ -3,6 +3,8 @@ package controller;
 import model.User;
 import model.UserDatabase;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Pattern;
@@ -10,8 +12,6 @@ import java.util.regex.Pattern;
 
 public class RegisterMenuController {
     private User userRegister;
-
-
     public String register(String username, String password, String passwordConfirmation, String email, String nickname, String slogan) {
         String emailToUpper = email.toUpperCase();
         if (!isCorrectUsername(username)) {
@@ -33,7 +33,16 @@ public class RegisterMenuController {
             return "email format is incorrect!";
         }
         // todo : password to SHA256
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] salt = new byte[32];
+        secureRandom.nextBytes(salt);
+        try {
+            password = UserDatabase.hashPassword(password,salt);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         userRegister = new User(username, password, nickname, email, slogan);
+        userRegister.setSalt(salt);
         return "register successfully!";
     }
 

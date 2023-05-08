@@ -52,7 +52,8 @@ public class StartMenu {
 
             }
             else if (startGame.find()) {
-
+                GameMenu menu = new GameMenu();
+                menu.run(scanner);
             }
             else {
                 System.out.println("Invalid command!");

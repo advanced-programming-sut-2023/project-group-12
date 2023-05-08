@@ -15,13 +15,15 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        UserDatabase.loadUsers();
-        for (User user:UserDatabase.getUsers()) {
-            if (user.isStayLoggedIn()) {
-                UserDatabase.setCurrentUser(user);
-                user.setStayLoggedIn(false);// ?????
-                MainMenu menu = new MainMenu();
-                menu.run(scanner);
+        if (UserDatabase.getUsers().size() > 0) {
+            UserDatabase.loadUsers();
+            for (User user : UserDatabase.getUsers()) {
+                if (user.isStayLoggedIn()) {
+                    UserDatabase.setCurrentUser(user);
+                    user.setStayLoggedIn(false);// ?????
+                    MainMenu menu = new MainMenu();
+                    menu.run(scanner);
+                }
             }
         }
         EnterMenu menu = new EnterMenu();

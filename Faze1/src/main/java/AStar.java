@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
-
+//todo : understand this or find sth else
 public class AStar {
     private final List<Node> nodes;
     private final List<Edge> edges;

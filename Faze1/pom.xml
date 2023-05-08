@@ -13,5 +13,12 @@
         <maven.compiler.target>13</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>dev.morlin.map</groupId>
+            <artifactId>map</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

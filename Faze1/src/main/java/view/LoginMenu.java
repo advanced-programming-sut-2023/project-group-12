@@ -6,6 +6,7 @@ import model.Captcha;
 import model.UserDatabase;
 import view.MainMenu;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -13,7 +14,7 @@ public class LoginMenu {
     // todo : check if after forgot password you should consider stay logged in
     private int numberOfWrongPasswords = 0;
 
-    public void run(Scanner scanner) {
+    public void run(Scanner scanner) throws NoSuchAlgorithmException {
         LoginMenuController controller = new LoginMenuController();
         String input;
         Matcher userLogin, forgotMyPassword;
@@ -33,7 +34,7 @@ public class LoginMenu {
         }
     }
 
-    private static boolean ForgotMyPassword(Scanner scanner, LoginMenuController controller, String input, Matcher forgotMyPassword) {
+    private static boolean ForgotMyPassword(Scanner scanner, LoginMenuController controller, String input, Matcher forgotMyPassword) throws NoSuchAlgorithmException {
         if (forgotMyPassword.group("username").isEmpty()) {
             System.out.println("Username can't be empty");
             return false;

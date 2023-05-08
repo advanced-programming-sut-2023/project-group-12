@@ -18,6 +18,12 @@ public class MainMenu {
             startMenu = MainMenuCommands.getMatcher(input, MainMenuCommands.GO_TO_START_MENU);
             userLogout = MainMenuCommands.getMatcher(input, MainMenuCommands.USER_LOGOUT);
             if (mapMenu.find()) {
+                if (mapMenu.group("size").isEmpty()) {
+                    System.out.println("Size can't be empty");
+                }
+                if (Integer.parseInt(mapMenu.group("size"))!= 200 || Integer.parseInt(mapMenu.group("size"))!= 400 ) {
+                    System.out.println("Size must be 200 or 400");
+                }
                 MapMenu menu = new MapMenu(Integer.parseInt(mapMenu.group("size")));
                 menu.run(scanner);
             } else if (profileMenu.find()) {

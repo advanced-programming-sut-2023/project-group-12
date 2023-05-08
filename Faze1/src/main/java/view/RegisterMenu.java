@@ -76,7 +76,7 @@ public class RegisterMenu {
             System.out.println("Password can't be empty");
             return false;
         }
-        if (userCreate.group("PasswordRepeat").isEmpty()) {
+        if (userCreate.group("passwordRepeat").isEmpty()) {
             System.out.println("Password confirmation can't be empty");
             return false;
         }
@@ -117,7 +117,6 @@ public class RegisterMenu {
             questionPick = RegisterMenuCommands.getMatcher(input, RegisterMenuCommands.QUESTION_PICK);
             if (questionPick.find()) {
                 if (QuestionPick(scanner, controller, questionPick)) return true;
-                break;
             } else if (input.equals("back")) {
                 break;
             } else {
