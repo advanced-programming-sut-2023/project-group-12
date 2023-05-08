@@ -28,12 +28,6 @@ public class Game {
 //        }
     }
 
-    public void repairBuilding(){
-        if(selectedBuilding.getHitPoint() < selectedBuilding.getBuildingType().getHitPoint()){
-            int cost = ((selectedBuilding.getBuildingType().getHitPoint() - selectedBuilding.getHitPoint())/selectedBuilding.getBuildingType().getHitPoint())*selectedBuilding.getBuildingType().getResourceCount();
-            //todo: check save resources in kingdom
-        }
-    }
 
     public Building getSelectedBuilding() {
         return selectedBuilding;

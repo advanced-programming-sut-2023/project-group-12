@@ -1,6 +1,8 @@
 package model;
 
 import model.Building.Building;
+import model.Property.ResourceType;
+import model.Property.Resources;
 import model.people.Unit;
 
 import java.util.ArrayList;
@@ -11,19 +13,22 @@ public class Kingdom {
     private ArrayList<Unit> people;
     private ArrayList<Building>buildings;
     private User owner;
+
+    private int gold;
     private int fearRate;
     private int texRate;
     private int foodRate;
-    private HashMap<String ,Integer> data;
+    private HashMap<ResourceType,Integer> allResources;
+
     {
-        data = new HashMap<>();
-        data.put("popularity",0);
-        data.put("gold",0);
-        data.put("food",0);
-        data.put("iron",0);
-        data.put("stone",0);
-        data.put("wood",0);
-        data.put("bitumen",0);
+        allResources = new HashMap<>();
+        allResources.put(ResourceType.BARELY,0);
+        allResources.put(ResourceType.WOOD,0);
+        allResources.put(ResourceType.IRON,0);
+        allResources.put(ResourceType.ALE,0);
+        allResources.put(ResourceType.FLOUR,0);
+        allResources.put(ResourceType.PITCH,0);
+        allResources.put(ResourceType.WHEAT,0);
     }
 
     public void setPopularity(int popularity) {
@@ -52,5 +57,22 @@ public class Kingdom {
 
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public ArrayList<Building> getBuildings() {
+        return buildings;
+    }
+
+
+    public HashMap<ResourceType, Integer> getAllResources() {
+        return allResources;
     }
 }

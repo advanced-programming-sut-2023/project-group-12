@@ -1,14 +1,16 @@
 package view;
 
-import controller.GameMenuController;
+import controller.GameController.GameMenuController;
 
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class GameMenu {
     public void run (Scanner scanner) {
         String input;
-        GameMenuController controller = new GameMenuController();
+        while(true) {
+            input = scanner.nextLine();
+        }
+//        GameMenuController controller = new GameMenuController();
 
     }
 }

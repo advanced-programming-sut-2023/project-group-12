@@ -13,11 +13,11 @@ public class Cell {
     Building building = null;
     ArrayList<Unit> units = new ArrayList<Unit>();
 
-    public TextureType getType() {
+    public TextureType getTextureType() {
         return type;
     }
 
-    public void setType(TextureType type) {
+    public void setTextureType(TextureType type) {
         this.type = type;
     }
 

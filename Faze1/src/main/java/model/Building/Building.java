@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Building {
-    private String name;
     private BuildingType buildingType;
     private int hitPoint;
     private ArrayList<Unit> people;
@@ -35,12 +34,22 @@ public class Building {
         else{
             height = 2;
         }
+
     }
 
+    public Kingdom getOwner() {
+        return owner;
+    }
 
-
+    public int getHeight() {
+        return height;
+    }
 
     public BuildingType getBuildingType() {
         return buildingType;
+    }
+
+    public void resetHealth(){
+        hitPoint = buildingType.getHitPoint();
     }
 }

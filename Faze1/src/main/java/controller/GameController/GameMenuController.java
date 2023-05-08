@@ -1,4 +1,4 @@
-package controller;
+package controller.GameController;
 
 import model.Building.BuildingType;
 import model.Game;
@@ -7,21 +7,26 @@ public class GameMenuController {
     private Game newGame;
 
     public String dropBuilding(int x, int y, String type) {
-        BuildingType building = BuildingType.getBuildingTypeByName(type);
-        if(building == null){
+        BuildingType buildingType = BuildingType.getBuildingTypeByName(type);
+        if(buildingType == null){
             return "building name is not correct";
         }
         if(x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()){
             return "your coordinates are not correct";
         }
-        //todo: check cell structure
-        newGame.dropBuilding(x, y, building);
+        if(!BuildingType.isBuildingMatchTexture(buildingType, newGame.getCurrentMap().getMap()[x][y].getTextureType())){
+            return "invalid texture!";
+        }
+        newGame.dropBuilding(x, y, buildingType);
         return "make building successfully!";
     }
 
     public String selectBuilding(int x, int y) {
         if(x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()){
             return "your coordinates are not correct";
+        }
+        if(newGame.getCurrentMap().getMap()[x][y].getBuilding() == null){
+            return "there is not any building here!";
         }
         newGame.selectBuilding(x, y);
         return "building selected successfully!";
@@ -31,15 +36,6 @@ public class GameMenuController {
         return "";
     }
 
-    public String Repair(){
-        if(newGame.getSelectedBuilding() == null){
-            return  "No buildings have been selected!";
-        }
-        //todo: complete repair
-
-        newGame.repairBuilding();
-        return "";
-    }
     public String chooseColor(String color) {
         return "";
     }
