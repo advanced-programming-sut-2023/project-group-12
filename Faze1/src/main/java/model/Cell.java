@@ -1,19 +1,23 @@
-package org.example;
+package model;
 
 
+import model.Building.Building;
+import model.people.Unit;
+
+import java.util.ArrayList;
 
 public class Cell {
 
-    Type type = Type.EARTH;
+    TextureType type = TextureType.EARTH;
     Tree tree = null;
     Building building = null;
     ArrayList<Unit> units = new ArrayList<Unit>();
 
-    public Type getType() {
+    public TextureType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(TextureType type) {
         this.type = type;
     }
 

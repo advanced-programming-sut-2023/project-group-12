@@ -11,6 +11,7 @@ public class Building {
     private BuildingType buildingType;
     private int hitPoint;
     private ArrayList<Unit> people;
+    private int height;
     private HashMap<String,Integer>price;
     private Kingdom owner;
 
@@ -24,6 +25,20 @@ public class Building {
     public int getHitPoint() {
         return hitPoint;
     }
+
+    public void setHeight(Building building) {
+        if(building.getBuildingType().getBuildingClass() == Tower.class){
+            height = 3;
+        }else if(building.getBuildingType().getBuildingClass() == Wall.class && building.getBuildingType().getBuildingName().equals("stair")){
+            height = 1;
+        }
+        else{
+            height = 2;
+        }
+    }
+
+
+
 
     public BuildingType getBuildingType() {
         return buildingType;

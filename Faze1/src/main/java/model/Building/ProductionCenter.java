@@ -4,16 +4,16 @@ import model.Kingdom;
 import model.Property.*;
 
 public class ProductionCenter extends Building{
-    private int productionRate;
+//    private int productionRate;
     private int hitPoint;
     private Property product1;
     private Property product2;
-    private int usageRate;
+//    private int usageRate;
     private Resources source;
 
     public ProductionCenter(BuildingType buildingType, Kingdom owner) {
         super(buildingType, owner);
-        hitPoint = buildingType.getHitPoint();
+
         switch (buildingType) {
             case INN:
                 //todo
@@ -41,10 +41,16 @@ public class ProductionCenter extends Building{
     }
 
 
-    public void useSource () {
-
+    public Property getProduct1() {
+        return product1;
     }
-    public void produce () {
 
+    public Property getProduct2() {
+        return product2;
     }
+
+    public Resources getSource() {
+        return source;
+    }
+
 }

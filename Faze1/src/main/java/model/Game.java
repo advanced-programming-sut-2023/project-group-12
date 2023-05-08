@@ -1,26 +1,59 @@
 package model;
 
+import model.Building.Building;
+import model.Building.BuildingType;
+
 import java.util.ArrayList;
-import java.util.Map;
+import model.Map;
 
 public class Game {
+
+
     private Map currentMap;
+    private Building selectedBuilding;
     private ArrayList<User> players;
-    private User currentUser;
+    private Kingdom currentKingdom;
+
     private int roundsPassed;
 
-    public void dropBuilding(int x, int y, String type) {
-//        currentMap.getGameField().get(x).get(y).setBuilding();
+    public void dropBuilding(int x, int y, BuildingType buildingType) {
+        Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom);
+        currentMap.getMap()[x][y].setBuilding(BuildingType.getBuildingByBuildingType(buildingType, currentKingdom));
     }
 
     public void selectBuilding(int x, int y) {
+        selectedBuilding = currentMap.getMap()[x][y].getBuilding();
+//        if(selectedBuilding.getBuildingType().getIsPartOfCastle()){
+//            System.out.println(selectedBuilding.getHitPoint());
+//        }
+    }
 
+    public void repairBuilding(){
+        if(selectedBuilding.getHitPoint() < selectedBuilding.getBuildingType().getHitPoint()){
+            int cost = ((selectedBuilding.getBuildingType().getHitPoint() - selectedBuilding.getHitPoint())/selectedBuilding.getBuildingType().getHitPoint())*selectedBuilding.getBuildingType().getResourceCount();
+            //todo: check save resources in kingdom
+        }
+    }
+
+    public Building getSelectedBuilding() {
+        return selectedBuilding;
     }
 
     public void selectUnit(int x, int y) {
 
     }
+
+    public Map getCurrentMap() {
+        return  currentMap;
+    }
+
+    public Kingdom getCurrentKingdom() {
+        return currentKingdom;
+    }
+
     public void nextTurn() {
 
     }
+
+
 }

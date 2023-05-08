@@ -10,6 +10,23 @@ public class Tower extends Building{
 
     public Tower(BuildingType buildingType, Kingdom owner) {
         super(buildingType, owner);
-        hitPoint = buildingType.getHitPoint();
+        switch (buildingType) {
+            case CIRCLE_TOWER:
+            case SQUARE_TOWER:
+                fireRange = 3;
+                break;
+            case PERIMETER_TOWER:
+                fireRange = 4;
+                break;
+            case DEFENCE_TURRET:
+                fireRange = 2;
+                break;
+            case LOOKOUT_TOWER:
+                fireRange = 5;
+                break;
+//            case MAIN_CASTLE:
+//                fireRange = 0;
+//               break;
+        }
     }
 }

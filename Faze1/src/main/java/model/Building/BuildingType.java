@@ -8,10 +8,10 @@ import model.people.Unit;
 
 public enum BuildingType {
     //name, class, hitPoint, goldPrice, resourcePrice, resourceCount, workerCount, engineerCount
-    SMALL_STONE_GATEHOUSE("Small stone gatehouse", Traps.class, 1000, 0, null, 0, 0, 0, true, null, null),//darvaze sangi koochak
-    BIG_STONE_GATEHOUSE("big stone gatehouse", Traps.class, 2000, 0, ResourceType.STONE, 20, 0, 0,true, null, null),//darvaze sangi bozorg
-    KEEP("keep", Building.class, 0, 0, null, 0, 0,0, true, null, null),//maghar
-    DRAWBRIDGE("drawbridge", Traps.class, 0,0, ResourceType.WOOD, 10, 0,0, true, null, null),//pol motaharrek
+    SMALL_STONE_GATEHOUSE("Small stone gatehouse", Gate.class, 1000, 0, null, 0, 0, 0, true, null, null),//darvaze sangi koochak
+    BIG_STONE_GATEHOUSE("big stone gatehouse", Gate.class, 2000, 0, ResourceType.STONE, 20, 0, 0,true, null, null),//darvaze sangi bozorg
+    KEEP("keep", Tower.class, 0, 0, null, 0, 0,0, true, null, null),//maghar
+    DRAWBRIDGE("drawbridge", Gate.class, 0,0, ResourceType.WOOD, 10, 0,0, true, null, null),//pol motaharrek
     LOOKOUT_TOWER("lookout tower", Tower.class, 1300, 0, ResourceType.STONE, 10, 0, 0, true, null, null),//borj didebani
     PERIMETER_TOWER("perimeter tower", Tower.class, 1000, 0 , ResourceType.STONE, 10, 0 ,0, true, null, null),//borj mohit
     DEFENCE_TURRET("defence turret", Tower.class, 1200, 0, ResourceType.STONE, 15, 0 ,  0, true, null, null), //borjak defaei
@@ -58,6 +58,9 @@ public enum BuildingType {
     BREWERY("brewery",ProductionCenter.class, 300, 0 ,ResourceType.WOOD, 10, 1, 0, false, new Resources(ResourceType.BARELY, 6), new Resources(ResourceType.ALE, 4)), //ABJO SAZI
     FOOD_STOCKPILE("food stockpile", Storage.class, 500, 0, ResourceType.WOOD, 5, 0,0, false, null, null) ,//ANBAR GHAZA
 
+    WALL("wall", Wall.class, 200, 0, ResourceType.STONE, 10, 0, 0,  false, null, null),
+
+    STAIR("stair", Wall.class, 50, 0, ResourceType.STONE, 10, 0,0,false,null,null),
     TREE("tree", ProductionCenter.class, 100, 0, null, 0, 0,0, false, null,null)
     ;
     private String buildingName;

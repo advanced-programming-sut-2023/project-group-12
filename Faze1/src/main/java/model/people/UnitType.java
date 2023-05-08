@@ -34,21 +34,22 @@ public enum UnitType {
 
 
 ;
-    int hitPoint;
-    int attackPower;
-    double defensePower;
-    double moveSpeed;
-    int range;
-    int secondRange;
-    int cost;
-    double precision;
-    int attackDelay;
-    WeaponType weapon;
-    DefenseType defence;
-    boolean canClimb;
-    boolean canDigDitch;
-    boolean isArab;
-    String name;
+    private int hitPoint;
+    private int attackPower;
+    private double defensePower;
+    private double moveSpeed;
+    private int range;
+    private int secondRange;
+    private int cost;
+    private double precision;
+    private int attackDelay;
+    private WeaponType weapon;
+    private DefenseType defence;
+    private boolean canClimb;
+    private boolean canDigDitch;
+    private boolean isArab;
+    private String name;
+
 
     UnitType(int hitPoint, int attackPower, double defensePower, double speed, int range, int secondRange, int cost,
              double precision, int attackDelay, WeaponType weapon, DefenseType defence, boolean canClimb, boolean canDigDitch, boolean isArab, String name) {
@@ -125,6 +126,10 @@ public enum UnitType {
 
     public void setSecondRange(int secondRange) {
         this.secondRange = secondRange;
+    }
+
+    public boolean isArab() {
+        return isArab;
     }
 
     public UnitType getUnitTypeByName(String name) {
