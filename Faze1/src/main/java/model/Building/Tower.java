@@ -8,8 +8,8 @@ public class Tower extends Building{
     private int defendRange;
     private int hitPoint;
 
-    public Tower(BuildingType buildingType, Kingdom owner) {
-        super(buildingType, owner);
+    public Tower(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
+        super(buildingType, owner, xPosition, yPosition);
         switch (buildingType) {
             case CIRCLE_TOWER:
             case SQUARE_TOWER:

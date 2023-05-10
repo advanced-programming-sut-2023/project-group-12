@@ -8,14 +8,14 @@ import java.util.HashMap;
 
 public class Storage extends Building{
     private BuildingType buildingType;
+
+    private int stored;
     private int capacity;
 
     private HashMap<Property, Integer> balance = new HashMap<>() ;
-    private int hitPoint;
 
-    public Storage(BuildingType buildingType, Kingdom owner) {
-        super(buildingType, owner);
-        hitPoint = buildingType.getHitPoint();
+    public Storage(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
+        super(buildingType, owner, xPosition, yPosition);
         switch (buildingType) {
             case ARMOURY:
                 capacity = 50;
@@ -47,4 +47,30 @@ public class Storage extends Building{
         }
         return amount == capacity;
     }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getAllBalance() {
+        int amount = 0;
+        for(int i=0; i<balance.size(); i++) {
+            amount += balance.get(i);
+        }
+        return amount ;
+    }
+
+    public HashMap<Property, Integer> getBalance() {
+        return balance;
+    }
+
+    public int getStored() {
+        return stored;
+    }
+
+    public void addToBalance(Property property, int amount){
+        balance.put(property, amount);
+    }
+
+
 }

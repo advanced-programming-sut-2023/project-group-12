@@ -5,8 +5,8 @@ import model.Kingdom;
 public class Gate extends Building{
 
     private boolean isOpen;
-    public Gate(BuildingType buildingType, Kingdom owner) {
-        super(buildingType, owner);
+    public Gate(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
+        super(buildingType, owner, xPosition, yPosition);
         isOpen = false;
     }
 

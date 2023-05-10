@@ -7,8 +7,8 @@ import model.people.Unit;
 public class Worker extends Unit {
     private Building workPlace;
 
-    public Worker(Kingdom homeland, int hitPoint) {
-        super(homeland, hitPoint);
+    public Worker(Kingdom homeland, UnitType unitType, int xPosition, int yPosition) {
+        super(homeland, unitType, xPosition, yPosition);
         workPlace = null;
     }
 

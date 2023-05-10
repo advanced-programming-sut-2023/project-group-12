@@ -9,15 +9,19 @@ import java.util.HashMap;
 public class Building {
     private BuildingType buildingType;
     private int hitPoint;
+    private int xPosition;
+    private int yPosition;
     private ArrayList<Unit> people;
     private int height;
     private HashMap<String,Integer>price;
     private Kingdom owner;
 
 
-    public Building(BuildingType buildingType, Kingdom owner) {
+    public Building(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
         this.buildingType = buildingType;
         this.owner = owner;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
         hitPoint = buildingType.getHitPoint();
     }
 
@@ -51,5 +55,13 @@ public class Building {
 
     public void resetHealth(){
         hitPoint = buildingType.getHitPoint();
+    }
+
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public int getyPosition() {
+        return yPosition;
     }
 }

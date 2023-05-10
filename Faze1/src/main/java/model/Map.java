@@ -17,4 +17,8 @@ public class Map {
     public int getDimension() {
         return dimension;
     }
+
+//    public Cell getCellByPosition(int xPosition, int yPosition) {
+//        re
+//    }
 }

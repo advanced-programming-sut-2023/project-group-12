@@ -12,8 +12,8 @@ public class UnitCreation extends Building{
 
     };
 
-    public UnitCreation(BuildingType buildingType, Kingdom owner) {
-        super(buildingType, owner);
+    public UnitCreation(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
+        super(buildingType, owner,  xPosition, yPosition);
 
         switch (buildingType){
             case BARRACK:
@@ -38,6 +38,12 @@ public class UnitCreation extends Building{
                 break;
         }
     }
+
+
+    public HashMap<UnitType, Integer> getAllUnit() {
+        return allUnit;
+    }
+
 
 
     public void createUnit() {

@@ -17,6 +17,9 @@ public class GameMenuController {
         if(!BuildingType.isBuildingMatchTexture(buildingType, newGame.getCurrentMap().getMap()[x][y].getTextureType())){
             return "invalid texture!";
         }
+        if(newGame.isEnemyExistsInCell(x, y)){
+            return "there is already an enemy in this cell and you cannot drop it!";
+        }
         newGame.dropBuilding(x, y, buildingType);
         return "make building successfully!";
     }

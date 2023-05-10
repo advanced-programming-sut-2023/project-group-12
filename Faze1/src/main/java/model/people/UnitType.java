@@ -132,7 +132,7 @@ public enum UnitType {
         return isArab;
     }
 
-    public UnitType getUnitTypeByName(String name) {
+    public static UnitType getUnitTypeByName(String name) {
         for(UnitType type : UnitType.values()) {
             if(type.getName().equals(name)){
                 return type;

@@ -11,8 +11,8 @@ public class ProductionCenter extends Building{
 //    private int usageRate;
     private Resources source;
 
-    public ProductionCenter(BuildingType buildingType, Kingdom owner) {
-        super(buildingType, owner);
+    public ProductionCenter(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
+        super(buildingType, owner, xPosition, yPosition);
 
         switch (buildingType) {
             case INN:
@@ -51,6 +51,19 @@ public class ProductionCenter extends Building{
 
     public Resources getSource() {
         return source;
+    }
+
+    public void run(ProductionCenter building){
+        if(source != null) {
+            if (building.getOwner().getAllResources().get(source.getResourceType()) < source.getValue()) {
+                return;
+            }
+            building.getOwner().getAllResources().put(source.getResourceType(), building.getOwner().getAllResources().get(source.getResourceType()) - source.getValue());
+        }
+        if(product1 != null){
+
+        }
+
     }
 
 }

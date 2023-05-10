@@ -6,8 +6,8 @@ import model.people.Unit;
 import java.util.ArrayList;
 
 public class Traps extends Building{
-    public Traps(BuildingType buildingType, Kingdom owner) {
-        super(buildingType, owner);
+    public Traps(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
+        super(buildingType, owner, xPosition, yPosition);
     }
 
 

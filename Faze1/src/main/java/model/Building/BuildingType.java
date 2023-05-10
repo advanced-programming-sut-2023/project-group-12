@@ -149,20 +149,20 @@ public enum BuildingType {
         return resources;
     }
 
-    public static Building getBuildingByBuildingType(BuildingType buildingType, Kingdom currentKingdom){
+    public static Building getBuildingByBuildingType(BuildingType buildingType, Kingdom currentKingdom, int xPosition, int yPosition){
         Building building;
         if(buildingType.getBuildingClass() == Tower.class){
-            building = new Tower(buildingType, currentKingdom);
+            building = new Tower(buildingType, currentKingdom, xPosition, yPosition);
         } else if (buildingType.getBuildingClass() == Storage.class) {
-            building = new Storage(buildingType, currentKingdom);
+            building = new Storage(buildingType, currentKingdom, xPosition, yPosition);
         } else if (buildingType.getBuildingClass() == ProductionCenter.class) {
-            building = new ProductionCenter(buildingType, currentKingdom);
+            building = new ProductionCenter(buildingType, currentKingdom, xPosition, yPosition);
         }else if (buildingType.getBuildingClass() == Wall.class){
-            building = new Wall(buildingType, currentKingdom);
+            building = new Wall(buildingType, currentKingdom, xPosition, yPosition);
         }else if (buildingType.getBuildingClass() == Traps.class){
-            building = new Traps(buildingType, currentKingdom);
+            building = new Traps(buildingType, currentKingdom, xPosition, yPosition);
         }else {
-            building = new Building(buildingType, currentKingdom);
+            building = new Building(buildingType, currentKingdom, xPosition, yPosition);
         }
         return building;
     }
