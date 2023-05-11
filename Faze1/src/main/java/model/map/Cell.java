@@ -8,10 +8,28 @@ import java.util.ArrayList;
 
 public class Cell {
 
-    Type type = Type.EARTH;
-    Tree tree = null;
-    Building building = null;
-    ArrayList<Unit> units = new ArrayList<Unit>();
+    private Type type = Type.EARTH;
+    private Tree tree = null;
+    private Building building = null;
+    private ArrayList<Unit> units = new ArrayList<Unit>();
+    private boolean isInThePath = false;
+    private Cell father;
+
+    public void setFather(Cell father) {
+        this.father = father;
+    }
+
+    public Cell getFather() {
+        return father;
+    }
+
+    public boolean isInThePath() {
+        return isInThePath;
+    }
+
+    public void setInThePath(boolean inThePath) {
+        isInThePath = inThePath;
+    }
 
     public Type getType() {
         return type;
@@ -51,5 +69,10 @@ public class Cell {
 
     public void setUnits(ArrayList<Unit> units) {
         this.units = units;
+    }
+    private boolean isPassable;
+
+    public boolean isPassable() {
+        return isPassable;
     }
 }
