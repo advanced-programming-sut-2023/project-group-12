@@ -7,7 +7,6 @@ public class Food extends Property {
         super(value);
         this.type = type;
     }
-
     public FoodType getType() {
         return type;
     }

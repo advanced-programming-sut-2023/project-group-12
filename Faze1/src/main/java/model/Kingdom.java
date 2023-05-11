@@ -33,17 +33,18 @@ public class Kingdom {
 
     private User owner;
 
-    private int gold;
+    private double gold;
     private int fearRate;
-    private int texRate;
+    private int taxRate;
     private int foodRate;
+    private int popularity;
 
-
-
-
+    public int getPopularity() {
+        return popularity;
+    }
 
     public void setPopularity(int popularity) {
-
+        this.popularity = popularity;
     }
 
     public int getFearRate() {
@@ -55,11 +56,11 @@ public class Kingdom {
     }
 
     public int getTaxRate() {
-        return texRate;
+        return taxRate;
     }
 
-    public void setTaxRate(int texRate) {
-        this.texRate = texRate;
+    public void setTaxRate(int taxRate) {
+        this.taxRate = taxRate;
     }
 
     public int getFoodRate() {
@@ -70,7 +71,7 @@ public class Kingdom {
         this.foodRate = foodRate;
     }
 
-    public int getGold() {
+    public double getGold() {
         return gold;
     }
 
@@ -81,10 +82,6 @@ public class Kingdom {
     public ArrayList<Building> getBuildings() {
         return buildings;
     }
-
-
-
-
     public int getPopulation() {
         return population;
     }
@@ -115,7 +112,7 @@ public class Kingdom {
 
 
 
-    public void addGold(int amount){
+    public void addGold(double amount){
         gold += amount;
     }
 
