@@ -13,4 +13,7 @@ public class Property {
     public int getValue() {
         return value;
     }
+
+
+
 }

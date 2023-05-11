@@ -26,13 +26,16 @@ public class Kingdom {
     private ArrayList<Storage> weapons = new ArrayList<>();
 
     private ArrayList<Storage> defensiveWeapons = new ArrayList<>();
-    private User owner;
 
+    private ArrayList<Storage> stockPiles = new ArrayList<>();
+
+    private ArrayList<Storage> foodStockPiles = new ArrayList<>();
+    private User owner;
     private int gold;
     private int fearRate;
     private int texRate;
     private int foodRate;
-    private ArrayList<Property> allProperties = new ArrayList<>();
+
 
 
 
@@ -103,7 +106,7 @@ public class Kingdom {
     public int getAllHorses(){
         int total = 0;
         for(Storage storage : stables){
-            total += storage.getAllBalance();
+            total += storage.getStored();
         }
         return total;
     }
@@ -111,7 +114,12 @@ public class Kingdom {
     public int getAllWeaponByWeaponType(WeaponType weaponType){
         int total = 0;
         for (Storage storage: weapons) {
-            total += storage.getBalance().get(weaponType);
+            for(int i=0; i < storage.getBalance().size(); i++){
+                if(((Weapon)storage.getBalance().get(i)).getWeaponType() == weaponType){
+                    total += storage.getBalance().get(i).getValue();
+                }
+            }
+
         }
         return total;
     }
@@ -119,7 +127,11 @@ public class Kingdom {
     public int getAllDefensiveWeaponByDefenseType(DefenseType defenseType){
         int total = 0;
         for(Storage storage: defensiveWeapons){
-            total += storage.getBalance().get(defenseType);
+            for(int i=0; i < storage.getBalance().size(); i++){
+                if(((DefensiveWeapon)storage.getBalance().get(i)).getDefenseType() == defenseType){
+                    total += storage.getBalance().get(i).getValue();
+                }
+            }
         }
         return total;
     }
@@ -156,23 +168,153 @@ public class Kingdom {
         return unemployed;
     }
 
-    public void decreaseWeapons(WeaponType weaponType ,int amount) {
+    public void decreaseWeapons(Weapon weapon) {
         for (Storage storage: weapons) {
-            if(amount > 0) {
-                amount -= storage.getBalance().get(weaponType);
-                storage.getBalance().put(new Weapon(weaponType, 1), Math.max(0, storage.getBalance().get(weaponType) - amount));
+            if(weapon.getValue() > 0) {
+                for(Property property: storage.getBalance()) {
+                    if(((Weapon)property).getWeaponType() == weapon.getWeaponType()) {
+                        property.addValue(-Math.min(weapon.getValue(), property.getValue()));
+                        weapon.addValue(-property.getValue());
+                    }
+                }
             }
 
         }
     }
 
-    public void decreaseDefensiveWeapons(DefenseType defensiveType ,int amount) {
+    public void decreaseDefensiveWeapons(DefensiveWeapon defensiveWeapon) {
         for (Storage storage: defensiveWeapons) {
-            if(amount > 0) {
-                amount -= storage.getBalance().get(defensiveType);
-                storage.getBalance().put(new DefensiveWeapon(defensiveType, 1), Math.max(0, storage.getBalance().get(defensiveType) - amount));
+            if(defensiveWeapon.getValue() > 0) {
+                for(Property property: storage.getBalance()) {
+                    if(((DefensiveWeapon)property).getDefenseType() == defensiveWeapon.getDefenseType()) {
+                        property.addValue(-defensiveWeapon.getValue());
+                        defensiveWeapon.addValue(-property.getValue());
+
+                    }
+                }
             }
 
+        }
+    }
+
+
+    public int getNumberOfProperties(Property property) {
+        if(property instanceof Resources){
+            return getNumberOfResources(((Resources)property));
+        }
+        if(property instanceof Weapon){
+            return getNumberOfWeapon(((Weapon)property));
+        }
+        if(property instanceof DefensiveWeapon) {
+            return getNumberOfDefensiveWeapon(((DefensiveWeapon) property));
+        }
+        if (property instanceof Food){
+            return getNumberOfFood(((Food)property));
+        }
+        return -2;
+    }
+
+    private int getNumberOfResources(Resources resource) {
+        int amount = 0;
+        for (Storage storage: stockPiles) {
+            for (Property property : storage.getBalance()){
+                if(((Resources)property).getResourceType() == resource.getResourceType()){
+                    amount += property.getValue();
+                }
+            }
+        }
+        return amount;
+    }
+
+    private int getNumberOfWeapon(Weapon weapon) {
+        int amount = 0;
+        for (Storage storage: weapons) {
+            for (Property property : storage.getBalance()){
+                if(((Weapon)property).getWeaponType() == weapon.getWeaponType()){
+                    amount += property.getValue();
+                }
+            }
+        }
+        return amount;
+
+    }
+
+    private int getNumberOfDefensiveWeapon(DefensiveWeapon defensiveWeapon) {
+        int amount = 0;
+        for (Storage storage: defensiveWeapons) {
+            for (Property property : storage.getBalance()){
+                if(((DefensiveWeapon)property).getDefenseType() == defensiveWeapon.getDefenseType()){
+                    amount += property.getValue();
+                }
+            }
+        }
+        return amount;
+    }
+
+    private int getNumberOfFood(Food food) {
+        int amount  = 0;
+        for (Storage storage: foodStockPiles) {
+            for (Property property : storage.getBalance()){
+                if(((Food)property).getType() == food.getType()){
+                    amount += property.getValue();
+                }
+            }
+        }
+        return amount;
+    }
+
+    public void addToProperty(Property property){
+        if(property instanceof Resources){
+            addToResources((Resources)property);
+        }
+        if(property instanceof Weapon){
+            addToWeapon((Weapon)property);
+        }
+        if(property instanceof DefensiveWeapon) {
+            addToDefensiveWeapon((DefensiveWeapon)property);
+        }
+        if (property instanceof Food){
+            addToFood((Food)property);
+        }
+    }
+
+    private void addToFood(Food food) {
+        for (Property myProperty: allProperties) {
+            if(myProperty instanceof Food){
+                if(((Food) myProperty).getType() == food.getType()){
+                    myProperty.addValue(food.getValue());
+                }
+            }
+        }
+    }
+
+    private void addToDefensiveWeapon(DefensiveWeapon defensiveWeapon) {
+        for (Property myProperty: allProperties) {
+            if(myProperty instanceof DefensiveWeapon){
+                if(((DefensiveWeapon) myProperty).getDefenseType() == defensiveWeapon.getDefenseType()){
+                    myProperty.addValue(defensiveWeapon.getValue());
+                }
+            }
+        }
+    }
+
+    private void addToWeapon(Weapon weapon) {
+        for (Property myProperty: allProperties) {
+            if(myProperty instanceof Weapon){
+                if(((Weapon) myProperty).getWeaponType() == weapon.getWeaponType()){
+                    myProperty.addValue(weapon.getValue());
+                }
+            }
+        }
+    }
+
+    private void addToResources(Resources resource){
+        for (Property myProperty: allProperties) {
+            if(myProperty instanceof Resources){
+                if(((Resources) myProperty).getResourceType() == resource.getResourceType()){
+                    myProperty.addValue(resource.getValue());
+                }
+            }
         }
     }
 }
