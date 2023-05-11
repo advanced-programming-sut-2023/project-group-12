@@ -10,7 +10,6 @@ import java.util.HashMap;
 public class Storage extends Building{
     private BuildingType buildingType;
 
-    private int stored;
     private int capacity;
 
     private ArrayList<Property> balance = new ArrayList<>() ;
@@ -53,7 +52,7 @@ public class Storage extends Building{
         return capacity;
     }
 
-    public int getAllBalance() {
+    public int getStored() {
         int amount = 0;
         for(int i=0; i<balance.size(); i++) {
             amount += balance.get(i).getValue();
@@ -65,9 +64,6 @@ public class Storage extends Building{
         return balance;
     }
 
-    public int getStored() {
-        return stored;
-    }
 
 
 
