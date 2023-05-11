@@ -4,6 +4,7 @@ import model.Kingdom;
 import model.Property.*;
 
 import java.net.Authenticator;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Storage extends Building{
@@ -12,26 +13,26 @@ public class Storage extends Building{
     private int stored;
     private int capacity;
 
-    private HashMap<Property, Integer> balance = new HashMap<>() ;
+    private ArrayList<Property> balance = new ArrayList<>() ;
 
     public Storage(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
         super(buildingType, owner, xPosition, yPosition);
         switch (buildingType) {
             case ARMOURY:
                 capacity = 50;
-                balance.put(new DefensiveWeapon(DefenseType.LEATHER_ARMOR, 1), 0);
-                balance.put(new DefensiveWeapon(DefenseType.METAL_ARMOR, 1), 0);
+                balance.add(new DefensiveWeapon(DefenseType.LEATHER_ARMOR, 1));
+                balance.add(new DefensiveWeapon(DefenseType.METAL_ARMOR, 1));
                 break;
             case STOCKPILE:
                 capacity = 1000;
                 for (ResourceType type : ResourceType.values()) {
-                    balance.put(new Resources(type, 1), 0);
+                    balance.add(new Resources(type, 1));
                 }
                 break;
             case FOOD_STOCKPILE:
                 capacity = 1000;
                 for (FoodType type : FoodType.values()) {
-                    balance.put(new Food(type, 1), 0);
+                    balance.add(new Food(type, 1));
                 }
                 break;
             default:
@@ -43,7 +44,7 @@ public class Storage extends Building{
     public boolean isFull () {
         int amount = 0;
         for(int i=0; i<balance.size(); i++) {
-            amount += balance.get(i);
+            amount += balance.get(i).getValue();
         }
         return amount == capacity;
     }
@@ -55,12 +56,12 @@ public class Storage extends Building{
     public int getAllBalance() {
         int amount = 0;
         for(int i=0; i<balance.size(); i++) {
-            amount += balance.get(i);
+            amount += balance.get(i).getValue();
         }
         return amount ;
     }
 
-    public HashMap<Property, Integer> getBalance() {
+    public ArrayList<Property> getBalance() {
         return balance;
     }
 
@@ -68,10 +69,8 @@ public class Storage extends Building{
         return stored;
     }
 
-    public void addToBalance(Property property, int amount){
-        balance.put(property, amount);
-    }
 
 
->>>>>>> 1be4b8ce9178cdfc65e07f37e9b0d38423afa56a
+
+
 }
