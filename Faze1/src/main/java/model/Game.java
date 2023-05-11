@@ -6,45 +6,70 @@ import model.map.Map;
 
 import java.util.ArrayList;
 
-public class Game {
-    private Map currentMap;
-    private Cell[][] map = currentMap.getMap();
-    private ArrayList<User> players = UserDatabase.getPlayers();
-    private User currentUser;
-    private int roundsPassed;
-    private ArrayList<Unit> selectedUnits;// todo : probably add a selected units class
+import model.Building.Building;
+import model.Building.BuildingType;
 
-    public void dropBuilding(int x, int y, String type) {
-//        currentMap.getGameField().get(x).get(y).setBuilding();
+
+public class Game {
+
+
+    private Map currentMap;
+    private Building selectedBuilding;
+    private ArrayList<User> players;
+    private Kingdom currentKingdom;
+
+    private int roundsPassed;
+
+    public void dropBuilding(int x, int y, BuildingType buildingType) {
+        Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom, x, y);
+        currentMap.getMap()[x][y].setBuilding(building);
     }
 
     public void selectBuilding(int x, int y) {
-
+        selectedBuilding = currentMap.getMap()[x][y].getBuilding();
+//        if(selectedBuilding.getBuildingType().getIsPartOfCastle()){
+//            System.out.println(selectedBuilding.getHitPoint());
+//        }
     }
 
-    public void selectUnit(int x, int y) {
 
+    public Building getSelectedBuilding() {
+        return selectedBuilding;
+    }
+//    public void selectUnit(int x, int y, String type) {
+//        // we assume that x,y and type are not trouble makers
+//        for (Unit unit : map[x][y].getUnits()) {
+//            // check type
+//            selectedUnits.add(unit);
+//        }
+//    }
+
+    public Map getCurrentMap() {
+        return  currentMap;
     }
 
-    public void selectUnit(int x, int y, String type) {
-        // we assume that x,y and type are not trouble makers
-        for (Unit unit : map[x][y].getUnits()) {
-            // check type
-            selectedUnits.add(unit);
+    public Kingdom getCurrentKingdom() {
+        return currentKingdom;
+    }
+
+    public boolean isEnemyExistsInCell(int x, int y) {
+        for(Unit unit : currentMap.getMap()[x][y].getUnits()){
+            if(unit.getHomeland() != currentKingdom) {
+                return true;
+            }
         }
+        return false;
     }
+    public void nextTurn() {
 
+    }
     public void moveUnit(int xStart, int yStart, int xEnd, int yEnd) {
         //todo: handle the method for special cases
         if (!currentMap.getMap()[xEnd][yEnd].isPassable()) {
             // it can't be reached
         }
-        ArrayList<Cell> path = finalPath(xStart,yStart,xEnd,yEnd);
+        ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
         //todo: complete the method
-    }
-
-    public void nextTurn() {
-
     }
     private ArrayList<Cell> finalPath (int xStart, int yStart, int xEnd, int yEnd) {
         ArrayList<Cell> path = new ArrayList<>();

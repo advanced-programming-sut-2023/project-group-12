@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class UserDatabase {
@@ -27,7 +25,6 @@ public class UserDatabase {
         questions.add("What was my first pet’s name?");
         questions.add("What is my mother’s last name?");
     }
-
     public static User getCurrentUser() {
         return currentUser;
     }
@@ -35,7 +32,6 @@ public class UserDatabase {
     public static void setCurrentUser(User currentUser) {
         UserDatabase.currentUser = currentUser;
     }
-
     private static final String DATA_BASE = "database.json";
     private static final Gson gson = new Gson();
     private static ArrayList<User> users = new ArrayList<>();
@@ -43,7 +39,6 @@ public class UserDatabase {
     public static ArrayList<User> getPlayers() {
         return players;
     }
-
     private static ArrayList<User> players = new ArrayList<>();// should be cleared after each game
 
     public static ArrayList<User> getUsers() {
@@ -138,6 +133,5 @@ public class UserDatabase {
         // Compare the entered hash to the stored hash
         return enteredHash.equals(storedHash);
     }
-
 }
 

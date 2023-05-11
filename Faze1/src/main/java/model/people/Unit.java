@@ -2,13 +2,35 @@ package model.people;
 
 import model.Kingdom;
 
-abstract public class Unit {
-
+public class Unit {
     private Kingdom homeland;
-    private int life;
 
-    public Unit(Kingdom homeland, int life) {
+    private int xPosition;
+
+    private int yPosition;
+
+    private UnitType unitType ;
+    private int hitPoint;
+
+
+    public Unit(Kingdom homeland, UnitType unitType, int xPosition, int yPosition) {
         this.homeland = homeland;
-        this.life = life;
+        this.unitType = unitType;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        hitPoint = unitType.getHitPoint();
     }
+
+    public UnitType getUnitType() {
+        return unitType;
+    }
+
+    public int getHitPoint() {
+        return hitPoint;
+    }
+
+    public Kingdom getHomeland() {
+        return homeland;
+    }
+
 }

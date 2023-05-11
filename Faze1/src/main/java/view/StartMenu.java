@@ -2,7 +2,6 @@ package view;
 
 import Commands.StartMenuCommands;
 import controller.StartMenuController;
-import model.UserDatabase;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

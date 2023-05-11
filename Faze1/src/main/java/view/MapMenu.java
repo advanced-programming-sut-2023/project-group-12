@@ -8,7 +8,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class MapMenu {
-
     private Map map;
     public MapMenu(int size) {
         map = new Map(size);

@@ -20,7 +20,6 @@ public class User {
 
     private String answer;
     private String slogan;
-
     public void setStayLoggedIn(boolean stayLoggedIn) {
         this.stayLoggedIn = stayLoggedIn;
     }

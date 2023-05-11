@@ -1,6 +1,6 @@
 package view;
 
-import model.User;
+
 import model.UserDatabase;
 
 import java.security.NoSuchAlgorithmException;

@@ -1,45 +1,26 @@
-package model.map;
+package model;
 
 
 import model.Building.Building;
-import model.TextureType;
 import model.people.Unit;
 
 import java.util.ArrayList;
 
 public class Cell {
 
-    public TextureType getTextureType;// ino man ezafe kardam okaye?
-    private Type type = Type.EARTH;// todo : lanati in che anie ?
+    private TextureType type = TextureType.EARTH;
     private Tree tree = null;
     private Building building = null;
     private ArrayList<Unit> units = new ArrayList<Unit>();
-    private boolean isInThePath = false;
-    private Cell father;
 
-    public void setFather(Cell father) {
-        this.father = father;
-    }
-
-    public Cell getFather() {
-        return father;
-    }
-
-    public boolean isInThePath() {
-        return isInThePath;
-    }
-
-    public void setInThePath(boolean inThePath) {
-        isInThePath = inThePath;
-    }
-
-    public Type getType() {
+    public TextureType getTextureType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setTextureType(TextureType type) {
         this.type = type;
     }
+
 
     public Tree getTree() {
         return tree;
@@ -69,12 +50,5 @@ public class Cell {
         units.remove(unit);
     }
 
-    public void setUnits(ArrayList<Unit> units) {
-        this.units = units;
-    }
-    private boolean isPassable;
 
-    public boolean isPassable() {
-        return isPassable;
-    }
 }

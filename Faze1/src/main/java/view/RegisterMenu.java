@@ -28,7 +28,6 @@ public class RegisterMenu {
             }
         }
     }
-
     private static boolean UserCreate(Scanner scanner, Matcher userCreate, RegisterMenuController controller) {
         boolean chooseSuggestedUsername = false;
         if(!checkEmptyFields(userCreate)) {

@@ -134,7 +134,6 @@ public class RegisterMenuController {
         }
         return sb.toString();
     }
-
     public static String generateRandomSlogan() {
         ArrayList<String> slogans = new ArrayList<>();
         String slogan;
