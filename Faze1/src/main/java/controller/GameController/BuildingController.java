@@ -4,7 +4,10 @@ import model.Building.Building;
 import model.Building.BuildingType;
 import model.Building.UnitCreation;
 import model.Game;
+import model.Property.DefensiveWeapon;
 import model.Property.ResourceType;
+import model.Property.Resources;
+import model.Property.Weapon;
 import model.people.UnitType;
 import model.people.soldier.Soldier;
 
@@ -23,11 +26,11 @@ public class BuildingController {
             return "full HP!";
         }
         int cost = ((building.getBuildingType().getHitPoint() - building.getHitPoint())/building.getBuildingType().getHitPoint())*building.getBuildingType().getResourceCount();
-        int balance = building.getOwner().getAllResources().get(ResourceType.STONE);
+        int balance = building.getOwner().getNumberOfProperties(new Resources(ResourceType.STONE, 1));
         if( balance < cost){
             return "you do not have enough stones!";
         }
-        building.getOwner().getAllResources().replace(ResourceType.STONE, balance - cost);
+        building.getOwner().addToProperty(new Resources(ResourceType.STONE, -cost));
         building.resetHealth();
         return "this building is repaired!";
     }
@@ -67,10 +70,10 @@ public class BuildingController {
                 return "you have not enough horse to create units!";
             }
         }
-        if(building.getOwner().getAllWeaponByWeaponType(unitType.getWeapon()) < count){
+        if(building.getOwner().getNumberOfProperties(new Weapon(unitType.getWeapon(), 0)) < count){
             return "you have not enough weapon to create units!";
         }
-        if(building.getOwner().getAllDefensiveWeaponByDefenseType(unitType.getDefence()) < count){
+        if(building.getOwner().getNumberOfProperties(new DefensiveWeapon(unitType.getDefence(), 0)) < count){
             return "you have not enough defensive weapon to create units!";
         }
         for (int i = 0; i < count; i++) {
@@ -84,9 +87,9 @@ public class BuildingController {
         }
         building.getOwner().addGold((-1)*count*unitType.getCost());
         building.getOwner().addPopulation((-1)*count);
-        //todo horse storage
-        building.getOwner().decreaseWeapons(unitType.getWeapon(), count);
-        building.getOwner().decreaseDefensiveWeapons(unitType.getDefence(), count);
+        //todo horse storage & pay resources
+//        building.getOwner().decreaseWeapons(unitType.getWeapon(), count);
+//        building.getOwner().decreaseDefensiveWeapons(unitType.getDefence(), count);
         //TODO
 
 
