@@ -62,6 +62,7 @@ public class ProductionCenter extends Building{
         }
         if(product1 != null){
 
+
         }
 
     }

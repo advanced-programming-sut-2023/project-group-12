@@ -32,18 +32,10 @@ public class Kingdom {
     private int fearRate;
     private int texRate;
     private int foodRate;
-    private HashMap<ResourceType,Integer> allResources;
+    private ArrayList<Property> allProperties = new ArrayList<>();
 
-    {
-        allResources = new HashMap<>();
-        allResources.put(ResourceType.BARELY,0);
-        allResources.put(ResourceType.WOOD,0);
-        allResources.put(ResourceType.IRON,0);
-        allResources.put(ResourceType.ALE,0);
-        allResources.put(ResourceType.FLOUR,0);
-        allResources.put(ResourceType.PITCH,0);
-        allResources.put(ResourceType.WHEAT,0);
-    }
+
+
 
     public void setPopularity(int popularity) {
 
@@ -86,9 +78,7 @@ public class Kingdom {
     }
 
 
-    public HashMap<ResourceType, Integer> getAllResources() {
-        return allResources;
-    }
+
 
     public int getPopulation() {
         return population;
