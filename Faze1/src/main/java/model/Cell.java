@@ -1,7 +1,3 @@
-package org.example;
-
-
-
 public class Cell {
 
     Type type = Type.EARTH;
