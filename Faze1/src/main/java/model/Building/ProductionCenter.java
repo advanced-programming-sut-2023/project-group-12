@@ -61,8 +61,10 @@ public class ProductionCenter extends Building{
             building.getOwner().spendProperties(source);
         }
         if(product1 != null){
-
-
+            building.getOwner().addToProperty(product1);
+        }
+        if(product2 != null){
+            building.getOwner().addToProperty(product2);
         }
 
     }

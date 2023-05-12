@@ -11,6 +11,8 @@ public class Cell {
     private TextureType type = TextureType.EARTH;
     private Tree tree = null;
     private Building building = null;
+
+    private int height = 0;
     private ArrayList<Unit> units = new ArrayList<Unit>();
 
     public TextureType getTextureType() {
@@ -50,5 +52,11 @@ public class Cell {
         units.remove(unit);
     }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
+    public int getHeight() {
+        return height;
+    }
 }

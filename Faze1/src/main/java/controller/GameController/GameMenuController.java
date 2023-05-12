@@ -14,7 +14,7 @@ public class GameMenuController {
         if(x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()){
             return "your coordinates are not correct";
         }
-        if(!BuildingType.isBuildingMatchTexture(buildingType, newGame.getCurrentMap().getMap()[x][y].getTextureType)){
+        if(!BuildingType.isBuildingMatchTexture(buildingType, newGame.getCurrentMap().getMap()[x][y].getTextureType())){
             return "invalid texture!";
         }
         if(newGame.isEnemyExistsInCell(x, y)){
