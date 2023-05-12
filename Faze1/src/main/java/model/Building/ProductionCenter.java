@@ -55,14 +55,16 @@ public class ProductionCenter extends Building{
 
     public void run(ProductionCenter building){
         if(source != null) {
-            if (building.getOwner().getAllResources().get(source.getResourceType()) < source.getValue()) {
+            if (building.getOwner().getNumberOfProperties(source) < source.getValue()) {
                 return;
             }
-            building.getOwner().getAllResources().put(source.getResourceType(), building.getOwner().getAllResources().get(source.getResourceType()) - source.getValue());
+            building.getOwner().spendProperties(source);
         }
         if(product1 != null){
-
-
+            building.getOwner().addToProperty(product1);
+        }
+        if(product2 != null){
+            building.getOwner().addToProperty(product2);
         }
 
     }

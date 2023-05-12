@@ -307,5 +307,78 @@ public class Kingdom {
     }
 
     //todo: pay resources
+    public void spendProperties(Property property){
+        if(property instanceof Resources){
+            spendResources((Resources) property);
+        }
+        if(property instanceof Weapon){
+            spendWeapon((Weapon) property);
+        }
+        if(property instanceof DefensiveWeapon) {
+            spendDefensiveWeapon((DefensiveWeapon) property);
+        }
+        if (property instanceof Food){
+            spendFood((Food) property);
+        }
+    }
 
+    private void spendFood(Food food) {
+        for (Storage storage: foodStockPiles) {
+            if(food.getValue() > 0) {
+                for(Property property: storage.getBalance()) {
+                    if(((Food)property).getType() == food.getType()) {
+                        int keepResource = food.getValue();
+                        food.addValue(-Math.min(property.getValue(), food.getValue()));
+                        property.addValue(-Math.min(property.getValue(), keepResource));
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void spendDefensiveWeapon(DefensiveWeapon defensiveWeapon) {
+        for (Storage storage: defensiveWeapons) {
+            if(defensiveWeapon.getValue() > 0) {
+                for(Property property: storage.getBalance()) {
+                    if(((DefensiveWeapon)property).getDefenseType() == defensiveWeapon.getDefenseType()) {
+                        int keepResource = defensiveWeapon.getValue();
+                        defensiveWeapon.addValue(-Math.min(property.getValue(), defensiveWeapon.getValue()));
+                        property.addValue(-Math.min(property.getValue(), keepResource));
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void spendWeapon(Weapon weapon) {
+        for (Storage storage: weapons) {
+            if(weapon.getValue() > 0) {
+                for(Property property: storage.getBalance()) {
+                    if(((Weapon)property).getWeaponType() == weapon.getWeaponType()) {
+                        int keepResource = weapon.getValue();
+                        weapon.addValue(-Math.min(property.getValue(), weapon.getValue()));
+                        property.addValue(-Math.min(property.getValue(), keepResource));
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void spendResources(Resources resource) {
+        for (Storage storage: stockPiles) {
+            if(resource.getValue() > 0) {
+                for(Property property: storage.getBalance()) {
+                    if(((Resources)property).getResourceType() == resource.getResourceType()) {
+                        int keepResource = resource.getValue();
+                        resource.addValue(-Math.min(property.getValue(), resource.getValue()));
+                        property.addValue(-Math.min(property.getValue(), keepResource));
+                    }
+                }
+            }
+
+        }
+    }
 }

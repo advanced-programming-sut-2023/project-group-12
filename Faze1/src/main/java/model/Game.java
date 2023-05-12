@@ -23,26 +23,15 @@ public class Game {
     public void dropBuilding(int x, int y, BuildingType buildingType) {
         Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom, x, y);
         currentMap.getMap()[x][y].setBuilding(building);
+        currentMap.getMap()[x][y].setHeight(building.getHeight());
     }
 
     public void selectBuilding(int x, int y) {
-        selectedBuilding = currentMap.getMap()[x][y].getBuilding();
-//        if(selectedBuilding.getBuildingType().getIsPartOfCastle()){
-//            System.out.println(selectedBuilding.getHitPoint());
-//        }
+        //todo: go to building menu controller
     }
 
 
-    public Building getSelectedBuilding() {
-        return selectedBuilding;
-    }
-//    public void selectUnit(int x, int y, String type) {
-//        // we assume that x,y and type are not trouble makers
-//        for (Unit unit : map[x][y].getUnits()) {
-//            // check type
-//            selectedUnits.add(unit);
-//        }
-//    }
+
 
     public Map getCurrentMap() {
         return  currentMap;

@@ -1,6 +1,5 @@
 package controller.GameController;
 
-import model.Building.Building;
 import model.Building.BuildingType;
 import model.Game;
 
@@ -30,13 +29,13 @@ public class GameMenuController {
             return "Y must be a number";
         }
         BuildingType buildingType = BuildingType.getBuildingTypeByName(type);
-        if (buildingType == null) {
+        if(buildingType == null){
             return "building name is not correct";
         }
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        if (!BuildingType.isBuildingMatchTexture(buildingType, newGame.getCurrentMap().getMap()[x][y].getTextureType)) {
+        if(!BuildingType.isBuildingMatchTexture(buildingType, newGame.getCurrentMap().getMap()[x][y].getTextureType())){
             return "invalid texture!";
         }
         if (newGame.isEnemyExistsInCell(x, y)) {
@@ -192,11 +191,11 @@ public class GameMenuController {
     }
 
     public String selectUnit(String xCoordinate, String yCoordinate) {
-        
+
     }
 
     public String moveUnit(String xCoordinate, String yCoordinate) {
-        
+
     }
 
     public String patrolUnit(String x1Coordinate, String y1Coordinate, String x2Coordinate, String y2Coordinate) {

@@ -87,9 +87,13 @@ public class BuildingController {
         }
         building.getOwner().addGold((-1)*count*unitType.getCost());
         building.getOwner().addPopulation((-1)*count);
-        //todo horse storage & pay resources
-//        building.getOwner().decreaseWeapons(unitType.getWeapon(), count);
-//        building.getOwner().decreaseDefensiveWeapons(unitType.getDefence(), count);
+        //todo horse storage
+        if(unitType.getWeapon() != null){
+            building.getOwner().spendProperties(new Weapon(unitType.getWeapon(), count));
+        }
+        if(unitType.getDefence() != null){
+            building.getOwner().spendProperties(new DefensiveWeapon(unitType.getDefence(), count));
+        }
         //TODO
 
 
