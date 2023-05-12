@@ -1,6 +1,6 @@
 package view;
 
-import controller.GameMenuController;
+import controller.GameController.GameMenuController;
 import java.util.Scanner;
 
 public class GameMenu {
