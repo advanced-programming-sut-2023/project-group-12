@@ -98,7 +98,7 @@ public class GameMenu {
                 System.out.println(output);
             }
             else if (selectUnit.find()) {
-                output = controller.selectUnit(selectUnit.group("xCoordinate"), selectUnit.group("yCoordinate"));
+                output = controller.selectUnit(selectUnit.group("xCoordinate"), selectUnit.group("yCoordinate"),selectUnit.group("type"));
                 System.out.println(output);
             }
             else if (selectBuilding.find()) {
@@ -114,7 +114,7 @@ public class GameMenu {
                 System.out.println(output);
             }
             else if (setMode.find()) {
-                output = controller.setMode(setMode.group("xCoordinate"), setMode.group("yCoordinate"),setMode.group("mode"));
+                output = controller.setMode(setMode.group("xCoordinate"), setMode.group("yCoordinate"),setMode.group("mode"), setMode.group("type"));
                 System.out.println(output);
             }
             else if (groundAttack.find()) {

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import model.Building.Building;
 import model.Building.BuildingType;
+import model.people.UnitType;
 
 
 public class Game {
@@ -17,7 +18,18 @@ public class Game {
     private Building selectedBuilding;
     private ArrayList<User> players;
     private Kingdom currentKingdom;
+    private ArrayList<Unit> selectedUnits;
 
+    public ArrayList<Unit> getSelectedUnits() {
+        return selectedUnits;
+    }
+
+    public void setSelectedUnits(Unit unit) {
+        this.selectedUnits.add(unit);
+    }
+    public void clearSelectedUnits () {
+        this.selectedUnits.clear();
+    }
     private int roundsPassed;
 
     public void dropBuilding(int x, int y, BuildingType buildingType) {
@@ -27,14 +39,11 @@ public class Game {
     }
 
     public void selectBuilding(int x, int y) {
-        //todo: go to building menu controller
+        this.selectedBuilding = currentMap.getMap()[x][y].getBuilding();
     }
 
-
-
-
     public Map getCurrentMap() {
-        return  currentMap;
+        return currentMap;
     }
 
     public Kingdom getCurrentKingdom() {
@@ -42,16 +51,18 @@ public class Game {
     }
 
     public boolean isEnemyExistsInCell(int x, int y) {
-        for(Unit unit : currentMap.getMap()[x][y].getUnits()){
-            if(unit.getHomeland() != currentKingdom) {
+        for (Unit unit : currentMap.getMap()[x][y].getUnits()) {
+            if (unit.getHomeland() != currentKingdom) {
                 return true;
             }
         }
         return false;
     }
+
     public void nextTurn() {
 
     }
+
     public void moveUnit(int xStart, int yStart, int xEnd, int yEnd) {
         //todo: handle the method for special cases
         if (!currentMap.getMap()[xEnd][yEnd].isPassable()) {
@@ -60,7 +71,8 @@ public class Game {
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
         //todo: complete the method
     }
-    private ArrayList<Cell> finalPath (int xStart, int yStart, int xEnd, int yEnd) {
+
+    private ArrayList<Cell> finalPath(int xStart, int yStart, int xEnd, int yEnd) {
         ArrayList<Cell> path = new ArrayList<>();
         Cell cell = currentMap.getMap()[xEnd][yEnd];
         path.add(cell);
@@ -69,11 +81,12 @@ public class Game {
             path.add(cell);
         }
         ArrayList<Cell> correctOrder = new ArrayList<>();
-        for (int i = path.size()-1; i >= 0; i--) {
+        for (int i = path.size() - 1; i >= 0; i--) {
             correctOrder.add(path.get(i));
         }
         return correctOrder;
     }
+
     private ArrayList<Cell> path(int xStart, int yStart, int xEnd, int yEnd) {
         ArrayList<Cell> way = new ArrayList<>();
         way.add(currentMap.getMap()[xStart][yStart]);
@@ -119,5 +132,13 @@ public class Game {
             output.add(currentMap.getMap()[x][y + 1]);
         }
         return output;
+    }
+
+    public Building getSelectedBuilding() {
+        return selectedBuilding;
+    }
+
+    public void setSelectedBuilding(Building selectedBuilding) {
+        this.selectedBuilding = selectedBuilding;
     }
 }
