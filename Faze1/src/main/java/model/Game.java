@@ -7,12 +7,16 @@ import java.util.ArrayList;
 import model.Map;
 import model.people.Unit;
 
+import javax.swing.plaf.PanelUI;
+
 public class Game {
+
+    static Game yetGame;
 
 
     private Map currentMap;
     private Building selectedBuilding;
-    private ArrayList<User> players;
+    private ArrayList<Kingdom> players;
     private Kingdom currentKingdom;
 
     private int roundsPassed;
@@ -59,5 +63,11 @@ public class Game {
 
     }
 
+    public static Game getYetGame() {
+        return yetGame;
+    }
 
+    public ArrayList<Kingdom> getPlayers() {
+        return players;
+    }
 }

@@ -11,8 +11,6 @@ import java.util.HashMap;
 
 public class Kingdom {
 
-    public static Kingdom yetKingdom;
-
     private int population;
 
     private int unemployed;
@@ -32,6 +30,10 @@ public class Kingdom {
     private ArrayList<Storage> stockPiles = new ArrayList<>();
 
     private ArrayList<Storage> foodStockPiles = new ArrayList<>();
+
+    private ArrayList<Trade> trades = new ArrayList<>();
+
+    private ArrayList<Trade> tradesHistory = new ArrayList<>();
     private User owner;
     private int gold;
     private int fearRate;
@@ -331,25 +333,41 @@ public class Kingdom {
     public Property getPropertyByName(String name) {
         for (FoodType foodType : FoodType.values()) {
             if (foodType.name().toLowerCase().equals(name))
-                for (Storage storage : Kingdom.yetKingdom.getFoodStockPiles())
+                for (Storage storage : getFoodStockPiles())
                     if (storage.getFoodByFoodType(foodType) != null)
                         return storage.getFoodByFoodType(foodType);
         }
 
         for (WeaponType weaponType : WeaponType.values()) {
             if (weaponType.name().toLowerCase().equals(name))
-                for (Storage storage : Kingdom.yetKingdom.getWeapons())
+                for (Storage storage : getWeapons())
                     if (storage.getWeaponByWeaponType(weaponType) != null)
                         return storage.getWeaponByWeaponType(weaponType);
         }
 
         for (ResourceType resourceType : ResourceType.values()) {
             if (resourceType.name().toLowerCase().equals(name))
-                for (Storage storage : Kingdom.yetKingdom.getStockPiles())
+                for (Storage storage : getStockPiles())
                     if (storage.getResourcesByResourceType(resourceType) != null)
                         return storage.getResourcesByResourceType(resourceType);
         }
 
         return null;
+    }
+
+    public ArrayList<Trade> getTradesHistory() {
+        return tradesHistory;
+    }
+
+    public void setTradesHistory(Trade trades) {
+        this.tradesHistory.add(trades);
+    }
+
+    public ArrayList<Trade> getTrades() {
+        return trades;
+    }
+
+    public void setTrades(Trade trades) {
+        this.trades.add(trades);
     }
 }
