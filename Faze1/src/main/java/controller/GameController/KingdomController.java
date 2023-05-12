@@ -76,5 +76,6 @@ public class KingdomController {
         int popularity = currentKingdom.getPopularity();
         currentKingdom.setFearRate(rate);
         currentKingdom.setPopularity(popularity - rate);
+        return "Fear rate set successfully";
     }
 }
