@@ -65,7 +65,32 @@ public class Storage extends Building{
     }
 
 
+    public Food getFoodByFoodType(FoodType foodType) {
+        for (Property property : balance) {
+            if (property instanceof Food)
+                if (((Food) property).getType().name().equals(foodType.name()))
+                    return ((Food) property);
+        }
+        return null;
+    }
 
+    public Weapon getWeaponByWeaponType(WeaponType weaponType) {
+        for (Property property : balance) {
+            if (property instanceof Weapon)
+                if (((Weapon) property).getWeaponType().name().equals(weaponType.name()))
+                    return ((Weapon) property);
+        }
+        return null;
+    }
+
+    public Resources getResourcesByResourceType(ResourceType resourceType) {
+        for (Property property : balance) {
+            if (property instanceof Resources)
+                if (((Resources) property).getResourceType().name().equals(resourceType.name()))
+                    return ((Resources) property);
+        }
+        return null;
+    }
 
 
 

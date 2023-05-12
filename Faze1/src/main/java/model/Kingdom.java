@@ -14,6 +14,10 @@ public class Kingdom {
     private int population;
 
     private int unemployed;
+
+    private ArrayList<Trade> trades = new ArrayList<>();
+
+    private ArrayList<Trade> tradesHistory = new ArrayList<>();
     private ArrayList<Building> buildings = new ArrayList<Building>();
 
     private ArrayList<Soldier> engineers = new ArrayList<Soldier>();
@@ -380,5 +384,54 @@ public class Kingdom {
             }
 
         }
+    }
+
+    public Property getPropertyByName(String name) {
+        for (FoodType foodType : FoodType.values()) {
+            if (foodType.name().toLowerCase().equals(name))
+                for (Storage storage : getFoodStockPiles())
+                    if (storage.getFoodByFoodType(foodType) != null)
+                        return storage.getFoodByFoodType(foodType);
+        }
+
+        for (WeaponType weaponType : WeaponType.values()) {
+            if (weaponType.name().toLowerCase().equals(name))
+                for (Storage storage : getWeapons())
+                    if (storage.getWeaponByWeaponType(weaponType) != null)
+                        return storage.getWeaponByWeaponType(weaponType);
+        }
+
+        for (ResourceType resourceType : ResourceType.values()) {
+            if (resourceType.name().toLowerCase().equals(name))
+                for (Storage storage : getStockPiles())
+                    if (storage.getResourcesByResourceType(resourceType) != null)
+                        return storage.getResourcesByResourceType(resourceType);
+        }
+
+        return null;
+    }
+
+    public ArrayList<Trade> getTradesHistory() {
+        return tradesHistory;
+    }
+
+    public void setTradesHistory(Trade trades) {
+        this.tradesHistory.add(trades);
+    }
+
+    public ArrayList<Trade> getTrades() {
+        return trades;
+    }
+
+    public void setTrades(Trade trades) {
+        this.trades.add(trades);
+    }
+
+    public ArrayList<Storage> getFoodStockPiles() {
+        return foodStockPiles;
+    }
+
+    public ArrayList<Storage> getStockPiles() {
+        return stockPiles;
     }
 }
