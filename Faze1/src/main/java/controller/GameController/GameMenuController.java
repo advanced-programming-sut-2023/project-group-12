@@ -225,8 +225,14 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        //return newGame.moveUnit();// todo : some how give me the current coordinates
-        return "";
+        if (!newGame.getCurrentMap().getMap()[x][y].isPassable()) {
+            return "the destination is not a valid destination, troops can't be there";
+        }
+        if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
+            return "this unit can't move";
+        }
+        newGame.moveUnit(newGame.getSelectedUnits().get(0).getxPosition(),newGame.getSelectedUnits().get(0).getxPosition(),x,y);// todo : some how give me the current coordinates
+        return "troops are moving successfully!";
     }
 
     public String patrolUnit(String x1Coordinate, String y1Coordinate, String x2Coordinate, String y2Coordinate) {

@@ -28,9 +28,11 @@ public class Game {
     public void setSelectedUnits(Unit unit) {
         this.selectedUnits.add(unit);
     }
-    public void clearSelectedUnits () {
+
+    public void clearSelectedUnits() {
         this.selectedUnits.clear();
     }
+
     private int roundsPassed;
 
     public void dropBuilding(int x, int y, BuildingType buildingType) {
@@ -66,10 +68,14 @@ public class Game {
 
     public void moveUnit(int xStart, int yStart, int xEnd, int yEnd) {
         //todo: handle the method for special cases
-        if (!currentMap.getMap()[xEnd][yEnd].isPassable()) {
-            // it can't be reached
-        }
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
+        int speed = this.getSelectedUnits().get(0).getSpeed();
+        for (int i = 0; i < speed && i < path.size() - 2; i++) {
+            for (int j = selectedUnits.size() - 1; j >= 0; j--) {
+                path.get(i).getUnits().remove(selectedUnits.get(j));
+                path.get(i + 1).getUnits().add(selectedUnits.get(j));
+            }
+        }
         //todo: complete the method
     }
 
@@ -134,7 +140,6 @@ public class Game {
         }
         return output;
     }
-
 
 
     public Building getSelectedBuilding() {
