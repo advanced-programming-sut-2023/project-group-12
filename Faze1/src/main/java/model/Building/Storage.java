@@ -6,12 +6,12 @@ import model.Property.*;
 import java.util.ArrayList;
 
 
-public class Storage extends Building{
+public class Storage extends Building {
 
     private BuildingType buildingType;
     private int capacity;
 
-    private ArrayList<Property> balance = new ArrayList<>() ;
+    private ArrayList<Property> balance = new ArrayList<>();
 
     public Storage(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
         super(buildingType, owner, xPosition, yPosition);
@@ -39,9 +39,9 @@ public class Storage extends Building{
     }
 
 
-    public boolean isFull () {
+    public boolean isFull() {
         int amount = 0;
-        for(int i=0; i<balance.size(); i++) {
+        for (int i = 0; i < balance.size(); i++) {
             amount += balance.get(i).getValue();
         }
         return amount == capacity;
@@ -53,24 +53,48 @@ public class Storage extends Building{
 
     public int getStored() {
         int amount = 0;
-        for(int i=0; i<balance.size(); i++) {
+        for (int i = 0; i < balance.size(); i++) {
             amount += balance.get(i).getValue();
         }
-        return amount ;
+        return amount;
     }
 
     public ArrayList<Property> getBalance() {
         return balance;
     }
 
-    public void addToBalance(Property property){
-        for(Property myProperty : balance) {
-            if(myProperty.equals(property)){
+    public void addToBalance(Property property) {
+        for (Property myProperty : balance) {
+            if (myProperty.equals(property)) {
                 myProperty.addValue(property.getValue());
             }
         }
     }
 
+    public Food getFoodByFoodType(FoodType foodType) {
+        for (Property property : balance) {
+            if (property instanceof Food)
+                if (((Food) property).getType().name().equals(foodType.name()))
+                    return ((Food) property);
+        }
+        return null;
+    }
 
+    public Weapon getWeaponByWeaponType(WeaponType weaponType) {
+        for (Property property : balance) {
+            if (property instanceof Weapon)
+                if (((Weapon) property).getWeaponType().name().equals(weaponType.name()))
+                    return ((Weapon) property);
+        }
+        return null;
+    }
 
+    public Resources getResourcesByResourceType(ResourceType resourceType) {
+        for (Property property : balance) {
+            if (property instanceof Resources)
+                if (((Resources) property).getResourceType().name().equals(resourceType.name()))
+                    return ((Resources) property);
+        }
+        return null;
+    }
 }

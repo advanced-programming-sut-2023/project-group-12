@@ -11,6 +11,8 @@ import java.util.HashMap;
 
 public class Kingdom {
 
+    public static Kingdom yetKingdom;
+
     private int population;
 
     private int unemployed;
@@ -316,5 +318,38 @@ public class Kingdom {
                 }
             }
         }
+    }
+
+    public ArrayList<Storage> getFoodStockPiles() {
+        return foodStockPiles;
+    }
+
+    public ArrayList<Storage> getStockPiles() {
+        return stockPiles;
+    }
+
+    public Property getPropertyByName(String name) {
+        for (FoodType foodType : FoodType.values()) {
+            if (foodType.name().toLowerCase().equals(name))
+                for (Storage storage : Kingdom.yetKingdom.getFoodStockPiles())
+                    if (storage.getFoodByFoodType(foodType) != null)
+                        return storage.getFoodByFoodType(foodType);
+        }
+
+        for (WeaponType weaponType : WeaponType.values()) {
+            if (weaponType.name().toLowerCase().equals(name))
+                for (Storage storage : Kingdom.yetKingdom.getWeapons())
+                    if (storage.getWeaponByWeaponType(weaponType) != null)
+                        return storage.getWeaponByWeaponType(weaponType);
+        }
+
+        for (ResourceType resourceType : ResourceType.values()) {
+            if (resourceType.name().toLowerCase().equals(name))
+                for (Storage storage : Kingdom.yetKingdom.getStockPiles())
+                    if (storage.getResourcesByResourceType(resourceType) != null)
+                        return storage.getResourcesByResourceType(resourceType);
+        }
+
+        return null;
     }
 }
