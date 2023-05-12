@@ -26,14 +26,14 @@ public class LoginMenu {
                 if (UserLogin(scanner, controller, userLogin)) return;
             } else if (forgotMyPassword.find()) {
                 if (ForgotMyPassword(scanner, controller, input, forgotMyPassword)) return;
-            } else if (input.equals("back")) {
+            } else if (input.equalsIgnoreCase("back")) {
                 return;
             } else {
                 System.out.println("Invalid command!");
             }
         }
     }
-    private boolean UserLogin(Scanner scanner, LoginMenuController controller, Matcher userLogin) {
+    private boolean UserLogin(Scanner scanner, LoginMenuController controller, Matcher userLogin) throws NoSuchAlgorithmException {
         if (userLogin.group("username").isEmpty()) {
             System.out.println("Username can't be empty");
             return false;
@@ -77,7 +77,7 @@ public class LoginMenu {
         }
         return false;
     }
-    private static boolean showCaptcha(Scanner scanner, LoginMenuController controller, String username, boolean stayLoggedIn) {
+    private static boolean showCaptcha(Scanner scanner, LoginMenuController controller, String username, boolean stayLoggedIn) throws NoSuchAlgorithmException {
         String output;
         String input;
         Captcha captcha = new Captcha();
@@ -89,11 +89,16 @@ public class LoginMenu {
         }
         System.out.println("Please enter the captcha");
         input = scanner.nextLine();
+        if (input.isEmpty()) {
+            System.out.println("captcha can't be empty");
+            return false;
+        }
         output = controller.isCaptchaCorrect(captcha, input);
         System.out.println(output);
         if (output.equals("user logged in successfully!")) {
             UserDatabase.setCurrentUser(UserDatabase.getUserByUsername(username));
             UserDatabase.getUserByUsername(username).setStayLoggedIn(stayLoggedIn);
+            UserDatabase.saveUsers();
             MainMenu menu = new MainMenu();
             menu.run(scanner);
             return true;
@@ -118,6 +123,14 @@ public class LoginMenu {
                         input = scanner.nextLine();
                         newPassword = LoginMenuCommands.getMatcher(input, LoginMenuCommands.NEW_PASSWORD);
                         if (newPassword.find()) {
+                            if (newPassword.group("password").isEmpty()) {
+                                System.out.println("Password can't be empty");
+                                continue;
+                            }
+                            if (newPassword.group("passwordRepeat").isEmpty()) {
+                                System.out.println("Password can't be empty");
+                                continue;
+                            }
                             output = controller.setNewPassword(forgotMyPassword.group("username"), newPassword.group("password"), newPassword.group("passwordRepeat"));
                             System.out.println(output);
                             if (output.equals("password changed successfully.")) {

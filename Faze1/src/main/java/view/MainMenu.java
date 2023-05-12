@@ -1,13 +1,16 @@
 package view;
 
 import Commands.MainMenuCommands;
+import controller.LoginMenuController;
+import model.UserDatabase;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class MainMenu {
     // private User currentUser;
-    public void run(Scanner scanner) {
+    public void run(Scanner scanner) throws NoSuchAlgorithmException {
         System.out.println("Welcome to main menu");
         String input;
         Matcher mapMenu, profileMenu, startMenu, userLogout;
@@ -24,14 +27,17 @@ public class MainMenu {
                 if (Integer.parseInt(mapMenu.group("size"))!= 200 || Integer.parseInt(mapMenu.group("size"))!= 400 ) {
                     System.out.println("Size must be 200 or 400");
                 }
-                MapMenu menu = new MapMenu(Integer.parseInt(mapMenu.group("size")));
+                MapMenu menu = new MapMenu(Integer.parseInt(mapMenu.group("size")), 1);
                 menu.run(scanner);
+                System.out.println("Welcome back to main menu");
             } else if (profileMenu.find()) {
                  view.ProfileMenu menu = new view.ProfileMenu();
-                menu .run(scanner);
+                menu.run(scanner);
+                System.out.println("Welcome back to main menu");
             } else if (startMenu.find()) {
                 StartMenu menu = new StartMenu();
                 menu.run(scanner);
+                System.out.println("Welcome back to main menu");
             } else if (userLogout.find()) {
                 System.out.println("user logged out successfully!");
                 return;

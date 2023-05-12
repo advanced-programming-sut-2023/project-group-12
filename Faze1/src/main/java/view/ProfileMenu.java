@@ -4,16 +4,20 @@ import Commands.ProfileMenuCommands;
 import controller.ProfileController;
 import model.UserDatabase;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class ProfileMenu {
     private ProfileController controller;
-    public void run(Scanner scanner) {
-       controller = new ProfileController(UserDatabase.getCurrentUser());
-        String input = scanner.nextLine();
+
+    public void run(Scanner scanner) throws NoSuchAlgorithmException {
+        System.out.println("Welcome to profile menu!");
+        controller = new ProfileController(UserDatabase.getCurrentUser());
+        String input;
         Matcher matcher;
         while (true) {
+            input = scanner.nextLine();
             if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_EMAIL)).find())
                 changeEmail(matcher);
             else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_USERNAME)).find())
@@ -34,9 +38,10 @@ public class ProfileMenu {
                 displaySlogan();
             else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY)).find())
                 displayAll();
+            else if (input.equalsIgnoreCase("back"))
+                return;
             else
                 System.out.println("Please try again!");
-
         }
     }
 
@@ -49,7 +54,7 @@ public class ProfileMenu {
         System.out.println(controller.changeNickname(matcher.group("nickname")));
     }
 
-    private void changePassword(Matcher matcher) {
+    private void changePassword(Matcher matcher) throws NoSuchAlgorithmException {
         System.out.println(controller.changePassword(matcher.group("oldPassword"), matcher.group("newPassword")));
     }
 

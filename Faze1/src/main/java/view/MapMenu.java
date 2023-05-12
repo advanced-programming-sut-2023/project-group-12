@@ -15,6 +15,7 @@ public class MapMenu {
 
 
     public void run (Scanner scanner) {
+        System.out.println("Welcome to map menu!");
         String input;
         Matcher setCellTexture, setCellsTexture, clear, dropRock, dropTree;
         MapMenuController controller = new MapMenuController(map);
@@ -48,7 +49,7 @@ public class MapMenu {
             else if (dropTree.find()) {
                 System.out.println(controller.dropTree(Integer.parseInt(dropTree.group("xCoordinate")), Integer.parseInt(dropTree.group("yCoordinate")), dropTree.group("type")));
             }
-            else if (input.equals("back")) {
+            else if (input.equalsIgnoreCase("back")) {
                 return;
             }
             else {

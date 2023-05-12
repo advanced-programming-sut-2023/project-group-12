@@ -11,7 +11,7 @@ public class User {
     private String question;
 
     public void setQuestion(int number) {
-        this.question = UserDatabase.getQuestions().get(number);
+        this.question = UserDatabase.getQuestions().get(number-1);
     }
 
     public String getQuestion() {
