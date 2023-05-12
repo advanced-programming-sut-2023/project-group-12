@@ -2,6 +2,7 @@ package model;
 
 import model.Building.Building;
 import model.Building.Storage;
+import model.Equipment.Equipment;
 import model.Property.*;
 import model.people.Unit;
 import model.people.soldier.Soldier;
@@ -30,6 +31,8 @@ public class Kingdom {
     private ArrayList<Storage> weapons = new ArrayList<>();
 
     private ArrayList<Storage> defensiveWeapons = new ArrayList<>();
+
+    private ArrayList<Equipment> equipments = new ArrayList<>();
 
     private ArrayList<Storage> stockPiles = new ArrayList<>();
 
@@ -433,5 +436,9 @@ public class Kingdom {
 
     public ArrayList<Storage> getStockPiles() {
         return stockPiles;
+    }
+
+    public void addEquipment(Equipment equipment) {
+        equipments.add(equipment);
     }
 }

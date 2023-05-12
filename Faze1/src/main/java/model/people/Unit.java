@@ -13,6 +13,8 @@ public class Unit {
     private int hitPoint;
     private String mode;
 
+    private boolean isBusy;
+
 
     public Unit(Kingdom homeland, UnitType unitType, int xPosition, int yPosition) {
         this.homeland = homeland;
@@ -20,6 +22,7 @@ public class Unit {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         hitPoint = unitType.getHitPoint();
+        isBusy = false;
     }
 
     public UnitType getUnitType() {
@@ -56,5 +59,12 @@ public class Unit {
 
     public String getMode() {
         return mode;
+    }
+    public boolean isBusy(){
+        return isBusy;
+    }
+
+    public void setBusy(boolean busy) {
+        isBusy = busy;
     }
 }

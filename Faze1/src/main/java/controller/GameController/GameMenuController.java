@@ -1,9 +1,13 @@
 package controller.GameController;
 
 import model.Building.BuildingType;
+import model.Equipment.Equipment;
+import model.Equipment.EquipmentType;
 import model.Game;
 import model.people.Unit;
 import model.people.UnitType;
+
+import java.util.ArrayList;
 
 public class GameMenuController {
     private Game newGame;
@@ -252,6 +256,7 @@ public class GameMenuController {
         if (x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0 || x1 >= newGame.getCurrentMap().getDimension() || y1 >= newGame.getCurrentMap().getDimension() || x2 >= newGame.getCurrentMap().getDimension() || y2 >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        return null;
 
     }
 
@@ -308,8 +313,26 @@ public class GameMenuController {
             return "equipment name can't be empty";
         }
         for (Unit unit: newGame.getSelectedUnits()) {
-            if (unit.getUnitType().)
+            if (unit.getUnitType() != UnitType.ENGINEER){
+                return "this type of units can't build equipment!";
+            }
         }
+        EquipmentType equipmentType = EquipmentType.getEquipmentTypeByName(equipmentName);
+        if(equipmentType == null){
+            return "equipment name is invalid!";
+        }
+        ArrayList<Unit> availableEngineers = new ArrayList<>();
+        for (Unit unit: newGame.getSelectedUnits()) {
+            if (!unit.isBusy()) {
+                availableEngineers.add(unit);
+            }
+        }
+        if(availableEngineers.size() < equipmentType.getEngineerCount()){
+            return "you don't have enough engineers for build "+equipmentName;
+        }
+        Equipment equipment = new Equipment(equipmentType,newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(), newGame.getCurrentKingdom());
+        newGame.getCurrentKingdom().addEquipment(equipment);
+        return "equipment "+equipmentName + "build successfully!";
     }
 
     public String digTunnel(String xCoordinate, String yCoordinate) {
@@ -326,9 +349,12 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        return null;
+
     }
 
     public String pourOil(String direction) {
+        return null;
     }
 
     public String airAttack(String xCoordinate, String yCoordinate) {
@@ -345,6 +371,7 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        return null;
     }
 
     public String groundAttack(String xCoordinate, String yCoordinate) {
@@ -361,6 +388,7 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        return null;
     }
 
     private String checkNumber(String X) {
