@@ -5,7 +5,7 @@ import model.Kingdom;
 import model.Property.*;
 
 public class ShopMenuController {
-    public static String buyOrSell (String action, String name, int amount) {
+    public String buyOrSell (String action, String name, int amount) {
 
         Property property = Game.getYetGame().getCurrentKingdom().getPropertyByName(name);
 
@@ -66,25 +66,26 @@ public class ShopMenuController {
 
         return "Wrong name";
     }
-    public static String showPriceList() {
-        System.out.println("Foods :");
+    public String showPriceList() {
+        String output = "";
+        output += "Foods :\n";
         for (FoodType foodType : FoodType.values()) {
-            System.out.println("\t" + foodType.name().toLowerCase() +
-                    " : buy price = " + foodType.getBuyPrice() + ", sell price = " + foodType.getSellPrice());
+            output+= "\t" + foodType.name().toLowerCase() +
+                    " : buy price = " + foodType.getBuyPrice() + ", sell price = " + foodType.getSellPrice() + "\n";
         }
 
-        System.out.println("Resources :");
+        output += "Resources :\n";
         for (ResourceType resourceType : ResourceType.values()) {
-            System.out.println("\t" + resourceType.name().toLowerCase() +
-                    " : buy price = " + resourceType.getBuyPrice() + ", sell price = " + resourceType.getSellPrice());
+            output += "\t" + resourceType.name().toLowerCase() +
+                    " : buy price = " + resourceType.getBuyPrice() + ", sell price = " + resourceType.getSellPrice() + "\n";
         }
 
-        System.out.println("Weapons :");
+        output += "Weapons :\n";
         for (WeaponType weaponType : WeaponType.values()) {
-            System.out.println("\t" + weaponType.name().toLowerCase() +
-                    " : buy price = " + weaponType.getBuyPrice() + ", sell price = " + weaponType.getSellPrice());
+            output += "\t" + weaponType.name().toLowerCase() +
+                    " : buy price = " + weaponType.getBuyPrice() + ", sell price = " + weaponType.getSellPrice() + "\n";
         }
-        return "";
+        return output;
     }
 
 

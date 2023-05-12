@@ -18,20 +18,21 @@ public class TradeMenu {
             trade = TradeMenuCommands.getMatcher(input,TradeMenuCommands.TRADE);
             accept = TradeMenuCommands.getMatcher(input,TradeMenuCommands.TRADE_ACCEPT);
             if (tradeList.find()) {
-                System.out.println(TradeMenuController.showAllTrades());
+                System.out.println(controller.showAllTrades());
             }
             else if (trade.find()) {
                 //todo last parameter of this function is receiver kingdom
-//                System.out.println(TradeMenuController.trade(trade.group("type"), trade.group("amount"), trade.group("price"), trade.group("message"), ));
+//                System.out.println(controller.trade(trade.group("type"), trade.group("amount"), trade.group("price"), trade.group("message"), ));
             }
             else if (accept.find()) {
-
+                System.out.println(controller.acceptTrade(Integer.parseInt(accept.group("id")), accept.group("message")));
             }
             else if (tradeHistory.find()) {
-
+                System.out.println(controller.showTradeHistory());
             }
             else if (input.equals("back")) {
-
+                controller.deleteTrades();
+                return;
             }
             else {
                 System.out.println("Invalid command!");
