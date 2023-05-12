@@ -6,9 +6,7 @@ import model.Property.*;
 
 public class ShopMenuController {
     public static String buyOrSell (String action, String name, int amount) {
-
         Property property = Game.getYetGame().getCurrentKingdom().getPropertyByName(name);
-
         if (property != null) {
             if (action.equals("buy")) {
                 if (property instanceof Food) {

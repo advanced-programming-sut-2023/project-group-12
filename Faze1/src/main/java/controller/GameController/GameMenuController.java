@@ -229,7 +229,8 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return newGame.moveUnit();// todo : some how give me the current coordinates
+        //return newGame.moveUnit();// todo : some how give me the current coordinates
+        return "";
     }
 
     public String patrolUnit(String x1Coordinate, String y1Coordinate, String x2Coordinate, String y2Coordinate) {
@@ -256,8 +257,7 @@ public class GameMenuController {
         if (x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0 || x1 >= newGame.getCurrentMap().getDimension() || y1 >= newGame.getCurrentMap().getDimension() || x2 >= newGame.getCurrentMap().getDimension() || y2 >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return null;
-
+return "";
     }
 
     public String setMode(String xCoordinate, String yCoordinate, String mode, String type) {
@@ -303,7 +303,7 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().size() == 0) {
             return "no unit to disband";
         }
-        moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(),);//todo : where's the keep?
+        //moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(),);//todo : where's the keep?
         newGame.getSelectedUnits().clear();
         return "units disbanded successfully!";
     }
@@ -349,12 +349,11 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return null;
-
+        return "";
     }
 
     public String pourOil(String direction) {
-        return null;
+        return "";
     }
 
     public String airAttack(String xCoordinate, String yCoordinate) {
@@ -371,7 +370,7 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return null;
+        return "";
     }
 
     public String groundAttack(String xCoordinate, String yCoordinate) {
@@ -388,7 +387,7 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return null;
+        return "";
     }
 
     private String checkNumber(String X) {
