@@ -5,7 +5,7 @@ import model.Property.Food;
 import model.Property.FoodType;
 
 public class KingdomController {
-    private Kingdom currentKingdom;
+    private Kingdom currentKingdom;//todo: we should set this
 
     public String setFoodRate(String number) throws NumberFormatException {
         // does the popularity change every month or just once ?
@@ -63,7 +63,7 @@ public class KingdomController {
         return "Your tax rate is: " + currentKingdom.getTaxRate();
     }
     // religion is all about buildings
-    public String setFearRate (String number) {//positive fear -> negative popularity
+    public String setFearRate (String number) throws NumberFormatException{//positive fear -> negative popularity
         int rate;
         try {
             rate = Integer.parseInt(number);
@@ -77,5 +77,25 @@ public class KingdomController {
         currentKingdom.setFearRate(rate);
         currentKingdom.setPopularity(popularity - rate);
         return "Fear rate set successfully";
+    }
+
+    public String showPopularityFactors() {
+        //todo : religion
+        return "Your popularity factors are: \n" +
+                "Food rate: " + currentKingdom.getFoodRate() + "\n" +
+                "Tax rate: " + currentKingdom.getTaxRate() + "\n" +
+                "Fear rate: " + currentKingdom.getFearRate();
+    }
+
+    public String showPopularity() {
+        return "Your popularity is: " + currentKingdom.getPopularity();
+    }
+
+    public String showFoodList() {
+        return "Your food list is: " + currentKingdom.getFoodList();
+    }
+
+    public String showFoodRate() {
+        return "Your food rate is: " + currentKingdom.getFoodRate();
     }
 }
