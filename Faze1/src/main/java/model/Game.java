@@ -19,7 +19,13 @@ public class Game {
     private Building selectedBuilding;
     private ArrayList<Kingdom> players;
     private Kingdom currentKingdom;
-    private ArrayList<Unit> selectedUnits;
+    private ArrayList<Unit> selectedUnits = new ArrayList<>();
+    private ArrayList<Unit> patrollingUnits = new ArrayList<>();
+    private int patrollingUnitsNumberOfRounds = 0;
+
+    public ArrayList<Unit> getPatrollingUnits() {
+        return patrollingUnits;
+    }
 
     public ArrayList<Unit> getSelectedUnits() {
         return selectedUnits;
@@ -66,10 +72,44 @@ public class Game {
 
     }
 
-    public void moveUnit(int xStart, int yStart, int xEnd, int yEnd) {
+    //todo: this at the beginning of each turn
+    public String patrolUnit(int xStart, int yStart, int xEnd, int yEnd) {
+        if (finalPath(xStart, yStart, xEnd, yEnd) == null) {
+            return "no path found between the two points";
+        }
+        if (finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart) == null) {
+            return "units can't get there";
+        }
+        int speed = this.patrollingUnits.get(0).getSpeed();
+        if (patrollingUnitsNumberOfRounds % 2 == 0) {//go towards the start
+            ArrayList<Cell>path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
+            if (speed < path.size()) {
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
+            }
+            else {
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
+                patrollingUnitsNumberOfRounds++;
+                speed = speed - path.size()+1;
+                moveUnitWithSpeed(xStart, yStart, xEnd, yEnd,speed);
+            }
+        }
+        else if (patrollingUnitsNumberOfRounds % 2 == 1) {//go towards the end
+            ArrayList<Cell>path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
+            if (speed < path.size()) {
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
+            }
+            else {
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
+                patrollingUnitsNumberOfRounds++;
+                speed = speed - path.size()+1;
+                moveUnitWithSpeed(xEnd, yEnd, xStart, yStart,speed);
+            }
+        }
+        return "";
+    }
+    private void moveUnitWithSpeed(int xStart, int yStart, int xEnd, int yEnd, int speed) {
         //todo: handle the method for special cases
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
-        int speed = this.getSelectedUnits().get(0).getSpeed();
         for (int i = 0; i < speed && i < path.size() - 2; i++) {
             for (int j = selectedUnits.size() - 1; j >= 0; j--) {
                 path.get(i).getUnits().remove(selectedUnits.get(j));
@@ -78,11 +118,32 @@ public class Game {
         }
         //todo: complete the method
     }
+    //todo: check the move method
+    public String moveUnit(int xStart, int yStart, int xEnd, int yEnd) {
+        //todo: handle the method for special cases
+        ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
+        if (path == null) {
+            return "no path found for these units";
+        }
+        int speed = this.getSelectedUnits().get(0).getSpeed();
+        for (int i = 0; i < speed && i < path.size() - 2; i++) {
+            for (int j = selectedUnits.size() - 1; j >= 0; j--) {
+                path.get(i).getUnits().remove(selectedUnits.get(j));
+                path.get(i + 1).getUnits().add(selectedUnits.get(j));
+            }
+        }
+        return "units moved successfully";
+        //todo: complete the method
+    }
 
     private ArrayList<Cell> finalPath(int xStart, int yStart, int xEnd, int yEnd) {
+        runPath(xStart, yStart, xEnd, yEnd);
         ArrayList<Cell> path = new ArrayList<>();
         Cell cell = currentMap.getMap()[xEnd][yEnd];
         path.add(cell);
+        if (cell.getFather() == null) {
+            return null;
+        }
         while (!path.contains(currentMap.getMap()[xStart][yStart])) {
             cell = cell.getFather();
             path.add(cell);
@@ -91,14 +152,24 @@ public class Game {
         for (int i = path.size() - 1; i >= 0; i--) {
             correctOrder.add(path.get(i));
         }
+        for (int i = 0; i < currentMap.getDimension(); i++) {
+            for (int j = 0; j < currentMap.getDimension(); j++) {
+                currentMap.getMap()[i][j].setFather(null);
+            }
+        }
         return correctOrder;
     }
 
-    private ArrayList<Cell> path(int xStart, int yStart, int xEnd, int yEnd) {
+    private void runPath(int xStart, int yStart, int xEnd, int yEnd) {
         ArrayList<Cell> way = new ArrayList<>();
         way.add(currentMap.getMap()[xStart][yStart]);
         currentMap.getMap()[xStart][yStart].setInThePath(true);
+        int previousSize = 0;
+        int currentSize = 1;
         while (!way.contains(currentMap.getMap()[xEnd][yEnd])) {
+            if (previousSize == currentSize) {
+                break;
+            }
             for (int i = 0; i < currentMap.getDimension(); i++) {
                 for (int j = 0; j < currentMap.getDimension(); j++) {
                     if (!currentMap.getMap()[i][j].isInThePath() && currentMap.getMap()[i][j].isPassable()) {
@@ -111,17 +182,18 @@ public class Game {
                         }
                     }
                     if (currentMap.getMap()[xEnd][yEnd].isInThePath()) {
-                        return way;
+                        return;
                     }
                 }
             }
+            previousSize = currentSize;
+            currentSize = way.size();
         }
         for (int i = 0; i < currentMap.getDimension(); i++) {
             for (int j = 0; j < currentMap.getDimension(); j++) {
                 currentMap.getMap()[i][j].setInThePath(false);
             }
         }
-        return way;
     }
 
     private ArrayList<Cell> neighbors(int x, int y) {

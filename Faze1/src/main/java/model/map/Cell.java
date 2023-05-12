@@ -15,7 +15,7 @@ public class Cell {
     private int height = 0;
     private ArrayList<Unit> units = new ArrayList<Unit>();
     private boolean isInThePath = false;
-    private Cell father;
+    private Cell father = null;
 
     public void setFather(Cell father) {
         this.father = father;
