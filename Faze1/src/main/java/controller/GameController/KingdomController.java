@@ -6,7 +6,7 @@ import model.Property.FoodType;
 
 public class KingdomController {
     private Kingdom currentKingdom;//todo: we should set this
-
+    // todo : different kinds of food = added popularity
     public String setFoodRate(String number) throws NumberFormatException {
         // does the popularity change every month or just once ?
         int rate;
@@ -80,7 +80,7 @@ public class KingdomController {
     }
 
     public String showPopularityFactors() {
-        //todo : religion
+        //todo : religion and see if there's others
         return "Your popularity factors are: \n" +
                 "Food rate: " + currentKingdom.getFoodRate() + "\n" +
                 "Tax rate: " + currentKingdom.getTaxRate() + "\n" +
@@ -92,7 +92,15 @@ public class KingdomController {
     }
 
     public String showFoodList() {
-        return "Your food list is: " + currentKingdom.getFoodList();
+        Food bread = new Food(FoodType.BREAD,0);
+        Food apples = new Food(FoodType.APPLES,0);
+        Food cheese = new Food(FoodType.CHEESE,0);
+        Food meat = new Food(FoodType.MEAT,0);
+        return "Your food list is:\n" +
+                "1) bread:"+ currentKingdom.getNumberOfProperties(bread) + "\n" +
+                "2) apples:" + currentKingdom.getNumberOfProperties(apples) + "\n" +
+                "3) cheese:" + currentKingdom.getNumberOfProperties(cheese) + "\n" +
+                "4) meat:" + currentKingdom.getNumberOfProperties(meat);
     }
 
     public String showFoodRate() {
