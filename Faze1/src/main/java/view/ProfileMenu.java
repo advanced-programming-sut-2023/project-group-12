@@ -8,12 +8,9 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class ProfileMenu {
-
     private ProfileController controller;
-
-
     public void run(Scanner scanner) {
-        controller = new ProfileController(UserDatabase.getCurrentUser());
+       controller = new ProfileController(UserDatabase.getCurrentUser());
         String input = scanner.nextLine();
         Matcher matcher;
         while (true) {

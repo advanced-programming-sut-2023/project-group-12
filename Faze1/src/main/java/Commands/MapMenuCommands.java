@@ -9,7 +9,6 @@ public enum MapMenuCommands {
     CLEAR_CELL ("(?=.*-x)(?=.*-y)^clear(( -x (?<xCoordinate>[-]?\\d+))|( -y (?<yCoordinate>[-]?\\d+))){2}$"),
     DROP_ROCK ("(?=.*-x)(?=.*-y)(?=.*-d)^droprock(( -x (?<xCoordinate>[-]?\\d+))|( -y (?<yCoordinate>[-]?\\d+))|( -d (?<direction>(n|e|w|s|r)))){3}$"),
     DROP_TREE ("(?=.*-x)(?=.*-y)(?=.*-t)^droptree(( -x (?<xCoordinate>[-]?\\d+))|( -y (?<yCoordinate>[-]?\\d+))|( -t (?<type>\\S+))){3}$");
-    // TODO: figure out where the other kind of changes in a map should be placed
     private String regex;
 
     private MapMenuCommands(String regex) {

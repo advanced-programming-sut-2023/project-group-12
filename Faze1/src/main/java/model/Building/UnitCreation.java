@@ -1,20 +1,47 @@
 package model.Building;
 
 import model.Kingdom;
-import model.people.Unit;
-
-import java.util.ArrayList;
+import model.people.UnitType;
 import java.util.HashMap;
 
 public class UnitCreation extends Building{
     private int rate;
-    private String unitType;
+    private HashMap<UnitType, Integer> allUnit = new HashMap<>() {
 
-    public UnitCreation(String name, String buildingType, int xCoordinate, int yCoordinate, int hitPoint, ArrayList<Unit> people, HashMap<String, Integer> price, Kingdom kingdom, int rate, String unitType) {
-        super(name, buildingType, xCoordinate, yCoordinate, hitPoint, people, price, kingdom);
-        this.rate = rate;
-        this.unitType = unitType;
+    };
+
+    public UnitCreation(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
+        super(buildingType, owner,  xPosition, yPosition);
+
+        switch (buildingType){
+            case BARRACK:
+                for(UnitType type : UnitType.values()){
+                    if(!type.isArab()){
+                        allUnit.put(type, 0);
+                    }
+                }
+                break;
+            case MERCENARY_POST:
+                for(UnitType type : UnitType.values()){
+                    if(type.isArab()){
+                        allUnit.put(type, 0);
+                    }
+                }
+                break;
+            case HOVEL:
+                break;
+            case CHURCH:
+                break;
+            case CATHEDRAL:
+                break;
+        }
     }
+
+
+    public HashMap<UnitType, Integer> getAllUnit() {
+        return allUnit;
+    }
+
     public void createUnit() {
 
     }

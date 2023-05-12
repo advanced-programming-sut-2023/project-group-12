@@ -2,7 +2,6 @@ package view;
 
 import Commands.StartMenuCommands;
 import controller.StartMenuController;
-import model.UserDatabase;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -52,7 +51,8 @@ public class StartMenu {
 
             }
             else if (startGame.find()) {
-
+                GameMenu menu = new GameMenu();
+                menu.run(scanner);
             }
             else {
                 System.out.println("Invalid command!");

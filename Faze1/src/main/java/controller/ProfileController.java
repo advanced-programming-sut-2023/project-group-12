@@ -10,7 +10,6 @@ public class ProfileController {
     public ProfileController(User currentUser) {
         this.currentUser = currentUser;
     }
-
     public String changeUsername(String username) {
         if (username.isEmpty()) {
             return "Username can't be empty";
@@ -31,7 +30,6 @@ public class ProfileController {
         currentUser.setNickname(nickname);
         return "Your nickname <" + oldNickName + "> changed to <" + nickname + "> successfully";
     }
-
     public String changePassword(String oldPassword, String newPassword) {
         if (oldPassword.isEmpty()) {
             return "Password can't be empty";
@@ -95,7 +93,6 @@ public class ProfileController {
     public String displayRank() {
         return "Your rank is : " + currentUser.getRank();
     }
-
     public String displayAll() {
         return "User Information :" +
                 "\n\tUsername = " + currentUser.getUsername() +

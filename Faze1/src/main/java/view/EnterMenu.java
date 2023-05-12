@@ -1,8 +1,9 @@
 package view;
 
-import model.User;
+
 import model.UserDatabase;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +16,11 @@ public class EnterMenu {
             if (input.equals("login now")) {
                 LoginMenu menu = new LoginMenu();
                 System.out.println("Please enter your username and password to login");
-                menu.run(scanner);
+                try {
+                    menu.run(scanner);
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println("Welcome back to enter menu!");
             }
             else if (input.equals("register now")) {
