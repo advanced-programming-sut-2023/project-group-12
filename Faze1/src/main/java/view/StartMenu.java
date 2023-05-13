@@ -52,18 +52,12 @@ public class StartMenu {
 
             }
             else if (startGame.find()) {
-<<<<<<< HEAD
                 String output = controller.startGame();
                 System.out.println(output);
                 if (output.equals("game started successfully")) {
                     GameMenu menu = new GameMenu();
                     menu.run(scanner);
                 }
-=======
-                GameMenu menu = new GameMenu();
-                System.out.println("start game successfully!");
-                menu.run(scanner);
->>>>>>> 80e5677d663924427d3bbd4173605b5b4a3b953e
             }
             else {
                 System.out.println("Invalid command!");
