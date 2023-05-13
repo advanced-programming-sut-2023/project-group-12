@@ -5,7 +5,7 @@ import model.Property.Food;
 import model.Property.FoodType;
 
 public class KingdomController {
-    private Kingdom currentKingdom;//todo: we should set this
+    private Kingdom currentKingdom ;//todo: we should set this
     // todo : different kinds of food = added popularity
     public String setFoodRate(String number) throws NumberFormatException {
         // does the popularity change every month or just once ?

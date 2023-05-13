@@ -17,7 +17,7 @@ public class MapMenu {
     public void run (Scanner scanner) {
         System.out.println("Welcome to map menu!");
         String input;
-        Matcher setCellTexture, setCellsTexture, clear, dropRock, dropTree;
+        Matcher setCellTexture, setCellsTexture, clear, dropRock, dropTree, showMap, mapUp, showDetail;
         MapMenuController controller = new MapMenuController(map);
         while (true) {
             input = scanner.nextLine();
@@ -26,6 +26,9 @@ public class MapMenu {
             clear = MapMenuCommands.getMatcher(input, MapMenuCommands.CLEAR_CELL);
             dropRock = MapMenuCommands.getMatcher(input, MapMenuCommands.DROP_ROCK);
             dropTree = MapMenuCommands.getMatcher(input, MapMenuCommands.DROP_TREE);
+            showMap = MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_MAP);
+            mapUp = MapMenuCommands.getMatcher(input, MapMenuCommands.MAP_UP);
+            showDetail = MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_DETAILS);
             if (setCellTexture.find()) {
                 int x = Integer.parseInt(setCellTexture.group("xCoordinate"));
                 int y = Integer.parseInt(setCellTexture.group("yCoordinate"));
@@ -44,12 +47,17 @@ public class MapMenu {
                 System.out.println(controller.clear(Integer.parseInt(clear.group("xCoordinate")), Integer.parseInt(clear.group("yCoordinate"))));
             }
             else if (dropRock.find()) {
-                System.out.println(controller.dropRock(Integer.parseInt(dropTree.group("xCoordinate")), Integer.parseInt(dropTree.group("yCoordinate")), dropTree.group("direction").toCharArray()[0]));
+                System.out.println(controller.dropRock(Integer.parseInt(dropRock.group("xCoordinate")), Integer.parseInt(dropRock.group("yCoordinate")), dropRock.group("direction").toCharArray()[0]));
             }
             else if (dropTree.find()) {
                 System.out.println(controller.dropTree(Integer.parseInt(dropTree.group("xCoordinate")), Integer.parseInt(dropTree.group("yCoordinate")), dropTree.group("type")));
-            }
-            else if (input.equalsIgnoreCase("back")) {
+            } else if (showMap.find()) {
+                System.out.println(controller.showMap(Integer.parseInt(showMap.group("x")), Integer.parseInt(showMap.group("y"))));
+            } else if (mapUp.find()) {
+                System.out.println(controller.mapUp(mapUp.group("direction"), Integer.parseInt(mapUp.group("number"))));
+            } else if (showDetail.find()) {
+                System.out.println(controller.showDetail(Integer.parseInt(showDetail.group("x")), Integer.parseInt(showDetail.group("y"))));
+            } else if (input.equals("back")) {
                 return;
             }
             else {

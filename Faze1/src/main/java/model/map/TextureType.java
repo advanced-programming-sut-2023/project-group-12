@@ -1,15 +1,14 @@
-package model;
+package model.map;
 
 public enum TextureType {
     EARTH(true, false),
     GRAVEL(true, false),
-    STONE(true, false),
-//    ROCK_NORTH(false, false),
-//    ROCK_EAST(false, false),
-//    ROCK_WEST(false, false),
-//    ROCK_SOUTH(false, false),
-    ROCK(false,false),
-    IRON(true, false),
+    STONE_MINE(true, false),
+    ROCK_NORTH(false, false),
+    ROCK_EAST(false, false),
+    ROCK_WEST(false, false),
+    ROCK_SOUTH(false, false),
+    IRON_MINE(true, false),
     GRASS(true, false),
     MEADOW(true, false),
     DENSE_MEADOW(true, false),
@@ -22,7 +21,7 @@ public enum TextureType {
     SMALL_POND(false, true),
     BIG_POND(false, true),
     BEACH(true, true),
-    SEA(false, true),;
+    SEA(false, true);
 
     private boolean passable;
 
@@ -36,7 +35,11 @@ public enum TextureType {
          return isWateryLand;
      }
 
-     public boolean passable(){
+    public boolean isWatery() {
+        return this.isWateryLand;
+    }
+
+    public boolean isPassable(){
         return passable;
     }
 }

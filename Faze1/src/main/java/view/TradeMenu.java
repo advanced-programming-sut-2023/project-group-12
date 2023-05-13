@@ -2,15 +2,17 @@ package view;
 
 import Commands.TradeMenuCommands;
 import controller.TradeMenuController;
+import model.Game;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class TradeMenu {
-    public void run (Scanner scanner) {
+    public void run (Scanner scanner, Game game) {
+        System.out.println("wellcome to trade menu");
         String input;
         Matcher tradeList,trade,accept,tradeHistory;
-        TradeMenuController controller = new TradeMenuController();
+        TradeMenuController controller = new TradeMenuController(game);
         while (true) {
             input = scanner.nextLine();
             tradeList = TradeMenuCommands.getMatcher(input,TradeMenuCommands.SHOW_ALL_TRADES);
@@ -18,20 +20,20 @@ public class TradeMenu {
             trade = TradeMenuCommands.getMatcher(input,TradeMenuCommands.TRADE);
             accept = TradeMenuCommands.getMatcher(input,TradeMenuCommands.TRADE_ACCEPT);
             if (tradeList.find()) {
-                System.out.println(TradeMenuController.showAllTrades());
+                System.out.println(controller.showAllTrades());
             }
             else if (trade.find()) {
-                //todo last parameter of this function is receiver kingdom
-//                System.out.println(TradeMenuController.trade(trade.group("type"), trade.group("amount"), trade.group("price"), trade.group("message"), ));
+                System.out.println(controller.trade(trade.group("type"), Integer.parseInt(trade.group("amount")), Integer.parseInt(trade.group("price")), trade.group("message"), trade.group("receiverName")));
             }
             else if (accept.find()) {
-
+                System.out.println(controller.acceptTrade(Integer.parseInt(accept.group("id")), accept.group("message")));
             }
             else if (tradeHistory.find()) {
-
+                System.out.println(controller.showTradeHistory());
             }
             else if (input.equals("back")) {
-
+                controller.deleteTrades();
+                return;
             }
             else {
                 System.out.println("Invalid command!");
