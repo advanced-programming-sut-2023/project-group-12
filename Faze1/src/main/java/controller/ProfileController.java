@@ -98,7 +98,8 @@ public class ProfileController {
     }
 
     public String displayRank() {
-        return "Your rank is : " + currentUser.getRank();
+        currentUser.setRank(UserDatabase.playerRank(currentUser));
+        return "Your rank is : " + UserDatabase.playerRank(currentUser);
     }
     public String displayAll() {
         return "User Information :" +

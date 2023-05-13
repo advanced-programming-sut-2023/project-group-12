@@ -11,7 +11,7 @@ public class User {
     private String question;
 
     public void setQuestion(int number) {
-        this.question = UserDatabase.getQuestions().get(number-1);
+        this.question = UserDatabase.getQuestions().get(number - 1);
     }
 
     public String getQuestion() {
@@ -20,6 +20,7 @@ public class User {
 
     private String answer;
     private String slogan;
+
     public void setStayLoggedIn(boolean stayLoggedIn) {
         this.stayLoggedIn = stayLoggedIn;
     }
@@ -38,7 +39,7 @@ public class User {
     public void setHighScore(int highScore) {
         this.highScore = highScore;
     }
-
+// todo : what is this shit
     public void setCurrentScore(int currentScore) {
         if (currentScore > highScore)
             setHighScore(currentScore);
@@ -98,13 +99,13 @@ public class User {
     }
 
     public int getRank() {
-        //TODO fix rank
-        return rank + 1;
+        return rank;
     }
 
     public String getSlogan() {
         return slogan;
     }
+
     // the part in profile menu where we change information
     public void setUsername(String username) {
         this.username = username;
@@ -125,20 +126,9 @@ public class User {
     public void setSlogan(String slogan) {
         this.slogan = slogan;
     }
-    // these methods maybe placed somewhere else
-    /**
-     this method generates a new password
-     */
-
-    private String generateRandomSlogan () {
-        // choose a slogan from slogan enum
-        return "";
-    }
-
     public void setAnswer(String answer) {
         this.answer = answer;
     }
-    // TODO: create a file for user info and encode it
     private byte[] salt;
 
     public void setSalt(byte[] salt) {
