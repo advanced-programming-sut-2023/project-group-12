@@ -12,14 +12,19 @@ public class Unit {
     private UnitType unitType ;
     private int hitPoint;
     private String mode;
+    private int speed;
 
+    public int getSpeed() {
+        return speed;
+    }
 
     public Unit(Kingdom homeland, UnitType unitType, int xPosition, int yPosition) {
         this.homeland = homeland;
         this.unitType = unitType;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
-        hitPoint = unitType.getHitPoint();
+        this.hitPoint = unitType.getHitPoint();
+        this.speed = unitType.getMoveSpeed() * 10;
     }
 
     public UnitType getUnitType() {

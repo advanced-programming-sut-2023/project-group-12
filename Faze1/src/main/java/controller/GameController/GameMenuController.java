@@ -225,7 +225,13 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return newGame.moveUnit();// todo : some how give me the current coordinates
+        if (!newGame.getCurrentMap().getMap()[x][y].isPassable()) {
+            return "the destination is not a valid destination, troops can't be there";
+        }
+        if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
+            return "this unit can't move";
+        }
+        return newGame.moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getxPosition(), x, y);// todo : some how give me the current coordinates
     }
 
     public String patrolUnit(String x1Coordinate, String y1Coordinate, String x2Coordinate, String y2Coordinate) {
@@ -252,7 +258,16 @@ public class GameMenuController {
         if (x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0 || x1 >= newGame.getCurrentMap().getDimension() || y1 >= newGame.getCurrentMap().getDimension() || x2 >= newGame.getCurrentMap().getDimension() || y2 >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-
+        if (x1 == x2 && y1 == y2) {
+            return "you can't patrol a unit in one place";
+        }
+        if (!isUnitSelected().equals("true")) {
+            return isUnitSelected();
+        }
+        newGame.getPatrollingUnits().clear();
+        newGame.getPatrollingUnits().addAll(newGame.getSelectedUnits());
+        newGame.patrolUnit(x1, y1, x2, y2);
+        return "patrolling started successfully";
     }
 
     public String setMode(String xCoordinate, String yCoordinate, String mode, String type) {
@@ -298,7 +313,7 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().size() == 0) {
             return "no unit to disband";
         }
-        moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(),);//todo : where's the keep?
+        //moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(),);//todo : where's the keep?
         newGame.getSelectedUnits().clear();
         return "units disbanded successfully!";
     }
@@ -307,9 +322,10 @@ public class GameMenuController {
         if (equipmentName.isEmpty()) {
             return "equipment name can't be empty";
         }
-        for (Unit unit: newGame.getSelectedUnits()) {
-            if (unit.getUnitType().)
+        for (Unit unit : newGame.getSelectedUnits()) {
+            //if (unit.getUnitType().)
         }
+        return "";
     }
 
     public String digTunnel(String xCoordinate, String yCoordinate) {
@@ -326,9 +342,11 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        return "";
     }
 
     public String pourOil(String direction) {
+        return "";
     }
 
     public String airAttack(String xCoordinate, String yCoordinate) {
@@ -345,6 +363,7 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        return "";
     }
 
     public String groundAttack(String xCoordinate, String yCoordinate) {
@@ -361,6 +380,7 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        return "";
     }
 
     private String checkNumber(String X) {
@@ -373,5 +393,11 @@ public class GameMenuController {
             return "X must be a number";
         }
         return "";
+    }
+    private String isUnitSelected () {
+        if (newGame.getSelectedUnits() == null || newGame.getSelectedUnits().size() == 0) {
+            return "you have to select a unit first";
+        }
+        return "true";
     }
 }

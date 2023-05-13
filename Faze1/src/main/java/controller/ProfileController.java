@@ -3,6 +3,8 @@ package controller;
 import model.User;
 import model.UserDatabase;
 
+import java.security.NoSuchAlgorithmException;
+
 public class ProfileController {
 
     private User currentUser;
@@ -30,18 +32,20 @@ public class ProfileController {
         currentUser.setNickname(nickname);
         return "Your nickname <" + oldNickName + "> changed to <" + nickname + "> successfully";
     }
-    public String changePassword(String oldPassword, String newPassword) {
+    public String changePassword(String oldPassword, String newPassword) throws NoSuchAlgorithmException {
         if (oldPassword.isEmpty()) {
             return "Password can't be empty";
         }
         if (newPassword.isEmpty()) {
             return "New password can't be empty";
         }
+        String oldPasswordToShow = oldPassword;
+        oldPassword = UserDatabase.hashPassword(oldPassword,currentUser.getSalt());
         if (oldPassword.equals(currentUser.getPassword())) {
-            if (!RegisterMenuController.isPasswordWeak(newPassword).equals("true")) {
+            if (RegisterMenuController.isPasswordWeak(newPassword).equals("true")) {
                 if (!newPassword.equals(oldPassword)) {
                     currentUser.setPassword(newPassword);
-                    return "Your password <" + oldPassword + "> changed to <" + newPassword + "> successfully";
+                    return "Your password <" + oldPasswordToShow + "> changed to <" + newPassword + "> successfully";
                 }
                 return "You should choose a new password";
             }
@@ -68,6 +72,9 @@ public class ProfileController {
     public String changeSlogan(String slogan) {
         if (slogan.isEmpty()) {
             return "Slogan can't be empty";
+        }
+        if (slogan.equals("random")) {
+            slogan = RegisterMenuController.generateRandomSlogan();
         }
         String oldSlogan = currentUser.getSlogan();
         currentUser.setSlogan(slogan);
@@ -96,7 +103,6 @@ public class ProfileController {
     public String displayAll() {
         return "User Information :" +
                 "\n\tUsername = " + currentUser.getUsername() +
-                "\n\tPassword = " + currentUser.getPassword() +
                 "\n\tNickname = " + currentUser.getNickname() +
                 "\n\tSlogan = " + currentUser.getSlogan() +
                 "\n\tHighScore = " + currentUser.getHighScore() +

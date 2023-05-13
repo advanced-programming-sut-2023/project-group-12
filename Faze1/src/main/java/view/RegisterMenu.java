@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 public class RegisterMenu {
     //todo : if the username already exists you can't handle the registration
     public void run(Scanner scanner) {
+        System.out.println("Welcome to register menu!");
         String input;
         Matcher userCreate;
         RegisterMenuController controller = new RegisterMenuController();
@@ -21,7 +22,7 @@ public class RegisterMenu {
             if (userCreate.find()) {
                 // todo : handle empty fields' spaces
                 if (UserCreate(scanner, userCreate, controller)) return;
-            } else if (input.equals("back")) {
+            } else if (input.equalsIgnoreCase("back")) {
                 return;
             } else {
                 System.out.println("Invalid command!");
@@ -138,7 +139,14 @@ public class RegisterMenu {
             System.out.println("Answer confirmation can't be empty");
             return false;
         }
-        int number = Integer.parseInt(questionPick.group("questionNumber"));
+        int number;
+        try {
+            number = Integer.parseInt(questionPick.group("questionNumber"));
+        }
+        catch (NumberFormatException e) {
+            System.out.println("Invalid question number");
+            return false;
+        }
         String answer = questionPick.group("answer");
         String answerConfirm = questionPick.group("answerConfirm");
         String show = controller.securityQuestionErrors(number, answer, answerConfirm);
@@ -163,6 +171,10 @@ public class RegisterMenu {
         }
         input = scanner.nextLine();
         int A = 0;
+        if (input.length() != captcha.getCreatedCaptcha().length) {
+            System.out.println("incorrect captcha, please try again");
+            return false;
+        }
         for (int i = 0; i < captcha.getCreatedCaptcha().length; i++) {
             if (input.charAt(i) - '0' != captcha.getNumbers()[i]) {
                 System.out.println("incorrect captcha, please try again");
@@ -187,17 +199,20 @@ public class RegisterMenu {
         for (int i = 0; i < 3; i++) {
             System.out.println((i + 1) + ")" + toAdds[i] + username);
         }
-        System.out.println("please choose your favorite username.If you don't have one please type in anything else");
-        input = scanner.nextLine();
-        if (input.equals("1") || input.equals("2") || input.equals("3")) {
-            for (int i = 1; i < 4; i++) {
-                if (Integer.parseInt(input) == i) {
-                    String answer = controller.register(toAdds[i - 1] + username, password, passwordRepeat, email, nickname, slogan);
-                    System.out.println(answer);
-                    if (answer.equals("register successfully!")) {
-                        chooseSuggestedUsername = true;
-                        System.out.println("This is your username: " + toAdds[i-1] + username);
-                        break;
+        first:
+        while (true) {
+            System.out.println("please choose your favorite username.If you don't have one please type in anything else");
+            input = scanner.nextLine();
+            if (input.equals("1") || input.equals("2") || input.equals("3")) {
+                for (int i = 1; i < 4; i++) {
+                    if (Integer.parseInt(input) == i) {
+                        String answer = controller.register(toAdds[i - 1] + username, password, passwordRepeat, email, nickname, slogan);
+                        System.out.println(answer);
+                        if (answer.equals("register successfully!")) {
+                            chooseSuggestedUsername = true;
+                            System.out.println("This is your username: " + toAdds[i - 1] + username);
+                            break first;
+                        }
                     }
                 }
             }

@@ -15,7 +15,7 @@ public class MapMenu {
 
 
     public void run (Scanner scanner) {
-        System.out.println("Wellcome to map menu");
+        System.out.println("Welcome to map menu!");
         String input;
         Matcher setCellTexture, setCellsTexture, clear, dropRock, dropTree, showMap, mapUp, showDetail;
         MapMenuController controller = new MapMenuController(map);

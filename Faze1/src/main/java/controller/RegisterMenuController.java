@@ -32,7 +32,6 @@ public class RegisterMenuController {
         if (!isEmailFormatCorrect(emailToUpper)) {
             return "email format is incorrect!";
         }
-        // todo : password to SHA256
         SecureRandom secureRandom = new SecureRandom();
         byte[] salt = new byte[32];
         secureRandom.nextBytes(salt);
@@ -41,6 +40,7 @@ public class RegisterMenuController {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+        slogan=slogan.replace("\"","");
         userRegister = new User(username, password, nickname, email, slogan);
         userRegister.setSalt(salt);
         return "register successfully!";
@@ -55,7 +55,7 @@ public class RegisterMenuController {
     }
 
     public String securityQuestionErrors(int number, String answer, String answerConfirm) {
-        if (number > 3) {
+        if (number > 3 || number < 1) {
             return "incorrect number question!";
         }
         if (!answer.equals(answerConfirm)) {
@@ -68,6 +68,7 @@ public class RegisterMenuController {
         userRegister.setAnswer(answer);
         userRegister.setQuestion(questionNumber);
         UserDatabase.addUser(userRegister);
+        UserDatabase.saveUsers();
     }
 
     public static String isPasswordWeak(String password) {
@@ -99,6 +100,7 @@ public class RegisterMenuController {
     }
 
     public static boolean isEmailFormatCorrect(String email) {
+        email = email.toUpperCase();
         String emailValid = "^[A-Z0-9_.]+@[A-Z0-9_]+\\.[A-Z0-9_.]+$";
         return Pattern.matches(emailValid, email);
     }
