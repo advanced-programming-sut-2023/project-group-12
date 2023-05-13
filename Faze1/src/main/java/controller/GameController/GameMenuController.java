@@ -14,6 +14,10 @@ public class GameMenuController {
     private KingdomController kingdomController = new KingdomController();
     private BuildingController buildingController = new BuildingController();
 
+    public void setNewGame(Game newGame) {
+        this.newGame = newGame;
+    }
+
     public String dropBuilding(String X, String Y, String type) {
         String output = checkNumber(X);
         if (!output.equals("")) {

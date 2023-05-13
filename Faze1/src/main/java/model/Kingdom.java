@@ -50,6 +50,17 @@ public class Kingdom {
         return popularity;
     }
 
+    public Kingdom(User owner){
+        this.owner = owner;
+        gold = 500;
+        fearRate = 0;
+        taxRate = 0;
+        popularity = 0;
+        foodRate = 0;
+        population = 15;
+        unemployed = 15;
+    }
+
     public void setPopularity(int popularity) {
         this.popularity = popularity;
     }

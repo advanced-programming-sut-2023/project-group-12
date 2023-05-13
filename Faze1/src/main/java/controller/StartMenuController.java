@@ -1,5 +1,7 @@
 package controller;
 
+import controller.GameController.GameMenuController;
+import model.Game;
 import model.User;
 import model.UserDatabase;
 
@@ -80,5 +82,10 @@ public class StartMenuController {
             return false;
         }
         return true;
+    }
+
+    public void startNewGame (){
+        Game newGame = new Game();
+
     }
 }

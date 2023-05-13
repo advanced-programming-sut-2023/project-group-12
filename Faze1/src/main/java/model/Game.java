@@ -14,11 +14,17 @@ import model.people.UnitType;
 public class Game {
 
 
-    static Game yetGame;
     private Map currentMap;
     private Building selectedBuilding;
     private ArrayList<Kingdom> players;
+
+    {
+        for (User user: UserDatabase.getPlayers()){
+            players.add(new Kingdom(user));
+        }
+    }
     private Kingdom currentKingdom;
+    //todo: next turn & current kingdom
     private ArrayList<Unit> selectedUnits = new ArrayList<>();
     private ArrayList<Unit> patrollingUnits = new ArrayList<>();
     private int patrollingUnitsNumberOfRounds = 0;
@@ -222,9 +228,7 @@ public class Game {
         this.selectedBuilding = selectedBuilding;
     }
 
-    public static Game getYetGame() {
-        return yetGame;
-    }
+
 
     public ArrayList<Kingdom> getPlayers() {
         return players;
