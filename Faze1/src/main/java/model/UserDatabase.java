@@ -126,5 +126,21 @@ public class UserDatabase {
         String enteredHash = hashPassword(password, storedSalt);
         return enteredHash.equals(storedHash);
     }
+    private static ArrayList<User> rankPlayers () {
+        ArrayList<User> sortedUsers = new ArrayList<>(users);
+        for (int i = 0; i < sortedUsers.size(); i++) {
+            for (int j = 0; j < sortedUsers.size() - 1; j++) {
+                if (sortedUsers.get(j).getHighScore() < sortedUsers.get(j + 1).getHighScore()) {
+                    User temp = sortedUsers.get(j);
+                    sortedUsers.set(j, sortedUsers.get(j + 1));
+                    sortedUsers.set(j + 1, temp);
+                }
+            }
+        }
+        return sortedUsers;
+    }
+    public static int playerRank (User user) {
+        return rankPlayers().indexOf(user) + 1;
+    }
 }
 
