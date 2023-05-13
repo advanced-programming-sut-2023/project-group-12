@@ -8,16 +8,14 @@ import model.people.Unit;
 import java.util.ArrayList;
 
 public class Cell {
-
     private TextureType TextureType;// ino man ezafe kardam okaye?
     private Type type = Type.EARTH;// todo : lanati in che anie ?
     private Tree tree = null;
     private Building building = null;
-
     private int height = 0;
-    private ArrayList<Unit> units = new ArrayList<Unit>();
+    private ArrayList<Unit> units = null;
     private boolean isInThePath = false;
-    private Cell father;
+    private Cell father = null;
 
     public void setFather(Cell father) {
         this.father = father;
@@ -60,6 +58,8 @@ public class Cell {
     }
 
     public ArrayList<Unit> getUnits() {
+        if (units == null)
+            units = new ArrayList<>();
         return units;
     }
 

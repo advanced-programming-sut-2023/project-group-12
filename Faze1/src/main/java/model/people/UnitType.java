@@ -37,7 +37,7 @@ public enum UnitType {
     private int hitPoint;
     private int attackPower;
     private double defensePower;
-    private double moveSpeed;
+    private int moveSpeed;
     private int range;
     private int secondRange;
     private int cost;
@@ -51,7 +51,7 @@ public enum UnitType {
     private String name;
 
 
-    UnitType(int hitPoint, int attackPower, double defensePower, double speed, int range, int secondRange, int cost,
+    UnitType(int hitPoint, int attackPower, double defensePower, int speed, int range, int secondRange, int cost,
              double precision, int attackDelay, WeaponType weapon, DefenseType defence, boolean canClimb, boolean canDigDitch, boolean isArab, String name) {
         this.hitPoint = hitPoint;
         this.attackPower = attackPower;
@@ -100,7 +100,7 @@ public enum UnitType {
         return attackPower;
     }
 
-    public double getMoveSpeed() {
+    public int getMoveSpeed() {
         return moveSpeed;
     }
 

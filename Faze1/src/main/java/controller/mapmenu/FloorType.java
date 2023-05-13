@@ -1,10 +1,9 @@
 package controller.mapmenu;
 
-import model.map.Map;
+
 import model.map.Type;
 
-import java.util.ArrayList;
-import java.util.regex.Matcher;
+
 import java.util.regex.Pattern;
 
 public enum FloorType {
