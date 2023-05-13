@@ -7,7 +7,7 @@ import model.people.Unit;
 import java.util.ArrayList;
 
 public class Cell {
-    private TextureType TextureType;
+    private TextureType TextureType = model.map.TextureType.EARTH;
 
     private Tree tree = null;
     private Building building = null;

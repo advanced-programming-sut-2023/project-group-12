@@ -13,6 +13,14 @@ import model.people.UnitType;
 
 
 public class Game {
+
+    public Game(Map currentMap, ArrayList<Kingdom> players) {
+        this.currentMap = currentMap;
+        this.players = players;
+        this.currentKingdom = players.get(0);
+        this.roundsPassed = 0;
+    }
+
     private Map currentMap;
     private Building selectedBuilding;
     private ArrayList<Kingdom> players;

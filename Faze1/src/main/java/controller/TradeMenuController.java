@@ -24,19 +24,21 @@ public class TradeMenuController {
 
         output += "id \\\\ resource name \\\\ amount \\\\ price \\\\ sender \\\\ receiver \\\\ massage" + "\n";
         int i = 1;
-        for (Trade trade : game.getCurrentKingdom().getTrades()) {
-            output += i + " \\\\ ";
-            if (trade.getProperty() instanceof Food)
-                output += ((Food) trade.getProperty()).getType().name().toLowerCase();
-            else if (trade.getProperty() instanceof Resources)
-                output += ((Resources) trade.getProperty()).getResourceType().name().toLowerCase();
-            else if (trade.getProperty() instanceof Weapon)
-                output += ((Weapon) trade.getProperty()).getWeaponType().name().toLowerCase();
-            else if (trade.getProperty() instanceof DefensiveWeapon)
-                output += ((DefensiveWeapon) trade.getProperty()).getDefenseType().name().toLowerCase();
-            output += " \\\\ " + trade.getResourceAmount() + " \\\\ " + trade.getPrice() +
-                    " \\\\ " + trade.getSender().getOwner().getUsername() + " \\\\ " +
-                    trade.getReceiver().getOwner().getUsername() + " \\\\ " + trade.getSenderMessage() + "\n";
+        if (!game.getCurrentKingdom().getTrades().isEmpty()) {
+            for (Trade trade : game.getCurrentKingdom().getTrades()) {
+                output += i + " \\\\ ";
+                if (trade.getProperty() instanceof Food)
+                    output += ((Food) trade.getProperty()).getType().name().toLowerCase();
+                else if (trade.getProperty() instanceof Resources)
+                    output += ((Resources) trade.getProperty()).getResourceType().name().toLowerCase();
+                else if (trade.getProperty() instanceof Weapon)
+                    output += ((Weapon) trade.getProperty()).getWeaponType().name().toLowerCase();
+                else if (trade.getProperty() instanceof DefensiveWeapon)
+                    output += ((DefensiveWeapon) trade.getProperty()).getDefenseType().name().toLowerCase();
+                output += " \\\\ " + trade.getResourceAmount() + " \\\\ " + trade.getPrice() +
+                        " \\\\ " + trade.getSender().getOwner().getUsername() + " \\\\ " +
+                        trade.getReceiver().getOwner().getUsername() + " \\\\ " + trade.getSenderMessage() + "\n";
+            }
         }
         return output;
     }

@@ -13,6 +13,11 @@ import java.util.HashMap;
 
 public class Kingdom {
 
+    public Kingdom(User owner, Cell headSquare) {
+        this.owner = owner;
+        this.HeadSquare = headSquare;
+    }
+
     private int population;
 
     private int unemployed;

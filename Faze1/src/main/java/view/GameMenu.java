@@ -2,15 +2,17 @@ package view;
 
 import Commands.GameMenuCommands;
 import controller.GameController.GameMenuController;
+import model.Game;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu {
-    public void run(Scanner scanner) {
+
+    public void run(Scanner scanner, Game game) {
         System.out.println("Welcome to the game");
         String input, output;
-        GameMenuController controller = new GameMenuController();
+        GameMenuController controller = new GameMenuController(game);
         Matcher chooseColor, chooseKeep, changeColor, changeKeep, dropBuilding, selectBuilding, createUnit, setFoodRate,
                 setTaxRate, showTaxRate, setFearRate, showPopularityFactors, showPopularity, showFoodList, showFoodRate,
                 dropUnit, repair, selectUnit, moveUnit, patrolUnit, setMode, groundAttack, airAttack, pourOil, digTunnel,
