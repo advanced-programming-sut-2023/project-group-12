@@ -18,13 +18,13 @@ public class Trade {
         return null;
     }
 
-    public Trade(Property property, int resourceAmount, int price, String message, Kingdom sender) {
+    public Trade(Property property, int resourceAmount, int price, String message,Kingdom sender, Kingdom receiver) {
         this.property = property;
         this.resourceAmount = resourceAmount;
         this.price = price;
         this.senderMessage = message;
         this.sender = sender;
-        this.receiver = null;
+        this.receiver = receiver;
         this.accept = false;
         receiverMessage = "";
     }

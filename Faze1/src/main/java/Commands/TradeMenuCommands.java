@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public enum TradeMenuCommands {
     SHOW_ALL_TRADES ("^trade list$"),
-    TRADE ("(?=.*-t)(?=.*-a)(?=.*-p)(?=.*-m)(?=.*-r)^trade(( -t (?<type>\\S+))|( -a (?<amount>[-]?\\d+))|( -p (?<price>[-]?\\d+))|( -m (?<message>.+))( -r (?<receiverName>\\S+))){5}$"),
+    TRADE ("(?=.*-t)(?=.*-a)(?=.*-p)(?=.*-m)(?=.*-r)^trade(( -t (?<type>\\S+))|( -a (?<amount>[-]?\\d+))|( -p (?<price>[-]?\\d+))|( -m (?<message>.+))|( -r (?<receiverName>\\S+))){5}$"),
     TRADE_HISTORY("trade history"),
     TRADE_ACCEPT("(?=.*-i)(?=.*-m)^trade accept(( -i (?<id>\\S+))|( -m (?<message>.+))){2}$");
     private String regex;
