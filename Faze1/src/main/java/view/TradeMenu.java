@@ -21,8 +21,7 @@ public class TradeMenu {
                 System.out.println(controller.showAllTrades());
             }
             else if (trade.find()) {
-                //todo last parameter of this function is receiver kingdom
-//                System.out.println(controller.trade(trade.group("type"), trade.group("amount"), trade.group("price"), trade.group("message"), ));
+                System.out.println(controller.trade(trade.group("type"), Integer.parseInt(trade.group("amount")), Integer.parseInt(trade.group("price")), trade.group("message"), trade.group("receiverName")));
             }
             else if (accept.find()) {
                 System.out.println(controller.acceptTrade(Integer.parseInt(accept.group("id")), accept.group("message")));

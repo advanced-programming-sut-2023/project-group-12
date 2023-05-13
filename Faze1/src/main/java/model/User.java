@@ -98,6 +98,7 @@ public class User {
     }
 
     public int getRank() {
+        //TODO fix rank
         return rank + 1;
     }
 
