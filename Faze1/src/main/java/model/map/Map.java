@@ -18,7 +18,7 @@ public class Map {
         map = new Cell[dimension][dimension];
         for (int i = 0; i < dimension; i++)
             for (int j = 0; j < dimension; j++)
-                map[i][j] = new Cell();
+                map[i][j] = new Cell(i, j);
         this.dimension = dimension;
         headSquares = new ArrayList<>();
         for (int i = 0; i < kingdomNumber; i++) {

@@ -7,6 +7,15 @@ import model.people.Unit;
 import java.util.ArrayList;
 
 public class Cell {
+
+    private int xCoordinate;
+    private int yCoordinate;
+
+    public Cell(int xCoordinate, int yCoordinate) {
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
+    }
+
     private TextureType TextureType = model.map.TextureType.EARTH;
 
     private Tree tree = null;
