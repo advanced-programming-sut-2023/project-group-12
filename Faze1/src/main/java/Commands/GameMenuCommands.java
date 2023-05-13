@@ -39,7 +39,8 @@ public enum GameMenuCommands {
     //BURN OIL("")
     //HANDLE PAGE 26 OF DOC
     GO_TO_TRADE_MENU("^go to trade menu$"),
-    GO_TO_SHOP_MENU("^go to shop menu$")
+    GO_TO_SHOP_MENU("^go to shop menu$"),
+    GO_TO_MAP_MENU("^go to map menu$")
     ;
     private String regex;
 
