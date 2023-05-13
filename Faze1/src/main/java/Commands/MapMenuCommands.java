@@ -11,7 +11,8 @@ public enum MapMenuCommands {
     DROP_TREE ("(?=.*-x)(?=.*-y)(?=.*-t)^droptree(( -x (?<xCoordinate>[-]?\\d+))|( -y (?<yCoordinate>[-]?\\d+))|( -t (?<type>\\S+))){3}$"),
     SHOW_DETAILS("^show detail -x (?<x>\\d+) -y (?<y>\\d+)$"),
     MAP_UP("^map up -d (?<direction>n|e|w|s) -n (?<number>\\d+)$"),
-    SHOW_MAP("^show map -x (?<x>\\d+) -y (?<y>\\d+)$");
+    SHOW_MAP("^show map -x (?<x>\\d+) -y (?<y>\\d+)$"),
+    SELECT_MAP("^select this map$");
     private String regex;
 
     private MapMenuCommands(String regex) {

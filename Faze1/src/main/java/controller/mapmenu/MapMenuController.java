@@ -1,5 +1,6 @@
 package controller.mapmenu;
 
+import model.UserDatabase;
 import model.map.Map;
 import model.map.TextureType;
 import model.people.Unit;
@@ -179,6 +180,11 @@ public class MapMenuController {
         } else
             output += "Your coordinate is incorrect";
         return output;
+    }
+
+    public String selectMap() {
+        UserDatabase.setCurrentMap(this.map);
+        return "map selected successfully";
     }
 
     private boolean isCorrectCoordinate(int x, int y) {

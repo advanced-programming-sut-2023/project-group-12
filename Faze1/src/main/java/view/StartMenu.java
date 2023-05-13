@@ -17,7 +17,6 @@ public class StartMenu {
             addPlayer = StartMenuCommands.getMatcher(input, StartMenuCommands.ADD_PLAYER);
             removePlayer = StartMenuCommands.getMatcher(input, StartMenuCommands.REMOVE_PLAYER);
             removeAllPlayers = StartMenuCommands.getMatcher(input, StartMenuCommands.REMOVE_ALL_PLAYERS);
-            chooseMap = StartMenuCommands.getMatcher(input, StartMenuCommands.CHOOSE_MAP);
             startGame = StartMenuCommands.getMatcher(input, StartMenuCommands.START_GAME);
 //          addRandomPlayers = StartMenuCommands.getMatcher(input, StartMenuCommands.ADD_RANDOM_PLAYERS);
             if (input.equalsIgnoreCase("back")) {
@@ -47,9 +46,6 @@ public class StartMenu {
             }
             else if (removeAllPlayers.find()) {
                 System.out.println(controller.removeAllPlayers());
-            }
-            else if (chooseMap.find()) {
-
             }
             else if (startGame.find()) {
                 String output = controller.startGame();

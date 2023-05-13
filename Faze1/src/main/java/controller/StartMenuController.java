@@ -2,10 +2,13 @@ package controller;
 
 import model.User;
 import model.UserDatabase;
+import model.map.Map;
 
 import java.util.ArrayList;
 
 public class StartMenuController {
+
+    private Map map;
     public String addPlayer(String username) {
         if (!UserDatabase.getPlayers().contains(UserDatabase.getCurrentUser())) {
             UserDatabase.getPlayers().add(UserDatabase.getCurrentUser());
@@ -21,6 +24,8 @@ public class StartMenuController {
                 return "Player is already added";
             }
         }
+        if (UserDatabase.getPlayers().size() == UserDatabase.getCurrentMap().getHeadSquares().size())
+            return "The map is filled!";
         UserDatabase.getPlayers().add(UserDatabase.getUserByUsername(username));
         return "Player successfully added";
     }
@@ -88,15 +93,6 @@ public class StartMenuController {
 //        }
 //        return "Players successfully added";
 //    }
-
-    public String chooseMap(String number) {
-        if (number.equals("random")) {
-            // TODO: add a random map
-        } else {
-            int num = Integer.parseInt(number);
-        }
-        return "";
-    }
 
     private boolean doesPlayerExist(String username) {
         if (UserDatabase.getUserByUsername(username) == null) {

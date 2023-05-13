@@ -74,6 +74,10 @@ public class Map {
         return lastY;
     }
 
+    public ArrayList<Cell> getHeadSquares() {
+        return headSquares;
+    }
+
     public void setLastY(int lastY) {
         this.lastY = lastY;
     }
