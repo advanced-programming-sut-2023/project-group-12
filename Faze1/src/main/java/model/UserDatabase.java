@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+import model.map.Map;
 
 
 import java.io.File;
@@ -15,6 +16,8 @@ import java.util.Scanner;
 public class UserDatabase {
     private static User currentUser;
     private static ArrayList<String> questions;
+
+    private static Map currentMap;
 
     public static ArrayList<String> getQuestions() {
         return questions;
@@ -57,6 +60,14 @@ public class UserDatabase {
             }
         }
         return null;
+    }
+
+    public static Map getCurrentMap() {
+        return currentMap;
+    }
+
+    public static void setCurrentMap(Map currentMap) {
+        UserDatabase.currentMap = currentMap;
     }
 
     public static boolean isEmailExists(String email) {
@@ -125,6 +136,22 @@ public class UserDatabase {
     public static boolean verifyPassword(String password, String storedHash, byte[] storedSalt) throws NoSuchAlgorithmException {
         String enteredHash = hashPassword(password, storedSalt);
         return enteredHash.equals(storedHash);
+    }
+    private static ArrayList<User> rankPlayers () {
+        ArrayList<User> sortedUsers = new ArrayList<>(users);
+        for (int i = 0; i < sortedUsers.size(); i++) {
+            for (int j = 0; j < sortedUsers.size() - 1; j++) {
+                if (sortedUsers.get(j).getHighScore() < sortedUsers.get(j + 1).getHighScore()) {
+                    User temp = sortedUsers.get(j);
+                    sortedUsers.set(j, sortedUsers.get(j + 1));
+                    sortedUsers.set(j + 1, temp);
+                }
+            }
+        }
+        return sortedUsers;
+    }
+    public static int playerRank (User user) {
+        return rankPlayers().indexOf(user) + 1;
     }
 }
 

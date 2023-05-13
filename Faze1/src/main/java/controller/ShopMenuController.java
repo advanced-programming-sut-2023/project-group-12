@@ -5,30 +5,37 @@ import model.Kingdom;
 import model.Property.*;
 
 public class ShopMenuController {
-    public static String buyOrSell (String action, String name, int amount) {
-        Property property = Game.getYetGame().getCurrentKingdom().getPropertyByName(name);
+
+    private Game game;
+
+    public ShopMenuController(Game game) {
+        this.game = game;
+    }
+
+    public String buyOrSell (String action, String name, int amount) {
+        Property property = game.getCurrentKingdom().getPropertyByName(name);
         if (property != null) {
             if (action.equals("buy")) {
                 if (property instanceof Food) {
-                    if (((Food) property).getType().getBuyPrice() * amount <= Game.getYetGame().getCurrentKingdom().getGold()) {
+                    if (((Food) property).getType().getBuyPrice() * amount <= game.getCurrentKingdom().getGold()) {
                         property.addValue(amount);
-                        Game.getYetGame().getCurrentKingdom().addGold(-1 * ((Food) property).getType().getBuyPrice() * amount);
+                        game.getCurrentKingdom().addGold(-1 * ((Food) property).getType().getBuyPrice() * amount);
                         return action + " " + name + " successfully completed";
                     } else
                         return "Out of money";
                 }
                 else if (property instanceof Weapon) {
-                    if (((Weapon) property).getWeaponType().getBuyPrice() * amount <= Game.getYetGame().getCurrentKingdom().getGold()) {
+                    if (((Weapon) property).getWeaponType().getBuyPrice() * amount <= game.getCurrentKingdom().getGold()) {
                         property.addValue(amount);
-                        Game.getYetGame().getCurrentKingdom().addGold(-1 * ((Weapon) property).getWeaponType().getBuyPrice() * amount);
+                        game.getCurrentKingdom().addGold(-1 * ((Weapon) property).getWeaponType().getBuyPrice() * amount);
                         return action + " " + name + " successfully complected";
                     } else
                         return "Out of money";
                 }
                 else if (property instanceof Resources) {
-                    if (((Resources) property).getResourceType().getBuyPrice() * amount <= Game.getYetGame().getCurrentKingdom().getGold()) {
+                    if (((Resources) property).getResourceType().getBuyPrice() * amount <= game.getCurrentKingdom().getGold()) {
                         property.addValue(amount);
-                        Game.getYetGame().getCurrentKingdom().addGold(-1 * ((Resources) property).getResourceType().getBuyPrice() * amount);
+                        game.getCurrentKingdom().addGold(-1 * ((Resources) property).getResourceType().getBuyPrice() * amount);
                         return action + " " + name + " successfully completed";
                     } else
                         return "Out of money";
@@ -37,7 +44,7 @@ public class ShopMenuController {
                 if (property instanceof Food) {
                     if (amount <= property.getValue()) {
                         property.addValue(-1 * amount);
-                        Game.getYetGame().getCurrentKingdom().addGold(((Food) property).getType().getSellPrice() * amount);
+                        game.getCurrentKingdom().addGold(((Food) property).getType().getSellPrice() * amount);
                         return action + " " + name + " successfully completed";
                     } else
                         return "Out of money";
@@ -45,7 +52,7 @@ public class ShopMenuController {
                 else if (property instanceof Weapon) {
                     if (amount <= property.getValue()) {
                         property.addValue(-1 * amount);
-                        Game.getYetGame().getCurrentKingdom().addGold(((Weapon) property).getWeaponType().getSellPrice() * amount);
+                        game.getCurrentKingdom().addGold(((Weapon) property).getWeaponType().getSellPrice() * amount);
                         return action + " " + name + " successfully complected";
                     } else
                         return "Out of money";
@@ -53,7 +60,7 @@ public class ShopMenuController {
                 else if (property instanceof Resources) {
                     if (amount <= property.getValue()) {
                         property.addValue(-1 * amount);
-                        Game.getYetGame().getCurrentKingdom().addGold(((Resources) property).getResourceType().getSellPrice() * amount);
+                        game.getCurrentKingdom().addGold(((Resources) property).getResourceType().getSellPrice() * amount);
                         return action + " " + name + " successfully completed";
                     } else
                         return "Out of money";

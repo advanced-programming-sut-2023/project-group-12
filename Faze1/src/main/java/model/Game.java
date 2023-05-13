@@ -17,16 +17,15 @@ public class Game {
     private Map currentMap;
     private Building selectedBuilding;
     private ArrayList<Kingdom> players;
-
-    {
-        for (User user: UserDatabase.getPlayers()){
-            players.add(new Kingdom(user));
-        }
-    }
     private Kingdom currentKingdom;
-    //todo: next turn & current kingdom
     private ArrayList<Unit> selectedUnits = new ArrayList<>();
     private ArrayList<Unit> patrollingUnits = new ArrayList<>();
+    private ArrayList<Unit> attackingUnits = new ArrayList<>();
+
+    public ArrayList<Unit> getAttackingUnits() {
+        return attackingUnits;
+    }
+
     private int patrollingUnitsNumberOfRounds = 0;
 
     public ArrayList<Unit> getPatrollingUnits() {
@@ -88,54 +87,53 @@ public class Game {
         }
         int speed = this.patrollingUnits.get(0).getSpeed();
         if (patrollingUnitsNumberOfRounds % 2 == 0) {//go towards the start
-            ArrayList<Cell>path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
+            ArrayList<Cell> path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
             if (speed < path.size()) {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
-            }
-            else {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart, this.patrollingUnits);
+            } else {
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart, this.patrollingUnits);
                 patrollingUnitsNumberOfRounds++;
-                speed = speed - path.size()+1;
-                moveUnitWithSpeed(xStart, yStart, xEnd, yEnd,speed);
+                speed = speed - path.size() + 1;
+                moveUnitWithSpeed(xStart, yStart, xEnd, yEnd, speed, this.patrollingUnits);
             }
-        }
-        else if (patrollingUnitsNumberOfRounds % 2 == 1) {//go towards the end
-            ArrayList<Cell>path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
+        } else if (patrollingUnitsNumberOfRounds % 2 == 1) {//go towards the end
+            ArrayList<Cell> path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
             if (speed < path.size()) {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
-            }
-            else {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd, this.patrollingUnits);
+            } else {
+                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd, this.patrollingUnits);
                 patrollingUnitsNumberOfRounds++;
-                speed = speed - path.size()+1;
-                moveUnitWithSpeed(xEnd, yEnd, xStart, yStart,speed);
+                speed = speed - path.size() + 1;
+                moveUnitWithSpeed(xEnd, yEnd, xStart, yStart, speed, this.patrollingUnits);
             }
         }
         return "";
     }
-    private void moveUnitWithSpeed(int xStart, int yStart, int xEnd, int yEnd, int speed) {
+
+    private void moveUnitWithSpeed(int xStart, int yStart, int xEnd, int yEnd, int speed, ArrayList<Unit> units) {
         //todo: handle the method for special cases
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
         for (int i = 0; i < speed && i < path.size() - 2; i++) {
-            for (int j = selectedUnits.size() - 1; j >= 0; j--) {
-                path.get(i).getUnits().remove(selectedUnits.get(j));
-                path.get(i + 1).getUnits().add(selectedUnits.get(j));
+            for (int j = units.size() - 1; j >= 0; j--) {
+                path.get(i).getUnits().remove(units.get(j));
+                path.get(i + 1).getUnits().add(units.get(j));
             }
         }
         //todo: complete the method
     }
+
     //todo: check the move method
-    public String moveUnit(int xStart, int yStart, int xEnd, int yEnd) {
+    public String moveUnit(int xStart, int yStart, int xEnd, int yEnd, ArrayList<Unit> units) {
         //todo: handle the method for special cases
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
         if (path == null) {
             return "no path found for these units";
         }
-        int speed = this.getSelectedUnits().get(0).getSpeed();
+        int speed = units.get(0).getSpeed();
         for (int i = 0; i < speed && i < path.size() - 2; i++) {
-            for (int j = selectedUnits.size() - 1; j >= 0; j--) {
-                path.get(i).getUnits().remove(selectedUnits.get(j));
-                path.get(i + 1).getUnits().add(selectedUnits.get(j));
+            for (int j = units.size() - 1; j >= 0; j--) {
+                path.get(i).getUnits().remove(units.get(j));
+                path.get(i + 1).getUnits().add(units.get(j));
             }
         }
         return "units moved successfully";
@@ -219,7 +217,6 @@ public class Game {
         return output;
     }
 
-
     public Building getSelectedBuilding() {
         return selectedBuilding;
     }
@@ -232,5 +229,83 @@ public class Game {
 
     public ArrayList<Kingdom> getPlayers() {
         return players;
+    }
+
+    public String groundAttack(int x, int y) {
+        ArrayList<Cell> path = finalPath(attackingUnits.get(0).getxPosition(), attackingUnits.get(0).getyPosition(), x, y);
+        if (path == null ) {
+            return "enemy can't be reached";
+        }
+        if (path.size() - 1 > attackingUnits.get(0).getSpeed()) {
+            return "enemy out of range, please move your units closer";
+        }
+        moveUnit(attackingUnits.get(0).getxPosition(), attackingUnits.get(0).getyPosition(), x, y, attackingUnits);
+        fight(x, y);
+        return "fight is done";
+    }
+
+    private void fight(int x, int y) {
+        Cell cell = this.getCurrentMap().getMap()[x][y];
+        for (int j = 0; j < attackingUnits.size(); j++) {
+            Unit unit = attackingUnits.get(j);
+            for (int i = 0; i < cell.getUnits().size(); i++) {
+                Unit unit1 = cell.getUnits().get(i);
+                if (unit1.getHomeland() != unit.getHomeland()) {
+                    oneIsDead:
+                    while (true) {
+                        if (unit.getHitPoint() > 0) {
+                            if (unit1.getHitPoint() > 0) {
+                                if (!unit1.isBeingHit()) {
+                                    unitOnUnitFight(unit, unit1);
+                                    unit1.setBeingHit(true);
+                                    if (!unit1.isHittingSomeOne() && !unit.isBeingHit()) {
+                                        unitOnUnitFight(unit1, unit);
+                                        unit.setBeingHit(true);
+                                    }
+                                }
+                                if (unit1.isBeingHit() && i == cell.getUnits().size() - 1) {
+                                    unitOnUnitFight(unit, unit1);
+                                    unit1.setBeingHit(true);
+                                    if (!unit1.isHittingSomeOne() && !unit.isBeingHit()) {
+                                        unitOnUnitFight(unit1, unit);
+                                        unit.setBeingHit(true);
+                                    }
+                                }
+                            } else {
+                                break oneIsDead;
+                            }
+                        } else {
+                            break oneIsDead;
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = attackingUnits.size() - 1; i >= 0; i--) {
+            if (attackingUnits.get(i).getHitPoint() <= 0)
+                attackingUnits.remove(i);
+        }
+        for (int i = cell.getUnits().size() - 1; i >= 0; i--) {
+            if (cell.getUnits().get(i).getHitPoint() <= 0)
+                cell.getUnits().remove(i);
+        }
+        for (Unit unit : attackingUnits) {
+            unit.setBeingHit(false);
+            unit.setHittingSomeOne(false);
+        }
+        for (Unit unit : cell.getUnits()) {
+            unit.setBeingHit(false);
+            unit.setHittingSomeOne(false);
+        }
+    }
+
+    private void unitOnUnitFight(Unit attacker, Unit mast) {
+        mast.decreaseHitPoint(attacker.getUnitType().getAttackPower());
+    }
+
+    public void airAttack(int x, int y) {// is it okay todo: ask mohammad
+        if (Math.pow(x - attackingUnits.get(0).getxPosition(), 2) + Math.pow(y - attackingUnits.get(0).getyPosition(), 2) <= attackingUnits.get(0).getUnitType().getRange()) {
+            fight(x, y);
+        }
     }
 }

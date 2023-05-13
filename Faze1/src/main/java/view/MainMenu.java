@@ -24,10 +24,17 @@ public class MainMenu {
                 if (mapMenu.group("size").isEmpty()) {
                     System.out.println("Size can't be empty");
                 }
-                if (Integer.parseInt(mapMenu.group("size"))!= 200 || Integer.parseInt(mapMenu.group("size"))!= 400 ) {
+                int size = Integer.parseInt(mapMenu.group("size"));
+                int kingdomNumber = Integer.parseInt(mapMenu.group("kingdomNumber"));
+                if (!(size == 200 || size == 400) ) {
                     System.out.println("Size must be 200 or 400");
+                    continue;
                 }
-                MapMenu menu = new MapMenu(Integer.parseInt(mapMenu.group("size")), 1);
+                if (kingdomNumber > 8 || kingdomNumber < 2) {
+                    System.out.println("kingdom number out of bounds");
+                    continue;
+                }
+                MapMenu menu = new MapMenu(size, kingdomNumber);
                 menu.run(scanner);
                 System.out.println("Welcome back to main menu");
             } else if (profileMenu.find()) {
@@ -35,6 +42,10 @@ public class MainMenu {
                 menu.run(scanner);
                 System.out.println("Welcome back to main menu");
             } else if (startMenu.find()) {
+                if (UserDatabase.getCurrentMap() == null) {
+                    System.out.println("Go back to map menu and choose your map");
+                    continue;
+                }
                 StartMenu menu = new StartMenu();
                 menu.run(scanner);
                 System.out.println("Welcome back to main menu");

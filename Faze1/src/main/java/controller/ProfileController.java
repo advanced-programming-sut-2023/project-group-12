@@ -43,7 +43,7 @@ public class ProfileController {
         oldPassword = UserDatabase.hashPassword(oldPassword,currentUser.getSalt());
         if (oldPassword.equals(currentUser.getPassword())) {
             if (RegisterMenuController.isPasswordWeak(newPassword).equals("true")) {
-                if (!newPassword.equals(oldPassword)) {
+                if (!UserDatabase.hashPassword(newPassword,currentUser.getSalt()).equals(oldPassword)) {
                     currentUser.setPassword(newPassword);
                     return "Your password <" + oldPasswordToShow + "> changed to <" + newPassword + "> successfully";
                 }
@@ -51,7 +51,7 @@ public class ProfileController {
             }
             return RegisterMenuController.isPasswordWeak(newPassword);
         }
-        return "Your password <" + oldPassword + "> is wrong";
+        return "Your password <" + oldPasswordToShow + "> is wrong";
     }
 
     public String changeEmail(String email) {
@@ -98,7 +98,8 @@ public class ProfileController {
     }
 
     public String displayRank() {
-        return "Your rank is : " + currentUser.getRank();
+        currentUser.setRank(UserDatabase.playerRank(currentUser));
+        return "Your rank is : " + UserDatabase.playerRank(currentUser);
     }
     public String displayAll() {
         return "User Information :" +

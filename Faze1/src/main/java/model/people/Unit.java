@@ -13,9 +13,27 @@ public class Unit {
     private int hitPoint;
     private String mode;
     private int speed;
+    private boolean beingHit = false;
+    private boolean hittingSomeOne = false;
+    public boolean isBeingHit() {
+        return beingHit;
+    }
 
+    public void setBeingHit(boolean beingHit) {
+        this.beingHit = beingHit;
+    }
+
+    public boolean isHittingSomeOne() {
+        return hittingSomeOne;
+    }
+
+    public void setHittingSomeOne(boolean hittingSomeOne) {
+        this.hittingSomeOne = hittingSomeOne;
+    }
+    public void decreaseHitPoint(int damage) {
+        this.hitPoint = hitPoint - damage;
+    }
     private boolean isBusy;
-
     public int getSpeed() {
         return speed;
     }

@@ -17,7 +17,7 @@ public class MapMenu {
     public void run (Scanner scanner) {
         System.out.println("Welcome to map menu!");
         String input;
-        Matcher setCellTexture, setCellsTexture, clear, dropRock, dropTree, showMap, mapUp, showDetail;
+        Matcher setCellTexture, setCellsTexture, clear, dropRock, dropTree, showMap, mapUp, showDetail, selectMap;
         MapMenuController controller = new MapMenuController(map);
         while (true) {
             input = scanner.nextLine();
@@ -29,6 +29,7 @@ public class MapMenu {
             showMap = MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_MAP);
             mapUp = MapMenuCommands.getMatcher(input, MapMenuCommands.MAP_UP);
             showDetail = MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_DETAILS);
+            selectMap = MapMenuCommands.getMatcher(input, MapMenuCommands.SELECT_MAP);
             if (setCellTexture.find()) {
                 int x = Integer.parseInt(setCellTexture.group("xCoordinate"));
                 int y = Integer.parseInt(setCellTexture.group("yCoordinate"));
@@ -57,6 +58,8 @@ public class MapMenu {
                 System.out.println(controller.mapUp(mapUp.group("direction"), Integer.parseInt(mapUp.group("number"))));
             } else if (showDetail.find()) {
                 System.out.println(controller.showDetail(Integer.parseInt(showDetail.group("x")), Integer.parseInt(showDetail.group("y"))));
+            } else if (selectMap.find()) {
+                System.out.println(controller.selectMap());
             } else if (input.equals("back")) {
                 return;
             }

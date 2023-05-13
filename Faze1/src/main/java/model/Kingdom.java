@@ -4,6 +4,7 @@ import model.Building.Building;
 import model.Building.Storage;
 import model.Equipment.Equipment;
 import model.Property.*;
+import model.map.Cell;
 import model.people.Unit;
 import model.people.soldier.Soldier;
 
@@ -39,6 +40,8 @@ public class Kingdom {
     private ArrayList<Storage> foodStockPiles = new ArrayList<>();
 
     private User owner;
+
+    private Cell HeadSquare;
 
     private double gold;
     private int fearRate;

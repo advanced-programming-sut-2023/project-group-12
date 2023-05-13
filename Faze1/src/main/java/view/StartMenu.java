@@ -17,9 +17,8 @@ public class StartMenu {
             addPlayer = StartMenuCommands.getMatcher(input, StartMenuCommands.ADD_PLAYER);
             removePlayer = StartMenuCommands.getMatcher(input, StartMenuCommands.REMOVE_PLAYER);
             removeAllPlayers = StartMenuCommands.getMatcher(input, StartMenuCommands.REMOVE_ALL_PLAYERS);
-            chooseMap = StartMenuCommands.getMatcher(input, StartMenuCommands.CHOOSE_MAP);
             startGame = StartMenuCommands.getMatcher(input, StartMenuCommands.START_GAME);
-            addRandomPlayers = StartMenuCommands.getMatcher(input, StartMenuCommands.ADD_RANDOM_PLAYERS);
+//          addRandomPlayers = StartMenuCommands.getMatcher(input, StartMenuCommands.ADD_RANDOM_PLAYERS);
             if (input.equalsIgnoreCase("back")) {
                 System.out.println("Welcome to main menu");
                 return;
@@ -31,13 +30,13 @@ public class StartMenu {
                 }
                 System.out.println(controller.addPlayer(addPlayer.group("username")));
             }
-            else if (addRandomPlayers.find()) {
-                if (addRandomPlayers.group("number").isEmpty()) {
-                    System.out.println("Number can't be empty");
-                    continue;
-                }
-                System.out.println(controller.addRandomPlayers(addRandomPlayers.group("number")));
-            }
+//            else if (addRandomPlayers.find()) {
+//                if (addRandomPlayers.group("number").isEmpty()) {
+//                    System.out.println("Number can't be empty");
+//                    continue;
+//                }
+//                System.out.println(controller.addRandomPlayers(addRandomPlayers.group("number")));
+//            }
             else if (removePlayer.find()) {
                 if (removePlayer.group("username").isEmpty()) {
                     System.out.println("Username can't be empty");
@@ -48,13 +47,13 @@ public class StartMenu {
             else if (removeAllPlayers.find()) {
                 System.out.println(controller.removeAllPlayers());
             }
-            else if (chooseMap.find()) {
-
-            }
             else if (startGame.find()) {
-                GameMenu menu = new GameMenu();
-                System.out.println("start game successfully!");
-                menu.run(scanner);
+                String output = controller.startGame();
+                System.out.println(output);
+                if (output.equals("game started successfully")) {
+                    GameMenu menu = new GameMenu();
+                    menu.run(scanner);
+                }
             }
             else {
                 System.out.println("Invalid command!");
