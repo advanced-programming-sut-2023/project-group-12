@@ -2,11 +2,17 @@ package controller.GameController;
 
 import model.Building.BuildingType;
 import model.Game;
+import model.Property.WeaponType;
 import model.people.Unit;
 import model.people.UnitType;
 
 public class GameMenuController {
     private Game newGame;
+
+    public void setNewGame(Game newGame) {
+        this.newGame = newGame;
+    }
+
     private KingdomController kingdomController = new KingdomController();
     private BuildingController buildingController = new BuildingController();
 
@@ -231,7 +237,7 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
             return "this unit can't move";
         }
-        return newGame.moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getxPosition(), x, y);// todo : some how give me the current coordinates
+        return newGame.moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getxPosition(), x, y,newGame.getSelectedUnits());// todo : some how give me the current coordinates
     }
 
     public String patrolUnit(String x1Coordinate, String y1Coordinate, String x2Coordinate, String y2Coordinate) {
@@ -363,7 +369,16 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return "";
+        if (!(newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.BOW) || !(newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.CROSS_BOW)) {
+            return "please enter a different command for non bowmen troops";
+        }
+        if (!newGame.isEnemyExistsInCell(x,y)) {
+            return "there's no enemy here";
+        }
+        newGame.getAttackingUnits().clear();
+        newGame.getAttackingUnits().addAll(newGame.getSelectedUnits());
+        newGame.airAttack(x,y);
+        return "fight is done successfully";
     }
 
     public String groundAttack(String xCoordinate, String yCoordinate) {
@@ -380,7 +395,18 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return "";
+        if (!isUnitSelected().equals("true")) {
+            return isUnitSelected();
+        }
+        if (newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.BOW || newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.CROSS_BOW) {
+            return "please enter a different command for bowmen";
+        }
+        if (!newGame.isEnemyExistsInCell(x,y)) {
+            return "there's no enemy here";
+        }
+        newGame.getAttackingUnits().clear();
+        newGame.getAttackingUnits().addAll(newGame.getSelectedUnits());
+        return newGame.groundAttack(x,y);
     }
 
     private String checkNumber(String X) {
@@ -394,10 +420,12 @@ public class GameMenuController {
         }
         return "";
     }
-    private String isUnitSelected () {
+
+    private String isUnitSelected() {
         if (newGame.getSelectedUnits() == null || newGame.getSelectedUnits().size() == 0) {
             return "you have to select a unit first";
         }
         return "true";
     }
+
 }

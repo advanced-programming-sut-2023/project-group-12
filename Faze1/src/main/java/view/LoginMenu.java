@@ -112,6 +112,9 @@ public class LoginMenu {
         }
         String output = controller.checkUsername(forgotMyPassword.group("username"));
         System.out.println(output);
+        if (output.equals("The username format is incorrect.") || output.equals("User with this username doesn't exist.")) {
+            return false;
+        }
         if (output.equals("Please answer your security question:\n" + UserDatabase.getUserByUsername(forgotMyPassword.group("username")).getQuestion())) {
             while (true) {
                 input = scanner.nextLine();
@@ -133,7 +136,7 @@ public class LoginMenu {
                             }
                             output = controller.setNewPassword(forgotMyPassword.group("username"), newPassword.group("password"), newPassword.group("passwordRepeat"));
                             System.out.println(output);
-                            if (output.equals("password changed successfully.")) {
+                            if (hasPasswordChanged(output)) {
                                 while (true) {
                                     showCaptcha(scanner,controller, forgotMyPassword.group("username"), false);
                                 }
@@ -151,5 +154,8 @@ public class LoginMenu {
             System.out.println("Invalid command!");
         }
         return false;
+    }
+    private static boolean hasPasswordChanged(String output) {
+        return output.contains("password changed successfully.");
     }
 }

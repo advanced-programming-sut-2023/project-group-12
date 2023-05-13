@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 
 public class GameMenu {
     public void run(Scanner scanner) {
+        System.out.println("Welcome to the game");
         String input, output;
         GameMenuController controller = new GameMenuController();
         Matcher chooseColor, chooseKeep, changeColor, changeKeep, dropBuilding, selectBuilding, createUnit, setFoodRate,
