@@ -5,6 +5,7 @@ import model.Equipment.Equipment;
 import model.Equipment.EquipmentType;
 import model.Game;
 import model.Property.WeaponType;
+import model.User;
 import model.map.Cell;
 import model.people.Unit;
 import model.people.UnitType;
@@ -478,5 +479,13 @@ public class GameMenuController {
         }
         newGame.getPatrollingUnits().clear();
         return "patrolling stopped";
+    }
+
+    public int getNumberOfRemainingPlayers() {//todo : this is needed to end the game if there's only one player left
+        return 0;
+    }
+
+    public User getWinner() {//todo : this returns the winner of the game
+        return null;
     }
 }
