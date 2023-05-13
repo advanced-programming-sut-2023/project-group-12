@@ -15,8 +15,8 @@ public class GameMenu {
         GameMenuController controller = new GameMenuController(game);
         Matcher chooseColor, chooseKeep, changeColor, changeKeep, dropBuilding, selectBuilding, createUnit, setFoodRate,
                 setTaxRate, showTaxRate, setFearRate, showPopularityFactors, showPopularity, showFoodList, showFoodRate,
-                dropUnit, repair, selectUnit, moveUnit, patrolUnit, setMode, groundAttack, airAttack, pourOil, digTunnel,
-                buildEquipment, disbandUnit, goToShopMenu, goToTradeMenu, goToMapMenu;
+                dropUnit, repair, selectUnit, moveUnit, patrolUnit,stopPatrolling, setMode, groundAttack, airAttack,
+                pourOil, digTunnel, buildEquipment, disbandUnit, goToShopMenu, goToTradeMenu, goToMapMenu;
         while (true) {
             input = scanner.nextLine();
             chooseColor = GameMenuCommands.getMatcher(input, GameMenuCommands.CHOOSE_COLOR);
@@ -39,6 +39,7 @@ public class GameMenu {
             selectUnit = GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_UNIT);
             moveUnit = GameMenuCommands.getMatcher(input, GameMenuCommands.MOVE_UNIT);
             patrolUnit = GameMenuCommands.getMatcher(input, GameMenuCommands.PATROL_UNIT);
+            stopPatrolling = GameMenuCommands.getMatcher(input, GameMenuCommands.STOP_PATROLLING);
             setMode = GameMenuCommands.getMatcher(input, GameMenuCommands.SET_MODE);
             groundAttack = GameMenuCommands.getMatcher(input, GameMenuCommands.GROUND_ATTACK);
             airAttack = GameMenuCommands.getMatcher(input, GameMenuCommands.AIR_ATTACK);
@@ -111,23 +112,27 @@ public class GameMenu {
                 output = controller.selectBuilding(selectBuilding.group("xCoordinate"), selectBuilding.group("yCoordinate"));
                 System.out.println(output);
             }
-            else if (moveUnit.find()) {
+            else if (moveUnit.find()) {//todo : the same as patrolling
                 output = controller.moveUnit(moveUnit.group("xCoordinate"), moveUnit.group("yCoordinate"));
                 System.out.println(output);
             }
-            else if (patrolUnit.find()) {
+            else if (patrolUnit.find()) {//todo : maybe here just set a patrolling unit and do their job at the end of every turn
                 output = controller.patrolUnit(patrolUnit.group("x1Coordinate"), patrolUnit.group("y1Coordinate"),patrolUnit.group("x2Coordinate"), patrolUnit.group("y2Coordinate"));
+                System.out.println(output);
+            }
+            else if (stopPatrolling.find()) {
+                output = controller.stopPatrolling();
                 System.out.println(output);
             }
             else if (setMode.find()) {
                 output = controller.setMode(setMode.group("xCoordinate"), setMode.group("yCoordinate"),setMode.group("mode"), setMode.group("type"));
                 System.out.println(output);
             }
-            else if (groundAttack.find()) {
+            else if (groundAttack.find()) {//todo: maybe the same as patrolling
                 output = controller.groundAttack(groundAttack.group("xCoordinate"), groundAttack.group("yCoordinate"));
                 System.out.println(output);
             }
-            else if (airAttack.find()) {
+            else if (airAttack.find()) {//todo: maybe the same as patrolling
                 output = controller.airAttack(airAttack.group("xCoordinate"), airAttack.group("yCoordinate"));
                 System.out.println(output);
             }

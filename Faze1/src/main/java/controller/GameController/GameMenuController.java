@@ -327,7 +327,7 @@ public class GameMenuController {
         }
         return "mode set successfully!";
     }
-
+// todo: disband is not done yet
     public String disbandUnit() {
         if (newGame.getSelectedUnits().size() == 0) {
             return "no unit to disband";
@@ -458,4 +458,11 @@ public class GameMenuController {
         return "true";
     }
 
+    public String stopPatrolling() {
+        if (newGame.getPatrollingUnits() == null || newGame.getPatrollingUnits().size() == 0) {
+            return "there's no unit patrolling";
+        }
+        newGame.getPatrollingUnits().clear();
+        return "patrolling stopped";
+    }
 }
