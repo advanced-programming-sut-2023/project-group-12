@@ -5,6 +5,7 @@ import model.Equipment.Equipment;
 import model.Equipment.EquipmentType;
 import model.Game;
 import model.Property.WeaponType;
+import model.map.Cell;
 import model.people.Unit;
 import model.people.UnitType;
 
@@ -55,6 +56,19 @@ public class GameMenuController {
         }
         if (newGame.isEnemyExistsInCell(x, y)) {
             return "there is already an enemy in this cell and you cannot drop it!";
+        }
+        int check = 0;
+        if(buildingType == BuildingType.STOCKPILE){
+            ArrayList<Cell> neighbors = newGame.neighbors(x, y);
+            for(Cell cell : neighbors){
+                if(cell.getBuilding().getBuildingType() == buildingType){
+                    check = 1;
+                    break;
+                }
+            }
+            if (check == 0) {
+                return "you should build stockpile near your other stockpiles!";
+            }
         }
         newGame.dropBuilding(x, y, buildingType);
         return "make building successfully!";
