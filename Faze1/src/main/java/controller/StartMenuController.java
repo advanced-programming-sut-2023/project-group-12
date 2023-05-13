@@ -7,8 +7,6 @@ import model.map.Map;
 import java.util.ArrayList;
 
 public class StartMenuController {
-
-    private Map map;
     public String addPlayer(String username) {
         if (!UserDatabase.getPlayers().contains(UserDatabase.getCurrentUser())) {
             UserDatabase.getPlayers().add(UserDatabase.getCurrentUser());

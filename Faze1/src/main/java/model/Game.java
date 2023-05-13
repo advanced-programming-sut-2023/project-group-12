@@ -1,18 +1,25 @@
 package model;
 
-import jdk.jshell.Snippet;
-import model.Building.*;
+import model.Property.WeaponType;
 import model.map.Cell;
 import model.people.Unit;
 import model.map.Map;
 
 import java.util.ArrayList;
 
+import model.Building.Building;
+import model.Building.BuildingType;
 import model.people.UnitType;
 
 
 public class Game {
 
+    public Game(Map currentMap, ArrayList<Kingdom> players) {
+        this.currentMap = currentMap;
+        this.players = players;
+        this.currentKingdom = players.get(0);
+        this.roundsPassed = 0;
+    }
 
     private Map currentMap;
     private Building selectedBuilding;
@@ -235,7 +242,7 @@ public class Game {
         }
     }
 
-    public ArrayList<Cell> neighbors(int x, int y) {
+    private ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> output = new ArrayList<>();
         if (currentMap.getMap()[x - 1][y] != null) {
             output.add(currentMap.getMap()[x - 1][y]);
@@ -259,8 +266,6 @@ public class Game {
     public void setSelectedBuilding(Building selectedBuilding) {
         this.selectedBuilding = selectedBuilding;
     }
-
-
 
     public ArrayList<Kingdom> getPlayers() {
         return players;

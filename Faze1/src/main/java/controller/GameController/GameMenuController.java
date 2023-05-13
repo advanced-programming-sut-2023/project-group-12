@@ -12,6 +12,11 @@ import model.people.UnitType;
 import java.util.ArrayList;
 
 public class GameMenuController {
+
+    public GameMenuController(Game newGame) {
+        this.newGame = newGame;
+    }
+
     private Game newGame;
 
     public void setNewGame(Game newGame) {

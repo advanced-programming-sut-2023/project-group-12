@@ -2,7 +2,12 @@ package view;
 
 import Commands.StartMenuCommands;
 import controller.StartMenuController;
+import model.Game;
+import model.Kingdom;
+import model.User;
+import model.UserDatabase;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -52,7 +57,10 @@ public class StartMenu {
                 System.out.println(output);
                 if (output.equals("game started successfully")) {
                     GameMenu menu = new GameMenu();
-                    menu.run(scanner);
+                    ArrayList<Kingdom> players = new ArrayList<>();
+                    for (int i = 0; i < UserDatabase.getPlayers().size(); i++)
+                        players.add(new Kingdom(UserDatabase.getPlayers().get(i), UserDatabase.getCurrentMap().getHeadSquares().get(i)));
+                    menu.run(scanner, new Game(UserDatabase.getCurrentMap(), players));
                 }
             }
             else {

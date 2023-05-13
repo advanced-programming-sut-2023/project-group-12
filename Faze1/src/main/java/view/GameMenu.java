@@ -2,19 +2,21 @@ package view;
 
 import Commands.GameMenuCommands;
 import controller.GameController.GameMenuController;
+import model.Game;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu {
-    public void run(Scanner scanner) {
+
+    public void run(Scanner scanner, Game game) {
         System.out.println("Welcome to the game");
         String input, output;
-        GameMenuController controller = new GameMenuController();
+        GameMenuController controller = new GameMenuController(game);
         Matcher chooseColor, chooseKeep, changeColor, changeKeep, dropBuilding, selectBuilding, createUnit, setFoodRate,
                 setTaxRate, showTaxRate, setFearRate, showPopularityFactors, showPopularity, showFoodList, showFoodRate,
                 dropUnit, repair, selectUnit, moveUnit, patrolUnit, setMode, groundAttack, airAttack, pourOil, digTunnel,
-                buildEquipment, disbandUnit, goToShopMenu, goToTradeMenu;
+                buildEquipment, disbandUnit, goToShopMenu, goToTradeMenu, goToMapMenu;
         while (true) {
             input = scanner.nextLine();
             chooseColor = GameMenuCommands.getMatcher(input, GameMenuCommands.CHOOSE_COLOR);
@@ -46,6 +48,7 @@ public class GameMenu {
             disbandUnit = GameMenuCommands.getMatcher(input, GameMenuCommands.DISBAND_UNIT);
             goToShopMenu = GameMenuCommands.getMatcher(input, GameMenuCommands.GO_TO_SHOP_MENU);
             goToTradeMenu = GameMenuCommands.getMatcher(input, GameMenuCommands.GO_TO_TRADE_MENU);
+            goToMapMenu = GameMenuCommands.getMatcher(input, GameMenuCommands.GO_TO_MAP_MENU);
 
             if (chooseColor.find()) {
                 output = controller.chooseColor(chooseColor.group("color"));
@@ -146,11 +149,15 @@ public class GameMenu {
             } else if (goToShopMenu.find()) {
                 ShopMenu menu = new ShopMenu();
                 menu.run(scanner, controller.getNewGame());
-                System.out.println("now you are in the game menu");
+                System.out.println("Now you are in the game menu");
             } else if (goToTradeMenu.find()) {
                 TradeMenu menu = new TradeMenu();
                 menu.run(scanner, controller.getNewGame());
-                System.out.println("now you are in the game menu");
+                System.out.println("Now you are in the game menu");
+            } else if (goToMapMenu.find()) {
+                MapMenu menu = new MapMenu(game.getCurrentMap());
+                menu.run(scanner);
+                System.out.println("Now you are in the game menu");
             } else {
                 System.out.println("invalid command!");
             }

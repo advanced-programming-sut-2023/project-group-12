@@ -16,6 +16,11 @@ import java.util.Scanner;
 
 public class Kingdom {
 
+    public Kingdom(User owner, Cell headSquare) {
+        this.owner = owner;
+        this.HeadSquare = headSquare;
+    }
+
     private int population;
 
     private int unEmployed;
@@ -433,25 +438,22 @@ public class Kingdom {
     public Property getPropertyByName(String name) {
         for (FoodType foodType : FoodType.values()) {
             if (foodType.name().toLowerCase().equals(name))
-                for (Storage storage : getFoodStockPiles())
-                    if (storage.getFoodByFoodType(foodType) != null)
-                        return storage.getFoodByFoodType(foodType);
+                return new Food(foodType, 0);
         }
 
         for (WeaponType weaponType : WeaponType.values()) {
             if (weaponType.name().toLowerCase().equals(name))
-                for (Storage storage : getWeapons())
-                    if (storage.getWeaponByWeaponType(weaponType) != null)
-                        return storage.getWeaponByWeaponType(weaponType);
+                return new Weapon(weaponType, 0);
         }
 
         for (ResourceType resourceType : ResourceType.values()) {
             if (resourceType.name().toLowerCase().equals(name))
-                for (Storage storage : getStockPiles())
-                    if (storage.getResourcesByResourceType(resourceType) != null)
-                        return storage.getResourcesByResourceType(resourceType);
+                return new Resources(resourceType, 0);
         }
-
+        for (DefenseType defenseType : DefenseType.values()) {
+            if (defenseType.name().toLowerCase().equals(name))
+                return new DefensiveWeapon(defenseType, 0);
+        }
         return null;
     }
 

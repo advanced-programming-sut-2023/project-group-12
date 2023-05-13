@@ -2,6 +2,7 @@ package controller;
 
 import model.Game;
 import model.Kingdom;
+import model.Property.DefensiveWeapon;
 import model.Property.Food;
 import model.Property.Resources;
 import model.Property.Weapon;
@@ -23,17 +24,22 @@ public class TradeMenuController {
 
         output += "id \\\\ resource name \\\\ amount \\\\ price \\\\ sender \\\\ receiver \\\\ massage" + "\n";
         int i = 1;
-        for (Trade trade : game.getCurrentKingdom().getTrades()) {
-            output += i + " \\\\ ";
-            if (trade.getProperty() instanceof Food)
-                output += ((Food) trade.getProperty()).getType().name().toLowerCase();
-            else if (trade.getProperty() instanceof Resources)
-                output += ((Resources) trade.getProperty()).getResourceType().name().toLowerCase();
-            else if (trade.getProperty() instanceof Weapon)
-                output += ((Weapon) trade.getProperty()).getWeaponType().name().toLowerCase();
-            output += " \\\\ " + trade.getResourceAmount() + " \\\\ " + trade.getPrice() +
-                    " \\\\ " + trade.getSender().getOwner().getUsername() + " \\\\ " +
-                    trade.getReceiver().getOwner().getUsername() + " \\\\ " + trade.getSenderMessage() + "\n";
+        if (!game.getCurrentKingdom().getTrades().isEmpty()) {
+            for (Trade trade : game.getCurrentKingdom().getTrades()) {
+                output += i + " \\\\ ";
+                if (trade.getProperty() instanceof Food)
+                    output += ((Food) trade.getProperty()).getType().name().toLowerCase();
+                else if (trade.getProperty() instanceof Resources)
+                    output += ((Resources) trade.getProperty()).getResourceType().name().toLowerCase();
+                else if (trade.getProperty() instanceof Weapon)
+                    output += ((Weapon) trade.getProperty()).getWeaponType().name().toLowerCase();
+                else if (trade.getProperty() instanceof DefensiveWeapon)
+                    output += ((DefensiveWeapon) trade.getProperty()).getDefenseType().name().toLowerCase();
+                output += " \\\\ " + trade.getResourceAmount() + " \\\\ " + trade.getPrice() +
+                        " \\\\ " + trade.getSender().getOwner().getUsername() + " \\\\ " +
+                        trade.getReceiver().getOwner().getUsername() + " \\\\ " +
+                        trade.getSenderMessage() + "\n";
+            }
         }
         return output;
     }
@@ -45,7 +51,7 @@ public class TradeMenuController {
                     if (price >= 0) {
                         if (price <= game.getCurrentKingdom().getGold()) {
                             game.getCurrentKingdom().setTrades(new Trade(game.getCurrentKingdom().getPropertyByName(resourceType),
-                                    resourceAmount, price, message, getUserByNameInThisGame(receiverName)));
+                                    resourceAmount, price, message, game.getCurrentKingdom(), getUserByNameInThisGame(receiverName)));
                             getUserByNameInThisGame(receiverName).setTrades(game.getCurrentKingdom().getTrades().get(game.getCurrentKingdom().getTrades().size() - 1));
                             return "trade added successfully";
                         } else
@@ -63,8 +69,11 @@ public class TradeMenuController {
     public String acceptTrade(int tradeId, String message) {
         if (tradeId <= game.getCurrentKingdom().getTrades().size() &&
                 tradeId > 0) {
-            game.getCurrentKingdom().getTrades().get(tradeId - 1).doTrade(message);
-            return "trade accepted";
+            if (game.getCurrentKingdom().equals(game.getCurrentKingdom().getTrades().get(tradeId - 1).getSender())) {
+                game.getCurrentKingdom().getTrades().get(tradeId - 1).doTrade(message);
+                return "trade accepted";
+            } else
+                return "You can\'t accept trade that you create it";
         } else
             return "wrong trade ID";
     }

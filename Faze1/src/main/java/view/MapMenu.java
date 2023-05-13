@@ -13,6 +13,9 @@ public class MapMenu {
         map = new Map(size, kingdomNumber);
     }
 
+    public MapMenu(Map map) {
+        this.map = map;
+    }
 
     public void run (Scanner scanner) {
         System.out.println("Welcome to map menu!");

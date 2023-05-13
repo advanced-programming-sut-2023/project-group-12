@@ -10,7 +10,6 @@ public class Map {
     private Cell[][] map;
 
     private ArrayList<Cell> headSquares;
-    private ArrayList<Kingdom> kingdoms;
 
     private int lastX;
     private int lastY;
@@ -21,10 +20,8 @@ public class Map {
             for (int j = 0; j < dimension; j++)
                 map[i][j] = new Cell();
         this.dimension = dimension;
-        kingdoms = new ArrayList<>();
         headSquares = new ArrayList<>();
         for (int i = 0; i < kingdomNumber; i++) {
-            kingdoms.add(new Kingdom());
             switch (i) {
                 case 0 :
                     headSquares.add(map[0][0]);
