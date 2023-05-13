@@ -1,7 +1,9 @@
 package model;
 
 import model.Building.Building;
+import model.Building.ProductionCenter;
 import model.Building.Storage;
+import model.Building.UnitCreation;
 import model.Equipment.Equipment;
 import model.Property.*;
 import model.map.Cell;
@@ -10,6 +12,7 @@ import model.people.soldier.Soldier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Kingdom {
 
@@ -20,12 +23,12 @@ public class Kingdom {
 
     private int population;
 
-    private int unemployed;
+    private int unEmployed;
 
     private ArrayList<Trade> trades = new ArrayList<>();
 
     private ArrayList<Trade> tradesHistory = new ArrayList<>();
-    private ArrayList<Building> buildings = new ArrayList<Building>();
+
 
     private ArrayList<Soldier> engineers = new ArrayList<Soldier>();
     private ArrayList<Unit> units = new ArrayList<Unit>();
@@ -44,6 +47,10 @@ public class Kingdom {
 
     private ArrayList<Storage> foodStockPiles = new ArrayList<>();
 
+    private ArrayList<ProductionCenter> allProductionCenters = new ArrayList<>();
+
+    private ArrayList<UnitCreation> allUnitCreations = new ArrayList<>();
+
     private User owner;
 
     private Cell HeadSquare;
@@ -56,6 +63,17 @@ public class Kingdom {
 
     public int getPopularity() {
         return popularity;
+    }
+
+    public Kingdom(User owner){
+        this.owner = owner;
+        gold = 500;
+        fearRate = 0;
+        taxRate = 0;
+        popularity = 0;
+        foodRate = 0;
+        population = 15;
+        unEmployed = 15;
     }
 
     public void setPopularity(int popularity) {
@@ -94,9 +112,29 @@ public class Kingdom {
         return owner;
     }
 
-    public ArrayList<Building> getBuildings() {
-        return buildings;
+
+    public ArrayList<UnitCreation> getAllUnitCreations() {
+        return allUnitCreations;
     }
+
+    public void addToAllUnitCreations(UnitCreation unitCreation) {
+        allUnitCreations.add(unitCreation);
+    }
+
+    public void addToStockPiles(Storage storage){
+        stockPiles.add(storage);
+    }
+
+    public void addToFoodStockPiles(Storage storage){
+        foodStockPiles.add(storage);
+    }
+
+    public void addToStables(Storage storage){
+        stables.add(storage);
+    }
+
+
+
     public int getPopulation() {
         return population;
     }
@@ -156,7 +194,7 @@ public class Kingdom {
     }
 
     public int getUnemployed() {
-        return unemployed;
+        return unEmployed;
     }
 
     public void decreaseWeapons(Weapon weapon) {
@@ -446,4 +484,33 @@ public class Kingdom {
     public void addEquipment(Equipment equipment) {
         equipments.add(equipment);
     }
+
+    public ArrayList<Equipment> getEquipments() {
+        return equipments;
+    }
+
+    public ArrayList<ProductionCenter> getAllProductionCenters() {
+        return allProductionCenters;
+    }
+    public void addProductionCenter(ProductionCenter building) {
+        allProductionCenters.add(building);
+    }
+
+    public void addPopularity(int amount){
+        popularity += amount;
+    }
+
+    public void addUnEmployed(int amount){
+        unEmployed += amount;
+    }
+
+    public void addToWeapons(Storage storage){
+        weapons.add(storage);
+    }
+
+    public void addToDefensiveWeapon(Storage storage){
+        defensiveWeapons.add(storage);
+    }
+
+
 }
