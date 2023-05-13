@@ -1,13 +1,13 @@
 package model;
 
+import jdk.jshell.Snippet;
+import model.Building.*;
 import model.map.Cell;
 import model.people.Unit;
 import model.map.Map;
 
 import java.util.ArrayList;
 
-import model.Building.Building;
-import model.Building.BuildingType;
 import model.people.UnitType;
 
 
@@ -50,6 +50,20 @@ public class Game {
         Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom, x, y);
         currentMap.getMap()[x][y].setBuilding(building);
         currentMap.getMap()[x][y].setHeight(building.getHeight());
+        if(building instanceof ProductionCenter ){
+            currentKingdom.addProductionCenter((ProductionCenter) building);
+        }else if (building instanceof UnitCreation) {
+            currentKingdom.addToAllUnitCreations((UnitCreation) building);
+        }else if (buildingType == BuildingType.STOCKPILE) {
+            currentKingdom.addToStockPiles((Storage) building);
+        } else if (buildingType == BuildingType.FOOD_STOCKPILE) {
+            currentKingdom.addToFoodStockPiles((Storage) building);
+        }else if (buildingType == BuildingType.ARMOURY){
+            currentKingdom.addToWeapons((Storage) building);
+            currentKingdom.addToDefensiveWeapon((Storage) building);
+        }else if (buildingType == BuildingType.STABLE) {
+            currentKingdom.addToStables((Storage) building);
+        }
     }
 
     public void selectBuilding(int x, int y) {
@@ -74,7 +88,28 @@ public class Game {
     }
 
     public void nextTurn() {
-
+        //TODO: add unit method for each turn
+        int currentKingdomNumber = -1;
+        for(int i = 0; i < players.size(); i++) {
+            if(currentKingdom == players.get(i)){
+                currentKingdomNumber = i;
+            }
+        }
+        if(currentKingdomNumber == (players.size() - 1)){
+            roundsPassed++;
+            currentKingdom = players.get(0);
+            for(Kingdom kingdom : players){
+                for(ProductionCenter productionCenter : kingdom.getAllProductionCenters()){
+                    productionCenter.run();
+                }
+                for (UnitCreation unitCreation: kingdom.getAllUnitCreations()) {
+                    unitCreation.run();
+                }
+            }
+        }
+        else{
+            currentKingdom = players.get(currentKingdomNumber+1);
+        }
     }
 
     //todo: this at the beginning of each turn
@@ -200,7 +235,7 @@ public class Game {
         }
     }
 
-    private ArrayList<Cell> neighbors(int x, int y) {
+    public ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> output = new ArrayList<>();
         if (currentMap.getMap()[x - 1][y] != null) {
             output.add(currentMap.getMap()[x - 1][y]);
@@ -308,4 +343,5 @@ public class Game {
             fight(x, y);
         }
     }
+
 }
