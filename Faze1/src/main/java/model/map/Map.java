@@ -17,7 +17,10 @@ public class Map {
 
     public Map(int dimension, int kingdomNumber) {
         map = new Cell[dimension][dimension];
-        dimension = dimension;
+        for (int i = 0; i < dimension; i++)
+            for (int j = 0; j < dimension; j++)
+                map[i][j] = new Cell();
+        this.dimension = dimension;
         kingdoms = new ArrayList<>();
         headSquares = new ArrayList<>();
         for (int i = 0; i < kingdomNumber; i++) {
@@ -42,10 +45,10 @@ public class Map {
                     headSquares.add(map[dimension / 2][0]);
                     break;
                 case 6 :
-                    headSquares.add(map[dimension][dimension / 2]);
+                    headSquares.add(map[dimension - 1][dimension / 2]);
                     break;
                 case 7 :
-                    headSquares.add(map[dimension / 2][dimension]);
+                    headSquares.add(map[dimension / 2][dimension - 1]);
                     break;
             }
         }

@@ -8,12 +8,13 @@ public enum ProfileMenuCommands {
     PROFILE_CHANGE_EMAIL("^profile change -e (?<email>\\S*)$"),
     PROFILE_CHANGE_NICKNAME("^profile change  -n (?<nickname>(\"[^\"]*\")|\\S*)$"),
     PROFILE_CHANGE_PASSWORD("(?=.*-o)(?=.*-n)^profile change password(( -o (?<oldPassword>\\S*))|( -n (?<newPassword>\\S*))){2}$"),
-    PROFILE_CHANGE_SLOGAN("^profile change slogan -s (?<slogan>(\"[^\"]*\")|\\S*))$"),
+    PROFILE_CHANGE_SLOGAN("^profile change slogan -s (?<slogan>(\"[^\"]*\")|\\S*)$"),
     PROFILE_REMOVE_SLOGAN("^Profile remove slogan$"),
     PROFILE_DISPLAY_HIGH_SCORE("^profile display highscore$"),
     PROFILE_DISPLAY_RANK("^profile display rank$"),
     PROFILE_DISPLAY_SLOGAN("^profile display slogan$"),
-    PROFILE_DISPLAY("^profile display$");
+    PROFILE_DISPLAY("^profile display$"),
+    PROFILE_BACK("^back$");
     private String regex;
 
     private ProfileMenuCommands(String regex) {

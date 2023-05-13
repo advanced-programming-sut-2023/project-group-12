@@ -15,7 +15,7 @@ public class Cell {
     private Building building = null;
 
     private int height = 0;
-    private ArrayList<Unit> units = new ArrayList<Unit>();
+    private ArrayList<Unit> units = null;
     private boolean isInThePath = false;
     private Cell father;
 
@@ -60,6 +60,8 @@ public class Cell {
     }
 
     public ArrayList<Unit> getUnits() {
+        if (units == null)
+            units = new ArrayList<>();
         return units;
     }
 

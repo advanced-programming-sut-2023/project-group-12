@@ -54,7 +54,7 @@ public class ProfileController {
         if (email.isEmpty()) {
             return "Email can't be empty";
         }
-        if (RegisterMenuController.isEmailFormatCorrect(email)) {
+        if (RegisterMenuController.isEmailFormatCorrect(email.toUpperCase())) {
             if (!UserDatabase.existsEmail(email)) {
                 String oldEmail = currentUser.getEmail();
                 currentUser.setEmail(email);

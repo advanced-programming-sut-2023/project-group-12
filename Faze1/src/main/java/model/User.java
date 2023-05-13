@@ -40,6 +40,8 @@ public class User {
     }
 
     public void setCurrentScore(int currentScore) {
+        if (currentScore > highScore)
+            setHighScore(currentScore);
         this.currentScore = currentScore;
     }
 
@@ -96,7 +98,7 @@ public class User {
     }
 
     public int getRank() {
-        return rank;
+        return rank + 1;
     }
 
     public String getSlogan() {

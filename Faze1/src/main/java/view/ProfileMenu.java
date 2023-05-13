@@ -11,9 +11,10 @@ public class ProfileMenu {
     private ProfileController controller;
     public void run(Scanner scanner) {
        controller = new ProfileController(UserDatabase.getCurrentUser());
-        String input = scanner.nextLine();
-        Matcher matcher;
+        System.out.println("Wellcome to profile menu");
         while (true) {
+            String input = scanner.nextLine();
+            Matcher matcher;
             if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_EMAIL)).find())
                 changeEmail(matcher);
             else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_USERNAME)).find())
@@ -34,6 +35,8 @@ public class ProfileMenu {
                 displaySlogan();
             else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY)).find())
                 displayAll();
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_BACK)).find())
+                return;
             else
                 System.out.println("Please try again!");
 

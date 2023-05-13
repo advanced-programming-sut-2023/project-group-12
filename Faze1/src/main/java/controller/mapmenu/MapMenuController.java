@@ -30,7 +30,7 @@ public class MapMenuController {
         if (isCorrectCoordinate(x1, y1) && isCorrectCoordinate(x2, y2) &&
                 x2 > x1 && y1 > y2) {
             if (getFloorTypeByName(type) != null) {
-                if (isBuildingExist(x1, x2, y1, y2)) {
+                if (!isBuildingExist(x1, x2, y1, y2)) {
                     setMapFloor(x1, y1, x2, y2, getFloorTypeByName(type).getType());
                     return "texture changed successfully";
                 } else
@@ -64,6 +64,7 @@ public class MapMenuController {
                 } else if (Character.toString(direction).equals("s")) {
                     setCellTexture(x, y, "rockS");
                 }
+                return "rock drop successfully";
             }
             return "there exist building";
         } else
@@ -74,14 +75,110 @@ public class MapMenuController {
         if (isCorrectCoordinate(x, y)) {
             if (getTreeTypeByName(type) != null) {
                 if (map.getMap()[x - 1][y - 1].getBuilding() == null) {
-                    map.getMap()[x - 1][y - 1].setTree(getTreeTypeByName(type).getTree());
-                    return "tree dropped successfully";
+                    if (!map.getMap()[x - 1][y - 1].getType().isWatery()) {
+                        map.getMap()[x - 1][y - 1].setTree(getTreeTypeByName(type).getTree());
+                        return "tree dropped successfully";
+                    } else
+                        return "this cell is watery";
                 } else
                     return "there exist building";
             } else
                 return "haven\'t this tree";
         } else
             return "your coordinate is incorrect";
+    }
+
+    public String showMap(int x, int y) {
+        map.setLastX(x - 1);
+        map.setLastY(y - 1);
+        String output = "\n";
+        for (int i = y + 4; i >= y - 6 && i >= 0; i--) {
+            if (i >= map.getMap().length)
+                continue;
+            for (int j = x - 6; j <= x + 4 && j <= map.getMap().length; j++) {
+                if (j < 0)
+                    continue;
+                output += showCell(j, i);
+            }
+            output += "\n";
+        }
+        return output;
+    }
+
+    private String showCell(int x, int y) {
+        String output = "";
+        String building = ".";
+        String soldier = ".";
+        String tree = ".";
+        if (map.getMap()[x][y].getBuilding() != null)
+            building = "B";
+        if (!map.getMap()[x][y].getUnits().isEmpty())
+            soldier = "S";
+        if (map.getMap()[x][y].getTree() != null)
+            tree = "T";
+        int backgroundTheme = 0;
+        for (Type type : Type.values()) {
+            if (map.getMap()[x][y].getType().name().equals(type.name())) {
+                backgroundTheme %= 8;
+                backgroundTheme += 40;
+                break;
+            }
+            backgroundTheme++;
+        }
+        output += "\033[" + backgroundTheme + "m" + building + soldier + tree + "|" + "\033[0m";
+        return output;
+    }
+
+    public String mapUp(String direction, int value) {
+        if (direction.equals("n")) {
+            if (map.getLastY() + value <= map.getDimension())
+                return showMap(map.getLastX() + 1, map.getLastY() + value + 1);
+            else
+                return "out of bounds";
+        } else if (direction.equals("e")) {
+            if (map.getLastX() + value <= map.getDimension())
+                return showMap(map.getLastX() + value + 1, map.getLastY() + 1);
+            else
+                return "out of bounds";
+        } else if (direction.equals("w")) {
+            if (map.getLastY() - value < 0)
+                return showMap(map.getLastX() - value + 1, map.getLastY() + 1);
+            else
+                return "out of bounds";
+        } else if (direction.equals("s")) {
+            if (map.getLastY() - value <= map.getDimension())
+                return showMap(map.getLastX() + 1, map.getLastY() - value + 1);
+            else
+                return "out of bounds";
+        }
+        return "Wrong direction";
+    }
+
+    public String showDetail(int x, int y) {
+        String output = "";
+        if (isCorrectCoordinate(x, y)) {
+            output += "Building : ";
+            if (map.getMap()[x - 1][y - 1].getBuilding() != null)
+                output += map.getMap()[x - 1][y - 1].getBuilding().getBuildingType().name().toLowerCase() + "\n";
+            else
+                output += "NONE" + "\n";
+            output += "Tree : ";
+            if (map.getMap()[x - 1][y - 1].getTree() != null)
+                output += map.getMap()[x - 1][y - 1].getTree().name() + "\n";
+            else
+                output += "NONE" + "\n";
+            output += "Texture : " + map.getMap()[x - 1][y - 1].getType().name() + "\n";
+            output += "Soldiers : ";
+            if (!map.getMap()[x - 1][y - 1].getUnits().isEmpty()) {
+                output += "\n";
+                for (Unit unit : map.getMap()[x - 1][y - 1].getUnits()) {
+                    output += unit.getUnitType().name().toLowerCase() + " owner = " + unit.getHomeland().getOwner().getUsername() + "\n";
+                }
+            } else
+                output += "NONE" + "\n";
+        } else
+            output += "Your coordinate is incorrect";
+        return output;
     }
 
     private boolean isCorrectCoordinate(int x, int y) {
@@ -108,7 +205,7 @@ public class MapMenuController {
 
     private boolean isBuildingExist(int x1, int x2, int y1, int y2) {
         for (int i = x1; i <= x2; i++) {
-            for (int j = y2; y2 <= y1; j++) {
+            for (int j = y2; j <= y1; j++) {
                 if (map.getMap()[i - 1][j - 1].getBuilding() != null)
                     return true;
             }
@@ -120,70 +217,5 @@ public class MapMenuController {
         for (int i = x1; i <= x2; i++)
             for (int j = y2; j <= y1; j++)
                 map.getMap()[i - 1][j - 1].setType(type);
-    }
-
-    public void showMap(int x, int y) {
-        System.out.println();
-        for (int i = y + 5; i >= y - 5 && i >= 0; i--) {
-            if (i >= map.getMap().length)
-                continue;
-            for (int j = x - 5; j <= x + 5 && j <= map.getMap().length; j++) {
-                if (j <= 0)
-                    continue;
-                showCell(j, i);
-            }
-            System.out.println();
-        }
-    }
-
-    private void showCell(int x, int y) {
-        map.setLastX(x);
-        map.setLastY(y);
-        String building = ".";
-        String soldier = ".";
-        String tree = ".";
-        if (map.getMap()[x][y].getBuilding() != null)
-            building = "B";
-        if (!map.getMap()[x][y].getUnits().isEmpty())
-            soldier = "S";
-        if (map.getMap()[x][y].getTree() != null)
-            tree = "T";
-        int backgroundTheme = 0;
-        for (Type type : Type.values()) {
-            if (map.getMap()[x][y].getType().name().equals(type.name())) {
-                System.out.print(backgroundTheme);
-                backgroundTheme %= 8;
-                backgroundTheme += 40;
-                break;
-            }
-            backgroundTheme++;
-        }
-        System.out.print(backgroundTheme + map.getMap()[x][y].getType().name());
-        System.out.print("\033[" + backgroundTheme + "m" + building + soldier + tree + "|" + "\033[0m");
-    }
-
-    private void mapUp(String direction, int value) {
-        if (direction.equals("n")) {
-            showMap(map.getLastX(), map.getLastY() + value);
-        } else if (direction.equals("e")) {
-            showMap(map.getLastX() + value, map.getLastY());
-        } else if (direction.equals("w")) {
-            showMap(map.getLastX() - value, map.getLastY());
-        } else if (direction.equals("s")) {
-           showMap(map.getLastX(), map.getLastY() - value);
-        }
-    }
-
-    private String showDetail(int x, int y) {
-        //todo : getBuilding.toString and unit.toString is its name
-        if (isCorrectCoordinate(x, y)) {
-            System.out.println("Building : " + map.getMap()[x - 1][y - 1].getBuilding().toString());
-            System.out.println("Tree : " + map.getMap()[x - 1][y - 1].getTree().name());
-            System.out.println("Texture : " + map.getMap()[x - 1][y - 1].getType().name());
-            System.out.println("Soldiers : ");
-            for (Unit unit : map.getMap()[x - 1][y - 1].getUnits()) {
-                System.out.println(unit.toString());
-            }
-        } return "your coordinate is incorrect";
     }
 }
