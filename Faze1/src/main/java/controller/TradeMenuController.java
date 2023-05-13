@@ -2,6 +2,7 @@ package controller;
 
 import model.Game;
 import model.Kingdom;
+import model.Property.DefensiveWeapon;
 import model.Property.Food;
 import model.Property.Resources;
 import model.Property.Weapon;
@@ -31,6 +32,8 @@ public class TradeMenuController {
                 output += ((Resources) trade.getProperty()).getResourceType().name().toLowerCase();
             else if (trade.getProperty() instanceof Weapon)
                 output += ((Weapon) trade.getProperty()).getWeaponType().name().toLowerCase();
+            else if (trade.getProperty() instanceof DefensiveWeapon)
+                output += ((DefensiveWeapon) trade.getProperty()).getDefenseType().name().toLowerCase();
             output += " \\\\ " + trade.getResourceAmount() + " \\\\ " + trade.getPrice() +
                     " \\\\ " + trade.getSender().getOwner().getUsername() + " \\\\ " +
                     trade.getReceiver().getOwner().getUsername() + " \\\\ " + trade.getSenderMessage() + "\n";

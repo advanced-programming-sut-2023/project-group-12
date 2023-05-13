@@ -1,9 +1,6 @@
 package model;
 
-import model.Property.Food;
-import model.Property.Property;
-import model.Property.Resources;
-import model.Property.Weapon;
+import model.Property.*;
 
 public class Trade {
     private Property property;
@@ -67,19 +64,16 @@ public class Trade {
     }
 
     public void doTrade(String receiverMessage) {
-        if (property instanceof Food)
-            receiver.getPropertyByName(((Food) property).getType().name()).addValue(-1 * resourceAmount);
-        else if (property instanceof Resources)
-            receiver.getPropertyByName(((Resources) property).getResourceType().name()).addValue(-1 * resourceAmount);
-        else if (property instanceof Weapon)
-            receiver.getPropertyByName(((Weapon) property).getWeaponType().name()).addValue(-1 * resourceAmount);
-        property.addValue(resourceAmount);
+        property.addValue(-1 * this.resourceAmount);
+        receiver.addToProperty(property);
+        property.addValue(2 * resourceAmount);
+        sender.addToProperty(property);
         sender.addGold(-1 * price);
-        receiver.addGold(resourceAmount);
+        receiver.addGold(price);
         sender.getTrades().remove(this);
         receiver.getTrades().remove(this);
-        sender.setTrades(this);
-        receiver.setTrades(this);
+        sender.setTradesHistory(this);
+        receiver.setTradesHistory(this);
         this.accept = true;
         this.receiverMessage = receiverMessage;
     }
