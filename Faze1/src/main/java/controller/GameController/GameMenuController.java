@@ -10,6 +10,10 @@ public class GameMenuController {
     private KingdomController kingdomController = new KingdomController();
     private BuildingController buildingController = new BuildingController();
 
+    public Game getNewGame() {
+        return newGame;
+    }
+
     public String dropBuilding(String X, String Y, String type) {
         String output = checkNumber(X);
         if (!output.equals("")) {

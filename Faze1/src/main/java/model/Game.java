@@ -13,8 +13,6 @@ import model.people.UnitType;
 
 public class Game {
 
-
-    static Game yetGame;
     private Map currentMap;
     private Building selectedBuilding;
     private ArrayList<Kingdom> players;
@@ -220,10 +218,6 @@ public class Game {
 
     public void setSelectedBuilding(Building selectedBuilding) {
         this.selectedBuilding = selectedBuilding;
-    }
-
-    public static Game getYetGame() {
-        return yetGame;
     }
 
     public ArrayList<Kingdom> getPlayers() {

@@ -2,15 +2,17 @@ package view;
 
 import Commands.TradeMenuCommands;
 import controller.TradeMenuController;
+import model.Game;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class TradeMenu {
-    public void run (Scanner scanner) {
+    public void run (Scanner scanner, Game game) {
+        System.out.println("wellcome to trade menu");
         String input;
         Matcher tradeList,trade,accept,tradeHistory;
-        TradeMenuController controller = new TradeMenuController();
+        TradeMenuController controller = new TradeMenuController(game);
         while (true) {
             input = scanner.nextLine();
             tradeList = TradeMenuCommands.getMatcher(input,TradeMenuCommands.SHOW_ALL_TRADES);

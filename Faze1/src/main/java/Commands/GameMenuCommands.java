@@ -38,7 +38,8 @@ public enum GameMenuCommands {
     //DITCH("dig, cancel digging, remove ditch"),
     //BURN OIL("")
     //HANDLE PAGE 26 OF DOC
-
+    GO_TO_TRADE_MENU("^go to trade menu$"),
+    GO_TO_SHOP_MENU("^go to shop menu$")
     ;
     private String regex;
 

@@ -13,7 +13,7 @@ public class GameMenu {
         Matcher chooseColor, chooseKeep, changeColor, changeKeep, dropBuilding, selectBuilding, createUnit, setFoodRate,
                 setTaxRate, showTaxRate, setFearRate, showPopularityFactors, showPopularity, showFoodList, showFoodRate,
                 dropUnit, repair, selectUnit, moveUnit, patrolUnit, setMode, groundAttack, airAttack, pourOil, digTunnel,
-                buildEquipment, disbandUnit;
+                buildEquipment, disbandUnit, goToShopMenu, goToTradeMenu;
         while (true) {
             input = scanner.nextLine();
             chooseColor = GameMenuCommands.getMatcher(input, GameMenuCommands.CHOOSE_COLOR);
@@ -43,6 +43,8 @@ public class GameMenu {
             digTunnel = GameMenuCommands.getMatcher(input, GameMenuCommands.DIG_TUNNEL);
             buildEquipment = GameMenuCommands.getMatcher(input, GameMenuCommands.BUILD_EQUIPMENT);
             disbandUnit = GameMenuCommands.getMatcher(input, GameMenuCommands.DISBAND_UNIT);
+            goToShopMenu = GameMenuCommands.getMatcher(input, GameMenuCommands.GO_TO_SHOP_MENU);
+            goToTradeMenu = GameMenuCommands.getMatcher(input, GameMenuCommands.GO_TO_TRADE_MENU);
 
             if (chooseColor.find()) {
                 output = controller.chooseColor(chooseColor.group("color"));
@@ -140,8 +142,15 @@ public class GameMenu {
             else if (disbandUnit.find()) {
                 output = controller.disbandUnit();
                 System.out.println(output);
-            }
-            else {
+            } else if (goToShopMenu.find()) {
+                ShopMenu menu = new ShopMenu();
+                menu.run(scanner, controller.getNewGame());
+                System.out.println("now you are in the game menu");
+            } else if (goToTradeMenu.find()) {
+                TradeMenu menu = new TradeMenu();
+                menu.run(scanner, controller.getNewGame());
+                System.out.println("now you are in the game menu");
+            } else {
                 System.out.println("invalid command!");
             }
         }
