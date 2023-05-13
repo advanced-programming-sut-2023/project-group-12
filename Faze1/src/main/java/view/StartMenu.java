@@ -53,6 +53,7 @@ public class StartMenu {
             }
             else if (startGame.find()) {
                 GameMenu menu = new GameMenu();
+                System.out.println("start game successfully!");
                 menu.run(scanner);
             }
             else {

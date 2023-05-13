@@ -1,7 +1,7 @@
 package controller.mapmenu;
 
 import model.map.Map;
-import model.map.Type;
+import model.map.TextureType;
 import model.people.Unit;
 
 public class MapMenuController {
@@ -16,7 +16,7 @@ public class MapMenuController {
         if (isCorrectCoordinate(x, y)) {
             if (getFloorTypeByName(type) != null) {
                 if (map.getMap()[x - 1][y - 1].getBuilding() == null) {
-                    map.getMap()[x - 1][y - 1].setType(getFloorTypeByName(type).getType());
+                    map.getMap()[x - 1][y - 1].setTextureType(getFloorTypeByName(type).getType());
                     return "texture changed successfully";
                 } else
                     return "there exists building";
@@ -44,7 +44,7 @@ public class MapMenuController {
     public String clear(int x, int y) {
         if (isCorrectCoordinate(x, y)) {
             map.getMap()[x - 1][y - 1].setBuilding(null);
-            map.getMap()[x - 1][y - 1].setType(Type.EARTH);
+            map.getMap()[x - 1][y - 1].setTextureType(TextureType.EARTH);
             map.getMap()[x - 1][y - 1].setTree(null);
             map.getMap()[x - 1][y - 1].setUnits(null);
             return "cell cleared successfully";
@@ -75,7 +75,7 @@ public class MapMenuController {
         if (isCorrectCoordinate(x, y)) {
             if (getTreeTypeByName(type) != null) {
                 if (map.getMap()[x - 1][y - 1].getBuilding() == null) {
-                    if (!map.getMap()[x - 1][y - 1].getType().isWatery()) {
+                    if (!map.getMap()[x - 1][y - 1].getTextureType().isWatery()) {
                         map.getMap()[x - 1][y - 1].setTree(getTreeTypeByName(type).getTree());
                         return "tree dropped successfully";
                     } else
@@ -117,8 +117,8 @@ public class MapMenuController {
         if (map.getMap()[x][y].getTree() != null)
             tree = "T";
         int backgroundTheme = 0;
-        for (Type type : Type.values()) {
-            if (map.getMap()[x][y].getType().name().equals(type.name())) {
+        for (TextureType type : TextureType.values()) {
+            if (map.getMap()[x][y].getTextureType().name().equals(type.name())) {
                 backgroundTheme %= 8;
                 backgroundTheme += 40;
                 break;
@@ -167,7 +167,7 @@ public class MapMenuController {
                 output += map.getMap()[x - 1][y - 1].getTree().name() + "\n";
             else
                 output += "NONE" + "\n";
-            output += "Texture : " + map.getMap()[x - 1][y - 1].getType().name() + "\n";
+            output += "Texture : " + map.getMap()[x - 1][y - 1].getTextureType().name() + "\n";
             output += "Soldiers : ";
             if (!map.getMap()[x - 1][y - 1].getUnits().isEmpty()) {
                 output += "\n";
@@ -213,9 +213,9 @@ public class MapMenuController {
         return false;
     }
 
-    private void setMapFloor(int x1, int y1, int x2, int y2, Type type) {
+    private void setMapFloor(int x1, int y1, int x2, int y2, TextureType type) {
         for (int i = x1; i <= x2; i++)
             for (int j = y2; j <= y1; j++)
-                map.getMap()[i - 1][j - 1].setType(type);
+                map.getMap()[i - 1][j - 1].setTextureType(type);
     }
 }

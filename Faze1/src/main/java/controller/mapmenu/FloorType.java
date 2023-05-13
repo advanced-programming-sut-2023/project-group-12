@@ -1,40 +1,42 @@
 package controller.mapmenu;
 
 
-import model.map.Type;
+import com.sun.source.util.TaskEvent;
+import model.map.TextureType;
+
 
 
 import java.util.regex.Pattern;
 
 public enum FloorType {
-    EARTH("^earth$", Type.EARTH),
-    GRAVEL("^gravel$", Type.GRAVEL),
-    STONE_MINE("^stoneMine$", Type.STONE_MINE),
-    ROCK_NORTH("^rockN$", Type.ROCK_NORTH),
-    ROCK_EAST("^rockE$", Type.ROCK_EAST),
-    ROCK_WEST("^rockW$", Type.ROCK_WEST),
-    ROCK_SOUTH("^rockS$", Type.ROCK_SOUTH),
-    IRON_MINE("^ironMine$", Type.IRON_MINE),
-    GRASS("^grass$", Type.GRASS),
-    MEADOW("^meadow$", Type.MEADOW),
-    DENSE_MEADOW("^denseMeadow$", Type.DENSE_MEADOW),
+    EARTH("^earth$", TextureType.EARTH),
+    GRAVEL("^gravel$", TextureType.GRAVEL),
+    STONE_MINE("^stoneMine$", TextureType.STONE_MINE),
+    ROCK_NORTH("^rockN$", TextureType.ROCK_NORTH),
+    ROCK_EAST("^rockE$", TextureType.ROCK_EAST),
+    ROCK_WEST("^rockW$", TextureType.ROCK_WEST),
+    ROCK_SOUTH("^rockS$", TextureType.ROCK_SOUTH),
+    IRON_MINE("^ironMine$", TextureType.IRON_MINE),
+    GRASS("^grass$", TextureType.GRASS),
+    MEADOW("^meadow$", TextureType.MEADOW),
+    DENSE_MEADOW("^denseMeadow$", TextureType.DENSE_MEADOW),
 
 
-    OIL("^oil$", Type.OIL),
-    PLAIN("^plain$", Type.PLAIN),
-    SHALLOW_WATER("^shallowWater$", Type.SHALLOW_WATER),
-    FOUNTAIN("^fountain$", Type.FOUNTAIN),
-    SMALL_POND("^smallPond$", Type.SMALL_POND),
-    BIG_POND("^bigPond$", Type.BIG_POND),
-    BEACH("^beach$", Type.BEACH),
-    SEA("^sea$", Type.SEA);
+    OIL("^oil$", TextureType.OIL),
+    PLAIN("^plain$", TextureType.PLAIN),
+    SHALLOW_WATER("^shallowWater$", TextureType.SHALLOW_WATER),
+    FOUNTAIN("^fountain$", TextureType.FOUNTAIN),
+    SMALL_POND("^smallPond$", TextureType.SMALL_POND),
+    BIG_POND("^bigPond$", TextureType.BIG_POND),
+    BEACH("^beach$", TextureType.BEACH),
+    SEA("^sea$", TextureType.SEA);
 
     private String regex;
 
-    private Type type;
+    private TextureType type;
 
 
-    FloorType(String regex, Type type) {
+    FloorType(String regex, TextureType type) {
         this.regex = regex;
         this.type = type;
     }
@@ -45,7 +47,7 @@ public enum FloorType {
         return false;
     }
 
-    public Type getType() {
+    public TextureType getType() {
         return type;
     }
 }
