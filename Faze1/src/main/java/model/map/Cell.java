@@ -2,14 +2,13 @@ package model.map;
 
 
 import model.Building.Building;
-import model.TextureType;
 import model.people.Unit;
 
 import java.util.ArrayList;
 
 public class Cell {
-    private TextureType TextureType;// ino man ezafe kardam okaye?
-    private Type type = Type.EARTH;// todo : lanati in che anie ?
+    private TextureType TextureType;
+
     private Tree tree = null;
     private Building building = null;
     private int height = 0;
@@ -33,12 +32,8 @@ public class Cell {
         isInThePath = inThePath;
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
+    public void setTextureType(model.map.TextureType textureType) {
+        TextureType = textureType;
     }
 
     public Tree getTree() {
@@ -88,7 +83,7 @@ public class Cell {
         this.height = height;
     }
 
-    public model.TextureType getTextureType() {
+    public TextureType getTextureType() {
         return TextureType;
     }
 }

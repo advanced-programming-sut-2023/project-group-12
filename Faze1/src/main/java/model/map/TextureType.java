@@ -1,6 +1,6 @@
 package model.map;
 
-public enum Type {
+public enum TextureType {
     EARTH(true, false),
     GRAVEL(true, false),
     STONE_MINE(true, false),
@@ -25,14 +25,21 @@ public enum Type {
 
     private boolean passable;
 
-    private boolean isWatery;
+    private boolean isWateryLand;
 
-    Type(boolean passable, boolean isWatery) {
+    TextureType(boolean passable, boolean isWateryLand) {
         this.passable = passable;
-        this.isWatery = isWatery;
+        this.isWateryLand = isWateryLand;
     }
+     public boolean isWateryLand() {
+         return isWateryLand;
+     }
 
     public boolean isWatery() {
-        return this.isWatery;
+        return this.isWateryLand;
+    }
+
+    public boolean isPassable(){
+        return passable;
     }
 }

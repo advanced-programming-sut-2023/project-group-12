@@ -3,8 +3,7 @@ package model.Building;
 
 import model.Kingdom;
 import model.Property.*;
-import model.TextureType;
-import model.people.Unit;
+import model.map.TextureType;
 
 public enum BuildingType {
     //name, class, hitPoint, goldPrice, resourcePrice, resourceCount, workerCount, engineerCount
@@ -169,11 +168,11 @@ public enum BuildingType {
 
     public static boolean isBuildingMatchTexture(BuildingType buildingType, TextureType textureType){
         if(buildingType == QUARRY)
-            return textureType == TextureType.STONE;
+            return textureType == TextureType.STONE_MINE;
         else if(buildingType == PITCH_RIG)
             return textureType == TextureType.PLAIN;
         else if(buildingType == IRON_MINE)
-            return textureType == TextureType.IRON;
+            return textureType == TextureType.IRON_MINE;
         else if(buildingType == OIL_SMELTER)
             return textureType == TextureType.OIL;
         else if(textureType.isWateryLand())
@@ -187,8 +186,8 @@ public enum BuildingType {
         else if(buildingType == TREE)
             return textureType == TextureType.DENSE_MEADOW;
         else if(buildingType.getBuildingClass() == Tower.class)
-            return textureType != TextureType.ROCK;
-        else return textureType == TextureType.GRAVEL || textureType == TextureType.STONE ||
+            return (textureType.isPassable() && !textureType.isWatery());
+        else return textureType == TextureType.GRAVEL || textureType == TextureType.STONE_MINE ||
                     textureType == TextureType.DENSE_MEADOW;
     }
 

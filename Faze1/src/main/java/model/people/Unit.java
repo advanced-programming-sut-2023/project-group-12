@@ -14,6 +14,8 @@ public class Unit {
     private String mode;
     private int speed;
 
+    private boolean isBusy;
+
     public int getSpeed() {
         return speed;
     }
@@ -23,6 +25,8 @@ public class Unit {
         this.unitType = unitType;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
+        hitPoint = unitType.getHitPoint();
+        isBusy = false;
         this.hitPoint = unitType.getHitPoint();
         this.speed = unitType.getMoveSpeed() * 10;
     }
@@ -62,6 +66,11 @@ public class Unit {
     public String getMode() {
         return mode;
     }
+    public boolean isBusy(){
+        return isBusy;
+    }
 
-
+    public void setBusy(boolean busy) {
+        isBusy = busy;
+    }
 }

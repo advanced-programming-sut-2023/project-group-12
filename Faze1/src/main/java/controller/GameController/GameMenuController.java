@@ -1,9 +1,13 @@
 package controller.GameController;
 
 import model.Building.BuildingType;
+import model.Equipment.Equipment;
+import model.Equipment.EquipmentType;
 import model.Game;
 import model.people.Unit;
 import model.people.UnitType;
+
+import java.util.ArrayList;
 
 public class GameMenuController {
     private Game newGame;
@@ -326,10 +330,27 @@ public class GameMenuController {
         if (equipmentName.isEmpty()) {
             return "equipment name can't be empty";
         }
-        for (Unit unit : newGame.getSelectedUnits()) {
-            //if (unit.getUnitType().)
+        for (Unit unit: newGame.getSelectedUnits()) {
+            if (unit.getUnitType() != UnitType.ENGINEER){
+                return "this type of units can't build equipment!";
+            }
         }
-        return "";
+        EquipmentType equipmentType = EquipmentType.getEquipmentTypeByName(equipmentName);
+        if(equipmentType == null){
+            return "equipment name is invalid!";
+        }
+        ArrayList<Unit> availableEngineers = new ArrayList<>();
+        for (Unit unit: newGame.getSelectedUnits()) {
+            if (!unit.isBusy()) {
+                availableEngineers.add(unit);
+            }
+        }
+        if(availableEngineers.size() < equipmentType.getEngineerCount()){
+            return "you don't have enough engineers for build "+equipmentName;
+        }
+        Equipment equipment = new Equipment(equipmentType,newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(), newGame.getCurrentKingdom());
+        newGame.getCurrentKingdom().addEquipment(equipment);
+        return "equipment "+equipmentName + "build successfully!";
     }
 
     public String digTunnel(String xCoordinate, String yCoordinate) {
