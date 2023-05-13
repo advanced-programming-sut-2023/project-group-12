@@ -1,5 +1,6 @@
 package model;
 
+import model.Building.*;
 import model.Property.WeaponType;
 import model.map.Cell;
 import model.people.Unit;
@@ -7,8 +8,6 @@ import model.map.Map;
 
 import java.util.ArrayList;
 
-import model.Building.Building;
-import model.Building.BuildingType;
 import model.people.UnitType;
 
 
@@ -57,7 +56,7 @@ public class Game {
         Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom, x, y);
         currentMap.getMap()[x][y].setBuilding(building);
         currentMap.getMap()[x][y].setHeight(building.getHeight());
-        if(building instanceof ProductionCenter ){
+        if(building instanceof ProductionCenter){
             currentKingdom.addProductionCenter((ProductionCenter) building);
         }else if (building instanceof UnitCreation) {
             currentKingdom.addToAllUnitCreations((UnitCreation) building);
@@ -242,7 +241,7 @@ public class Game {
         }
     }
 
-    private ArrayList<Cell> neighbors(int x, int y) {
+    public ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> output = new ArrayList<>();
         if (currentMap.getMap()[x - 1][y] != null) {
             output.add(currentMap.getMap()[x - 1][y]);
