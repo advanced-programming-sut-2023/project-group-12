@@ -57,6 +57,8 @@ public class Game {
     private int roundsPassed;
 
     public void dropBuilding(int x, int y, BuildingType buildingType) {
+        currentKingdom.addGold(-buildingType.getGoldPrice());
+
         Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom, x, y);
         currentMap.getMap()[x][y].setBuilding(building);
         currentMap.getMap()[x][y].setHeight(building.getHeight());

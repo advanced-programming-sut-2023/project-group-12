@@ -6,6 +6,7 @@ import model.Equipment.Equipment;
 import model.Equipment.EquipmentType;
 import model.Game;
 import model.Kingdom;
+import model.Property.Resources;
 import model.Property.WeaponType;
 import model.User;
 import model.UserDatabase;
@@ -70,17 +71,30 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        if(newGame.getCurrentMap().getMap()[x][y].getBuilding() != null ){
+            return "there is a building here!";
+        }
         if (!BuildingType.isBuildingMatchTexture(buildingType, newGame.getCurrentMap().getMap()[x][y].getTextureType())) {
             return "invalid texture!";
         }
         if (newGame.isEnemyExistsInCell(x, y)) {
             return "there is already an enemy in this cell and you cannot drop it!";
         }
+        if(newGame.getCurrentKingdom().getGold() < buildingType.getGoldPrice()){
+            return "you don't have enough gold to build this building!";
+        }
+        if(buildingType.getResources() != null){
+            Resources resources = new Resources(buildingType.getResourcePrice(), buildingType.getResourceCount());
+            if(buildingType.getResourceCount() > newGame.getCurrentKingdom().getNumberOfProperties(resources)){
+                return "you don't have enough " + buildingType.getResourcePrice().getName() +" to build this building!";
+            }
+            newGame.getCurrentKingdom().spendProperties(resources);
+        }
         int check = 0;
         if (buildingType == BuildingType.STOCKPILE) {
             ArrayList<Cell> neighbors = newGame.neighbors(x, y);
             for (Cell cell : neighbors) {
-                if (cell.getBuilding().getBuildingType() == buildingType) {
+                if (cell.getBuilding() != null && cell.getBuilding().getBuildingType() == buildingType) {
                     check = 1;
                     break;
                 }
