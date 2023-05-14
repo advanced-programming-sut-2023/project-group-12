@@ -18,7 +18,7 @@ public class Cell {
 
     private Building building = null;
     private int height = 0;
-    private ArrayList<Unit> units = null;
+    private ArrayList<Unit> units = new ArrayList<>();
     private boolean isInThePath = false;
     private Cell father = null;
     public Cell(int xCoordinate, int yCoordinate) {
@@ -65,8 +65,6 @@ public class Cell {
     }
 
     public ArrayList<Unit> getUnits() {
-        if (units == null)
-            units = new ArrayList<>();
         return units;
     }
 
