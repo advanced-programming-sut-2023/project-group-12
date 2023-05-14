@@ -3,6 +3,8 @@ package controller;
 import model.Game;
 import model.Property.*;
 
+import static controller.GameController.GameMenuController.checkNumber;
+
 public class ShopMenuController {
 
     private Game game;
@@ -11,7 +13,14 @@ public class ShopMenuController {
         this.game = game;
     }
 
-    public String buyOrSell(String action, String name, int amount) {
+    public String buyOrSell(String action, String name, String stringAmount) {
+
+        String output = checkNumber(stringAmount);
+        if (!output.equals("")) {
+            return output;
+        }
+        int amount = Integer.parseInt(stringAmount);
+
         Property property = game.getCurrentKingdom().getPropertyByName(name);
         if (property != null) {
             if (amount > 0) {
