@@ -57,5 +57,6 @@ public class ProfileTest {
         Assertions.assertEquals("Your email <\"h1309973@gmail.com\"> changed to <h1337408davo@gmail.com> successfully", profileController.changeEmail("h1337408davo@gmail.com"));
 
 
+
     }
 }
