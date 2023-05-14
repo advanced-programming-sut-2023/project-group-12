@@ -27,7 +27,6 @@ public class Cell {
         isPassable = getTextureType().isPassable();
     }
 
-
     public void setFather(Cell father) {
         this.father = father;
     }

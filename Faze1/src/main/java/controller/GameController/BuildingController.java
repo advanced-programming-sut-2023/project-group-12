@@ -14,13 +14,13 @@ import model.people.soldier.Soldier;
 import javax.naming.BinaryRefAddr;
 
 public class BuildingController {
-    private Building building;
+
+    public static Building building = null;
 
     private Game newGame;
 
     public BuildingController(Game newGame) {
         this.newGame = newGame;
-        this.building = newGame.getSelectedBuilding();
     }
 
     public String repair(Building building){
@@ -44,6 +44,9 @@ public class BuildingController {
     }
 
     public String createUnit(String type, int count){
+        if (building == null) {
+            return "there's no selected building";
+        }
         int xPosition = building.getxPosition();
         int yPosition = building.getyPosition();
         boolean horseable = false;

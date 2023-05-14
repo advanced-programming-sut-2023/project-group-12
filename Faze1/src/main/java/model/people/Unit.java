@@ -1,6 +1,7 @@
 package model.people;
 
 import model.Kingdom;
+import model.map.Cell;
 
 public class Unit {
     protected Kingdom homeland;
@@ -17,6 +18,7 @@ public class Unit {
     private int speed;
     private boolean beingHit = false;
     private boolean hittingSomeOne = false;
+
     public boolean isBeingHit() {
         return beingHit;
     }

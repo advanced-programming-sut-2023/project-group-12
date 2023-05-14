@@ -13,6 +13,10 @@ import model.people.UnitType;
 
 public class Game {
 
+    public ArrayList<Kingdom> getKingdoms() {
+        return kingdoms;
+    }
+
     public Game(Map currentMap, ArrayList<Kingdom> players) {
         this.currentMap = currentMap;
         this.players = players;
@@ -56,18 +60,18 @@ public class Game {
         Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom, x, y);
         currentMap.getMap()[x][y].setBuilding(building);
         currentMap.getMap()[x][y].setHeight(building.getHeight());
-        if(building instanceof ProductionCenter){
+        if (building instanceof ProductionCenter) {
             currentKingdom.addProductionCenter((ProductionCenter) building);
-        }else if (building instanceof UnitCreation) {
+        } else if (building instanceof UnitCreation) {
             currentKingdom.addToAllUnitCreations((UnitCreation) building);
-        }else if (buildingType == BuildingType.STOCKPILE) {
+        } else if (buildingType == BuildingType.STOCKPILE) {
             currentKingdom.addToStockPiles((Storage) building);
         } else if (buildingType == BuildingType.FOOD_STOCKPILE) {
             currentKingdom.addToFoodStockPiles((Storage) building);
-        }else if (buildingType == BuildingType.ARMOURY){
+        } else if (buildingType == BuildingType.ARMOURY) {
             currentKingdom.addToWeapons((Storage) building);
             currentKingdom.addToDefensiveWeapon((Storage) building);
-        }else if (buildingType == BuildingType.STABLE) {
+        } else if (buildingType == BuildingType.STABLE) {
             currentKingdom.addToStables((Storage) building);
         }
     }
@@ -96,29 +100,28 @@ public class Game {
     public void nextTurn() {
         //TODO: add unit method for each turn
         int currentKingdomNumber = -1;
-        for(int i = 0; i < players.size(); i++) {
-            if(currentKingdom == players.get(i)){
+        for (int i = 0; i < players.size(); i++) {
+            if (currentKingdom == players.get(i)) {
                 currentKingdomNumber = i;
             }
         }
-        if(currentKingdomNumber == (players.size() - 1)){
+        if (currentKingdomNumber == (players.size() - 1)) {
             roundsPassed++;
             currentKingdom = players.get(0);
-            for(Kingdom kingdom : players){
-                for(ProductionCenter productionCenter : kingdom.getAllProductionCenters()){
+            for (Kingdom kingdom : players) {
+                for (ProductionCenter productionCenter : kingdom.getAllProductionCenters()) {
                     productionCenter.run();
                 }
-                for (UnitCreation unitCreation: kingdom.getAllUnitCreations()) {
+                for (UnitCreation unitCreation : kingdom.getAllUnitCreations()) {
                     unitCreation.run();
                 }
             }
-        }
-        else{
-            currentKingdom = players.get(currentKingdomNumber+1);
+        } else {
+            currentKingdom = players.get(currentKingdomNumber + 1);
         }
     }
 
-    //todo: this at the beginning of each turn
+    //todo : this at the beginning of each turn
     public String patrolUnit(int xStart, int yStart, int xEnd, int yEnd) {
         if (finalPath(xStart, yStart, xEnd, yEnd) == null) {
             return "no path found between the two points";
@@ -170,11 +173,14 @@ public class Game {
         if (path == null) {
             return "no path found for these units";
         }
+        //todo : check if there's trap in the way
         int speed = units.get(0).getSpeed();
+        for (Unit unit:units) {
+            path.get((Math.min(speed,path.size()-1))).addUnits(unit);
+        }
         for (int i = 0; i < speed && i < path.size() - 2; i++) {
             for (int j = units.size() - 1; j >= 0; j--) {
                 path.get(i).getUnits().remove(units.get(j));
-                path.get(i + 1).getUnits().add(units.get(j));
             }
         }
         return "units moved successfully";
@@ -190,6 +196,9 @@ public class Game {
             return null;
         }
         while (!path.contains(currentMap.getMap()[xStart][yStart])) {
+            if (cell.getFather() == null) {
+                return null;
+            }
             cell = cell.getFather();
             path.add(cell);
         }
@@ -243,16 +252,16 @@ public class Game {
 
     public ArrayList<Cell> neighbors(int x, int y) {
         ArrayList<Cell> output = new ArrayList<>();
-        if (currentMap.getMap()[x - 1][y] != null) {
+        if (x >= 1 && currentMap.getMap()[x - 1][y] != null) {
             output.add(currentMap.getMap()[x - 1][y]);
         }
-        if (currentMap.getMap()[x + 1][y] != null) {
+        if (x + 1 < currentMap.getDimension() && currentMap.getMap()[x + 1][y] != null) {
             output.add(currentMap.getMap()[x + 1][y]);
         }
-        if (currentMap.getMap()[x][y - 1] != null) {
+        if (y >= 1 && currentMap.getMap()[x][y - 1] != null) {
             output.add(currentMap.getMap()[x][y - 1]);
         }
-        if (currentMap.getMap()[x][y + 1] != null) {
+        if (y + 1 < currentMap.getDimension() && currentMap.getMap()[x][y + 1] != null) {
             output.add(currentMap.getMap()[x][y + 1]);
         }
         return output;
@@ -269,10 +278,10 @@ public class Game {
     public ArrayList<Kingdom> getPlayers() {
         return players;
     }
-
+// todo : handle bowmen
     public String groundAttack(int x, int y) {
         ArrayList<Cell> path = finalPath(attackingUnits.get(0).getxPosition(), attackingUnits.get(0).getyPosition(), x, y);
-        if (path == null ) {
+        if (path == null) {
             return "enemy can't be reached";
         }
         if (path.size() - 1 > attackingUnits.get(0).getSpeed()) {
@@ -348,4 +357,8 @@ public class Game {
         }
     }
 
+    public void setCurrentKingdom(Kingdom currentKingdom) {
+        this.currentKingdom = currentKingdom;
+    }
+    private ArrayList<Kingdom> kingdoms = new ArrayList<>();
 }

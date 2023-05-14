@@ -1,8 +1,11 @@
 package view;
 
 import Commands.GameMenuCommands;
+import controller.GameController.BuildingController;
 import controller.GameController.GameMenuController;
+import controller.GameController.KingdomController;
 import model.Game;
+import model.Kingdom;
 import model.UserDatabase;
 
 import java.util.Scanner;
@@ -20,8 +23,13 @@ public class GameMenu {
                 dropUnit, repair, selectUnit, moveUnit, patrolUnit, stopPatrolling, setMode,
                 groundAttack, airAttack, pourOil, digTunnel, buildEquipment, disbandUnit,
                 goToShopMenu, goToTradeMenu, goToMapMenu;
+        controller.buildKingdoms();
         while (controller.getNumberOfRemainingPlayers() > 1) {
             for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
+                controller.setCurrentKingdom(UserDatabase.getPlayers().get(i));
+                System.out.println(game.getCurrentKingdom().getOwner().getUsername());
+                //todo : set the current kingdom according to player
+                BuildingController buildingController = new BuildingController(game);
                 //todo : handle the current player
                 while (true) {
                     input = scanner.nextLine();
@@ -54,10 +62,10 @@ public class GameMenu {
                     goToMapMenu = GameMenuCommands.getMatcher(input, GameMenuCommands.GO_TO_MAP_MENU);
 
                     if (dropBuilding.find()) {
-                        output = controller.dropBuilding((dropBuilding.group("x")), (dropBuilding.group("y")), dropBuilding.group("type"));
+                        output = controller.dropBuilding((dropBuilding.group("xCoordinate")), (dropBuilding.group("yCoordinate")), dropBuilding.group("type"));
                         System.out.println(output);
                     } else if (selectBuilding.find()) {
-                        output = controller.selectBuilding((selectBuilding.group("x")), (selectBuilding.group("y")));
+                        output = controller.selectBuilding((selectBuilding.group("xCoordinate")), (selectBuilding.group("yCoordinate")));
                         System.out.println(output);
                     } else if (createUnit.find()) {
                         output = controller.createUnit(createUnit.group("type"), (createUnit.group("count")));
@@ -144,9 +152,11 @@ public class GameMenu {
                         if (i == UserDatabase.getPlayers().size() - 1) {
                             System.out.println("player " + UserDatabase.getPlayers().get(i).getUsername() + " is done");
                             System.out.println("player " + UserDatabase.getPlayers().get(0).getUsername() + "'s turn");
+                            break;
                         } else {
                             System.out.println("player " + UserDatabase.getPlayers().get(i).getUsername() + " is done");
                             System.out.println("player " + UserDatabase.getPlayers().get(i + 1).getUsername() + "'s turn");
+                            break;
                         }
                     } else if (input.equalsIgnoreCase("pause")) {
                         PauseMenu menu = new PauseMenu();

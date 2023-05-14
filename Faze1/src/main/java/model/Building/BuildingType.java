@@ -5,6 +5,8 @@ import model.Kingdom;
 import model.Property.*;
 import model.map.TextureType;
 
+import java.util.Arrays;
+
 public enum BuildingType {
     //name, class, hitPoint, goldPrice, resourcePrice, resourceCount, workerCount, engineerCount
     SMALL_STONE_GATEHOUSE("Small stone gatehouse", Gate.class, 1000, 0, null, 0, 0, 0, true, null, null),//darvaze sangi koochak
