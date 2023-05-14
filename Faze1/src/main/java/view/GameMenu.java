@@ -28,9 +28,7 @@ public class GameMenu {
             for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
                 controller.setCurrentKingdom(UserDatabase.getPlayers().get(i));
                 System.out.println(game.getCurrentKingdom().getOwner().getUsername());
-                //todo : set the current kingdom according to player
                 BuildingController buildingController = new BuildingController(game);
-                //todo : handle the current player
                 while (true) {
                     input = scanner.nextLine();
                     dropBuilding = GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING);
@@ -64,7 +62,12 @@ public class GameMenu {
                     if (dropBuilding.find()) {
                         output = controller.dropBuilding((dropBuilding.group("xCoordinate")), (dropBuilding.group("yCoordinate")), dropBuilding.group("type"));
                         System.out.println(output);
-                    } else if (selectBuilding.find()) {
+                    }
+                    else if (input.equalsIgnoreCase("show buildings")) {
+                        output = controller.showBuildings();
+                        System.out.println(output);
+                    }
+                    else if (selectBuilding.find()) {
                         output = controller.selectBuilding((selectBuilding.group("xCoordinate")), (selectBuilding.group("yCoordinate")));
                         System.out.println(output);
                     } else if (createUnit.find()) {

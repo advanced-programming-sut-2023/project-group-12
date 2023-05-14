@@ -80,9 +80,11 @@ public class GameMenuController {
         if (buildingType == BuildingType.STOCKPILE) {
             ArrayList<Cell> neighbors = newGame.neighbors(x, y);
             for (Cell cell : neighbors) {
-                if (cell.getBuilding().getBuildingType() == buildingType) {
-                    check = 1;
-                    break;
+                if (cell.getBuilding() != null) {
+                    if (cell.getBuilding().getBuildingType() == buildingType && cell.getBuilding().getOwner().equals(newGame.getCurrentKingdom())) {
+                        check = 1;
+                        break;
+                    }
                 }
             }
             if (check == 0) {
@@ -566,5 +568,8 @@ public class GameMenuController {
                 cell.addUnits(equipment);
             } else tent.subtractDelay(1);
         }
+    }
+    public String showBuildings () {
+        return newGame.showBuildings();
     }
 }

@@ -91,4 +91,12 @@ public class Building {
     public void subtractDelay(int delay) {
         this.delay -= delay;
     }
+    @Override
+    public String toString() {
+        return buildingType.getBuildingName()+"\n"
+                +"HP: "+hitPoint+"\n"
+                +"Price: "+price+"\n"
+                +"X: "+xPosition+"\n"
+                +"Y: "+yPosition+"\n";
+    }
 }

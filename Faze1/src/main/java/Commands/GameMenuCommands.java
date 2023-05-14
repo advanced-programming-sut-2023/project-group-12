@@ -4,19 +4,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands {
-    SHOW_POPULARITY_FACTORS("^show popularity factors$"),
+    SHOW_POPULARITY_FACTORS("^show popularity factors$"),//todo : religion
     SHOW_POPULARITY("^show popularity$"),
     SHOW_FOOD_LIST("^show food list$"),
-    SET_FOOD_RATE("^food rate -r (?<rate>[-]?\\d*)$"),
+    SET_FOOD_RATE("^food rate -r (?<rate>[-]?\\d*)$"),// todo : if food is not enough
     SHOW_FOOD_RATE("^food rate show$"),
     SET_TAX_RATE("^tax rate -r (?<rate>[-]?\\d*)$"),
     SHOW_TAX_RATE("^tax rate show$"),
     SET_FEAR_RATE("^fear rate -r (?<rate>[-]?\\d*)$"),
-    DROP_BUILDING("(?=.*-x)(?=.*-y)(?=.*-type)^dropbuilding(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -type (?<type>\\S+|(\"[^\"]*\")))){3}$"),
-    SELECT_BUILDING("(?=.*-x)(?=.*-y)^select building(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),
+    DROP_BUILDING("(?=.*-x)(?=.*-y)(?=.*-type)^dropbuilding(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -type (?<type>\\S*|(\"[^\"]*\")))){3}$"),//todo: check the map dimensions, buildings on each other
+    SELECT_BUILDING("(?=.*-x)(?=.*-y)^select building(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),//todo: only the owner can select building
     CREATE_UNIT("(?=.*-type)(?=.*-count)^createunit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -count (?<count>[-]?\\d*))){2}$"),
-    DROP_UNIT("(?=.*-type)(?=.*-count)(?=.*-x)(?=.*-y)^drop unit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -count (?<count>[-]?\\d*))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){4}$"),
-    REPAIR("^repair$"),
+    DROP_UNIT("(?=.*-type)(?=.*-count)(?=.*-x)(?=.*-y)^drop unit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -count (?<count>[-]?\\d*))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){4}$"),//todo : shouldn't be on the building
+    REPAIR("^repair$"),// todo : make it have a bug
     SELECT_UNIT("(?=.*-x)(?=.*-y)(?=.*-type)^select unit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){3}$"),
     MOVE_UNIT("(?=.*-x)(?=.*-y)^move unit to(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),
     PATROL_UNIT("(?=.*-x1)(?=.*-y1)(?=.*-x2)(?=.*-y2)^patrol unit(( -x1 (?<x1Coordinate>[-]?\\d*))|( -y1 (?<y1Coordinate>[-]?\\d*))|( -x2 (?<x2Coordinate>[-]?\\d*))|( -y2 (?<y2Coordinate>[-]?\\d*))){4}$"),

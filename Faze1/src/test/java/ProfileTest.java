@@ -55,8 +55,5 @@ public class ProfileTest {
     public void changeEmailTest() throws Exception {
         Assertions.assertEquals("Email can't be empty", profileController.changeEmail(""));
         Assertions.assertEquals("Your email <\"h1309973@gmail.com\"> changed to <h1337408davo@gmail.com> successfully", profileController.changeEmail("h1337408davo@gmail.com"));
-
-
-
     }
 }

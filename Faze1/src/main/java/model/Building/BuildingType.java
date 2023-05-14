@@ -8,7 +8,6 @@ import model.map.TextureType;
 import java.util.Arrays;
 
 public enum BuildingType {
-    //name, class, hitPoint, goldPrice, resourcePrice, resourceCount, workerCount, engineerCount
     SMALL_STONE_GATEHOUSE("Small stone gatehouse", Gate.class, 1000, 0, null, 0, 0, 0, true, null, null),//darvaze sangi koochak
     BIG_STONE_GATEHOUSE("big stone gatehouse", Gate.class, 2000, 0, ResourceType.STONE, 20, 0, 0,true, null, null),//darvaze sangi bozorg
     KEEP("keep", Tower.class, 0, 0, null, 0, 0,0, true, null, null),//maghar

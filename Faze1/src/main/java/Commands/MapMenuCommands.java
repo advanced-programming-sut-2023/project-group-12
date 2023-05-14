@@ -3,7 +3,7 @@ package Commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum MapMenuCommands {
+public enum MapMenuCommands {//todo : empty fields | map + two directions!, default |
     SET_TEXTURE_OF_CELL ("(?=.*-x)(?=.*-y)(?=.*-t)^settexture(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -t (?<type>\\S*))){3}$"),
     SET_TEXTURE_OF_CELLS ("(?=.*-x1)(?=.*-y1)(?=.*-x2)(?=.*-y2)(?=.*-t)^settexture(( -x1 (?<x1Coordinate>[-]?\\d*))|( -y1 (?<y1Coordinate>[-]?\\d*))|( -x2 (?<x2Coordinate>[-]?\\d*))|( -y2 (?<y2Coordinate>[-]?\\d*))|( -t (?<type>\\S*))){5}$"),
     CLEAR_CELL ("(?=.*-x)(?=.*-y)^clear(( -x (?<xCoordinate>[-]?[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),
