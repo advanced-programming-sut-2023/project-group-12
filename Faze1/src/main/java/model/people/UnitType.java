@@ -133,6 +133,9 @@ public enum UnitType {
     }
 
     public static UnitType getUnitTypeByName(String name) {
+        if(name.charAt(0) == '\"'){
+            name = name.substring(1, name.length() - 1);
+        }
         for(UnitType type : UnitType.values()) {
             if(type.getName().equals(name)){
                 return type;
