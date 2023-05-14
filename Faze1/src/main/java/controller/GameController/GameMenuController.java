@@ -24,7 +24,20 @@ public class GameMenuController {
     }
 
     private Game newGame;
-
+    public void buildKingdoms () {
+        for (User user : UserDatabase.getUsers()) {
+            Kingdom kingdom = new Kingdom(user);
+            newGame.getKingdoms().add(kingdom);
+        }
+    }
+    public void setCurrentKingdom (User user) {
+        for (Kingdom kingdom : newGame.getKingdoms()) {
+            if (kingdom.getOwner().equals(user)) {
+                newGame.setCurrentKingdom(kingdom);
+                return;
+            }
+        }
+    }
     public void setNewGame(Game newGame) {
         this.newGame = newGame;
     }

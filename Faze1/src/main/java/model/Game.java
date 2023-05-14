@@ -13,6 +13,10 @@ import model.people.UnitType;
 
 public class Game {
 
+    public ArrayList<Kingdom> getKingdoms() {
+        return kingdoms;
+    }
+
     public Game(Map currentMap, ArrayList<Kingdom> players) {
         this.currentMap = currentMap;
         this.players = players;
@@ -192,6 +196,9 @@ public class Game {
             return null;
         }
         while (!path.contains(currentMap.getMap()[xStart][yStart])) {
+            if (cell.getFather() == null) {
+                return null;
+            }
             cell = cell.getFather();
             path.add(cell);
         }
@@ -350,4 +357,8 @@ public class Game {
         }
     }
 
+    public void setCurrentKingdom(Kingdom currentKingdom) {
+        this.currentKingdom = currentKingdom;
+    }
+    private ArrayList<Kingdom> kingdoms = new ArrayList<>();
 }

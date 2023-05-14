@@ -52,7 +52,6 @@ public class Kingdom {
     private ArrayList<UnitCreation> allUnitCreations = new ArrayList<>();
 
     private ArrayList<Building> siegeBuildings = new ArrayList<>();
-
     private User owner;
 
     private Cell HeadSquare;
