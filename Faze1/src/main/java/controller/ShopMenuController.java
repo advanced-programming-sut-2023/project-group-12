@@ -1,6 +1,7 @@
 package controller;
 
 import model.Game;
+import model.Kingdom;
 import model.Property.*;
 
 import static controller.GameController.GameMenuController.checkNumber;
@@ -97,8 +98,10 @@ public class ShopMenuController {
         String output = "";
         output += "Foods :\n";
         for (FoodType foodType : FoodType.values()) {
+            Food food = new Food(foodType, 0);
             output += "\t" + foodType.name().toLowerCase() +
-                    " : buy price = " + foodType.getBuyPrice() + ", sell price = " + foodType.getSellPrice() + "\n";
+                    " : buy price = " + foodType.getBuyPrice() + ", sell price = " +
+                    foodType.getSellPrice() + "\n";
         }
 
         output += "Resources :\n";
@@ -117,6 +120,7 @@ public class ShopMenuController {
             output += "\t" + defenseType.name().toLowerCase() +
                     " : buy price = " + defenseType.getBuyPrice() + ", sell price = " + defenseType.getSellPrice() + "\n";
         }
+
         return output;
     }
 

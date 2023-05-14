@@ -1,9 +1,5 @@
 package model.map;
 
-import model.Kingdom;
-import model.UserDatabase;
-import model.people.Unit;
-import model.people.UnitType;
 
 import java.util.ArrayList;
 
