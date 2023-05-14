@@ -52,7 +52,7 @@ public class Map {
                     break;
             }
         }
-        map[10][10].addUnits(new Unit(new Kingdom(UserDatabase.getCurrentUser()), UnitType.ARABIAN_SWORDSMAN, 9, 9));
+//        map[10][10].addUnits(new Unit(new Kingdom(UserDatabase.getCurrentUser()), UnitType.ARABIAN_SWORDSMAN, 9, 9));
     }
 
     public Cell[][] getMap() {
