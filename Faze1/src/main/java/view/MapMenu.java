@@ -60,10 +60,10 @@ public class MapMenu {
             } else if (mapUp.find()) {
                 System.out.println(controller.mapUp(mapUp.group("direction"), Integer.parseInt(mapUp.group("number"))));
             } else if (showDetail.find()) {
-                System.out.println(controller.showDetail(Integer.parseInt(showDetail.group("x")), Integer.parseInt(showDetail.group("y"))));
+                System.out.print(controller.showDetail(Integer.parseInt(showDetail.group("x")), Integer.parseInt(showDetail.group("y"))));
             } else if (selectMap.find()) {
                 System.out.println(controller.selectMap());
-            } else if (input.equals("back")) {
+            } else if (input.equalsIgnoreCase("back")) {
                 return;
             }
             else {

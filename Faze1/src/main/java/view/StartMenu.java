@@ -35,13 +35,6 @@ public class StartMenu {
                 }
                 System.out.println(controller.addPlayer(addPlayer.group("username")));
             }
-//            else if (addRandomPlayers.find()) {
-//                if (addRandomPlayers.group("number").isEmpty()) {
-//                    System.out.println("Number can't be empty");
-//                    continue;
-//                }
-//                System.out.println(controller.addRandomPlayers(addRandomPlayers.group("number")));
-//            }
             else if (removePlayer.find()) {
                 if (removePlayer.group("username").isEmpty()) {
                     System.out.println("Username can't be empty");

@@ -13,7 +13,7 @@ public class Main {
             for (User user : UserDatabase.getUsers()) {
                 if (user.isStayLoggedIn()) {
                     UserDatabase.setCurrentUser(user);
-                    user.setStayLoggedIn(false);// ?????
+                    System.out.println("Welcome back " + user.getUsername() + "!");
                     MainMenu menu = new MainMenu();
                     menu.run(scanner);
                 }

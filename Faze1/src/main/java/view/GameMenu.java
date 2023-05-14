@@ -29,13 +29,13 @@ public class GameMenu {
                     output = controller.chooseColor(chooseColor.group("color"));
                     System.out.println(output);
                 } else if (chooseKeep.find()) {
-                    output = controller.chooseKeep((chooseKeep.group("keepNumber")));
+                    output = controller.chooseKeep((chooseKeep.group("number")));
                     System.out.println(output);
                 } else if (changeColor.find()) {
                     output = controller.changeColor(changeColor.group("color"));
                     System.out.println(output);
                 } else if (changeKeep.find()) {
-                    output = controller.changeKeep((changeKeep.group("keepNumber")));
+                    output = controller.changeKeep((changeKeep.group("number")));
                     System.out.println(output);
                 } else if (input.equalsIgnoreCase("next")) {
                     if (i == UserDatabase.getPlayers().size() - 1) {

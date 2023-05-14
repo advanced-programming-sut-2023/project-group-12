@@ -84,7 +84,7 @@ public class MapMenuController {
                 } else
                     return "there exist building";
             } else
-                return "haven\'t this tree";
+                return "haven't this tree";
         } else
             return "your coordinate is incorrect";
     }

@@ -6,6 +6,7 @@ import model.Equipment.EquipmentType;
 import model.Game;
 import model.Property.WeaponType;
 import model.User;
+import model.UserDatabase;
 import model.map.Cell;
 import model.people.Unit;
 import model.people.UnitType;
@@ -454,14 +455,14 @@ public class GameMenuController {
         return newGame.groundAttack(x,y);
     }
 
-    private String checkNumber(String X) {
+    public static String checkNumber(String X) {
         if (X.isEmpty()) {
-            return "X can't be empty";
+            return "input can't be empty";
         }
         try {
             int x = Integer.parseInt(X);
         } catch (NumberFormatException e) {
-            return "X must be a number";
+            return "input must be a number";
         }
         return "";
     }
@@ -482,7 +483,7 @@ public class GameMenuController {
     }
 
     public int getNumberOfRemainingPlayers() {//todo : this is needed to end the game if there's only one player left
-        return 0;
+        return UserDatabase.getPlayers().size();
     }
 
     public User getWinner() {//todo : this returns the winner of the game

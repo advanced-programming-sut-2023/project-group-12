@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 
 public class MainMenu {
     // private User currentUser;
+    //todo : the getting map from Userdata base thing is not good
     public void run(Scanner scanner) throws NoSuchAlgorithmException {
         System.out.println("Welcome to main menu");
         String input;
@@ -38,7 +39,7 @@ public class MainMenu {
                 menu.run(scanner);
                 System.out.println("Welcome back to main menu");
             } else if (profileMenu.find()) {
-                 view.ProfileMenu menu = new view.ProfileMenu();
+                view.ProfileMenu menu = new view.ProfileMenu();
                 menu.run(scanner);
                 System.out.println("Welcome back to main menu");
             } else if (startMenu.find()) {
