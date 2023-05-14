@@ -1,7 +1,7 @@
 package view;
 
 import Commands.MapMenuCommands;
-import controller.mapmenu.MapMenuController;
+import controller.GameController.mapmenu.MapMenuController;
 import model.map.Map;
 
 import java.util.Scanner;

@@ -1,5 +1,7 @@
 package model.Building;
 
+import model.Equipment.Equipment;
+import model.Equipment.EquipmentType;
 import model.Kingdom;
 import model.people.Unit;
 
@@ -15,6 +17,10 @@ public class Building {
     private int height;
     private HashMap<String,Integer>price;
     private Kingdom owner;
+
+    private int delay;
+
+    private EquipmentType equipmentType;
 
 
     public Building(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
@@ -63,5 +69,26 @@ public class Building {
 
     public int getyPosition() {
         return yPosition;
+    }
+
+
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public EquipmentType getEquipmentType() {
+        return equipmentType;
+    }
+
+    public void setEquipmentType(EquipmentType equipmentType) {
+        this.equipmentType = equipmentType;
+    }
+
+    public void subtractDelay(int delay) {
+        this.delay -= delay;
     }
 }
