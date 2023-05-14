@@ -86,7 +86,7 @@ public class TradeMenuController {
         int tradeId = Integer.parseInt(id);
         if (tradeId <= game.getCurrentKingdom().getTrades().size() &&
                 tradeId > 0) {
-            if (game.getCurrentKingdom().equals(game.getCurrentKingdom().getTrades().get(tradeId - 1).getSender())) {
+            if (!game.getCurrentKingdom().equals(game.getCurrentKingdom().getTrades().get(tradeId - 1).getSender())) {
                 game.getCurrentKingdom().getTrades().get(tradeId - 1).doTrade(message);
                 return "trade accepted";
             } else

@@ -22,10 +22,10 @@ public class TradeMenu {
             if (tradeList.find()) {
                 System.out.print(controller.showAllTrades());
             }
-            else if (trade.find()) {// todo: no integer
+            else if (trade.find()) {
                 System.out.println(controller.trade(trade.group("type"), trade.group("amount"), trade.group("price"), trade.group("message"), trade.group("receiverName")));
             }
-            else if (accept.find()) {//todo : don't pass integer
+            else if (accept.find()) {
                 System.out.println(controller.acceptTrade(accept.group("id"), accept.group("message")));
             }
             else if (tradeHistory.find()) {
