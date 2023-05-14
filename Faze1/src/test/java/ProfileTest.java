@@ -54,6 +54,54 @@ public class ProfileTest {
     @Test
     public void changeEmailTest() throws Exception {
         Assertions.assertEquals("Email can't be empty", profileController.changeEmail(""));
-        Assertions.assertEquals("Your email <\"h1309973@gmail.com\"> changed to <h1337408davo@gmail.com> successfully", profileController.changeEmail("h1337408davo@gmail.com"));
+        Assertions.assertEquals("This email is already used", profileController.changeEmail("h1309973@gmail.com"));
+        Assertions.assertEquals("The email format is incorrect", profileController.changeEmail("h1309973gmail.com"));
+        Assertions.assertEquals("Your email <h1309973@gmail.com> changed to <h1337408davo@gmail.com> successfully", profileController.changeEmail("h1337408davo@gmail.com"));
+        Assertions.assertEquals("h1337408davo@gmail.com", user.getEmail());
+        Assertions.assertEquals("Your email <h1337408davo@gmail.com> changed to <h1309973@gmail.com> successfully", profileController.changeEmail("h1309973@gmail.com"));
+    }
+    @Test
+    public void changeSloganTest() throws Exception {
+        Assertions.assertEquals("Slogan can't be empty", profileController.changeSlogan(""));
+        Assertions.assertEquals("Your slogan <goomba goomba> changed to <The king> successfully", profileController.changeSlogan("The king"));
+        Assertions.assertEquals("The king", user.getSlogan());
+        Assertions.assertEquals("Your slogan <The king> changed to <goomba goomba> successfully", profileController.changeSlogan("goomba goomba"));
+    }
+
+    @Test
+    public void changeRemoveSloganTest() throws Exception {
+        Assertions.assertEquals("Your slogan removed successfully", profileController.removeSlogan());
+        Assertions.assertEquals(null, user.getSlogan());
+        user.setSlogan("goomba goomba");
+    }
+
+    @Test
+    public void displayHighScoreTest() throws Exception {
+        Assertions.assertEquals("Your highScore is : " + user.getHighScore(), profileController.displayHighScore());
+    }
+
+    @Test
+    public void displaySloganTest() throws Exception {
+
+        Assertions.assertEquals("Your slogan is : goomba goomba", profileController.displaySlogan());
+        user.setSlogan(null);
+        Assertions.assertEquals("You don't have a slogan", profileController.displaySlogan());
+        user.setSlogan("goomba goomba");
+    }
+
+    @Test
+    public void displayRankTest() throws Exception {
+        Assertions.assertEquals("Your rank is : " + UserDatabase.playerRank(user), profileController.displayRank());
+    }
+
+    @Test
+    public void displayAllTest() throws Exception {
+        Assertions.assertEquals("User Information :" +
+                "\n\tUsername = Mohammad" +
+                "\n\tNickname = Mammad" +
+                "\n\tSlogan = goomba goomba" +
+                "\n\tHighScore = " + user.getHighScore() +
+                "\n\tRank = " + user.getRank() +
+                "\n\tE-mail = h1309973@gmail.com", profileController.displayAll());
     }
 }
