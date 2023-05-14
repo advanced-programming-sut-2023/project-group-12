@@ -5,9 +5,7 @@ import model.map.Cell;
 
 public class Unit {
     protected Kingdom homeland;
-
     private boolean isOily;
-
     protected int xPosition;
 
     protected int yPosition;
@@ -103,5 +101,8 @@ public class Unit {
 
     public void setBusy(boolean busy) {
         isBusy = busy;
+    }
+    public String toString(){
+        return this.getUnitType().getName();
     }
 }

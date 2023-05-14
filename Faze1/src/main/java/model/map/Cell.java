@@ -12,8 +12,6 @@ public class Cell {
     private int yCoordinate;
     private TextureType TextureType = model.map.TextureType.EARTH;
     private boolean isPassable;
-
-
     private Tree tree = null;
 
     private Building building = null;
@@ -40,7 +38,7 @@ public class Cell {
     }
 
     public void setInThePath(boolean inThePath) {
-        isInThePath = inThePath;
+        this.isInThePath = inThePath;
     }
 
     public void setTextureType(model.map.TextureType textureType) {

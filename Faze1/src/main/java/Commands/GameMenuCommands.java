@@ -17,17 +17,17 @@ public enum GameMenuCommands {
     CREATE_UNIT("(?=.*-type)(?=.*-count)^createunit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -count (?<count>[-]?\\d*))){2}$"),
     DROP_UNIT("(?=.*-type)(?=.*-count)(?=.*-x)(?=.*-y)^drop unit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -count (?<count>[-]?\\d*))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){4}$"),//todo : shouldn't be on the building
     REPAIR("^repair$"),// todo : make it have a bug
-    SELECT_UNIT("(?=.*-x)(?=.*-y)(?=.*-type)^select unit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){3}$"),
-    MOVE_UNIT("(?=.*-x)(?=.*-y)^move unit to(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),
-    PATROL_UNIT("(?=.*-x1)(?=.*-y1)(?=.*-x2)(?=.*-y2)^patrol unit(( -x1 (?<x1Coordinate>[-]?\\d*))|( -y1 (?<y1Coordinate>[-]?\\d*))|( -x2 (?<x2Coordinate>[-]?\\d*))|( -y2 (?<y2Coordinate>[-]?\\d*))){4}$"),
+    SELECT_UNIT("(?=.*-x)(?=.*-y)(?=.*-type)^select unit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){3}$"),//todo : clear selected after a while
+    MOVE_UNIT("(?=.*-x)(?=.*-y)^move unit to(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),// todo: why only once ?
+    PATROL_UNIT("(?=.*-x1)(?=.*-y1)(?=.*-x2)(?=.*-y2)^patrol unit(( -x1 (?<x1Coordinate>[-]?\\d*))|( -y1 (?<y1Coordinate>[-]?\\d*))|( -x2 (?<x2Coordinate>[-]?\\d*))|( -y2 (?<y2Coordinate>[-]?\\d*))){4}$"),//todo : in next turn
     STOP_PATROLLING("^stop patrolling$"),
-    SET_MODE("(?=.*-x)(?=.*-y)(?=.*-s)(?=.*-type)^set(( -type (?<type>\\S*|(\"[^\"]*\")))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -s (?<mode>\\S*))){4}$"),// defensive offensive standing
-    GROUND_ATTACK("^attack -e (?<xCoordinate>[-]?\\d*) (?<yCoordinate>[-]?\\d*)$"),
-    AIR_ATTACK("(?=.*-x)(?=.*-y)^attack(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),
+    SET_MODE("(?=.*-x)(?=.*-y)(?=.*-s)(?=.*-type)^set(( -type (?<type>\\S*|(\"[^\"]*\")))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -s (?<mode>\\S*))){4}$"),// todo : in next turn
+    GROUND_ATTACK("^attack -e (?<xCoordinate>[-]?\\d*) (?<yCoordinate>[-]?\\d*)$"),// todo: what happens to the units
+    AIR_ATTACK("(?=.*-x)(?=.*-y)^attack(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),//todo : handle all of them
     POUR_OIL("^pour oil -d (?<direction>[news]?)$"),
     DIG_TUNNEL("(?=.*-x)(?=.*-y)^dig tunnel(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),
     BUILD_EQUIPMENT("^build -q (?<equipmentName>\\S+|(\"[^\"]*\"))$"),
-    DISBAND_UNIT("^disband unit$"),
+    DISBAND_UNIT("^disband unit$"),//todo : go back to your farm
     //DROP_GATE(""),
     //BUILD_WALL(""),
     //PUT_STAIRS(""),
