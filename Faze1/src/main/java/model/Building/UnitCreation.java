@@ -2,6 +2,7 @@ package model.Building;
 
 import model.Kingdom;
 import model.people.UnitType;
+import model.people.Worker;
 import model.people.soldier.Soldier;
 
 import java.util.HashMap;
@@ -30,12 +31,8 @@ public class UnitCreation extends Building{
                     }
                 }
                 break;
-            case HOVEL:
-                break;
-            case CHURCH:
-                break;
-            case CATHEDRAL:
-                break;
+            case STABLE:
+                allUnit.put(UnitType.HORSE, 0);
         }
     }
 
@@ -54,8 +51,6 @@ public class UnitCreation extends Building{
                 Soldier soldier = new Soldier(getOwner(), UnitType.BLACK_MONK,getxPosition(), getyPosition());
                 getOwner().addUnit(soldier);
                 getOwner().addSoldier(soldier);
-            case CATHEDRAL:
-
         }
     }
 

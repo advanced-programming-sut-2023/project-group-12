@@ -38,7 +38,7 @@ public class BuildingController {
         if( balance < cost){
             return "you do not have enough stones!";
         }
-        building.getOwner().addToProperty(new Resources(ResourceType.STONE, -cost));
+        building.getOwner().spendProperties(new Resources(ResourceType.STONE, cost));
         building.resetHealth();
         return "this building is repaired!";
     }
@@ -98,14 +98,13 @@ public class BuildingController {
         }
         building.getOwner().addGold((-1)*count*unitType.getCost());
         building.getOwner().addPopulation((-1)*count);
-        //todo horse storage
+
         if(unitType.getWeapon() != null){
             building.getOwner().spendProperties(new Weapon(unitType.getWeapon(), count));
         }
         if(unitType.getDefence() != null){
             building.getOwner().spendProperties(new DefensiveWeapon(unitType.getDefence(), count));
         }
-        //TODO
 
 
         return "soldiers created successfully!";

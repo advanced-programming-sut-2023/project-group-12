@@ -22,7 +22,7 @@ public enum BuildingType {
     MERCENARY_POST("mercenary post", UnitCreation.class, 500, 0, ResourceType.WOOD, 10, 0,0, true, null, null), //SARBAZ KHANE MOZDOORAN
     ENGINEER_GUILD("engineer guild", Building.class, 500, 100, ResourceType.WOOD, 10, 0,0, true, null, null), //SENF MOHANDESAN
     KILLING_PIT("killing pit", Traps.class, 0, 0, ResourceType.WOOD, 6, 0 ,0,true, null, null), //GODAL KOSHTAR
-    //todo abjoo
+
     INN("inn", ProductionCenter.class,300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.ALE, 1), null), //MOSAFER KHANE
     MILL("mill", ProductionCenter.class, 300, 0, ResourceType.WOOD, 20, 3, 0, false, new Resources(ResourceType.WHEAT, 2), new Resources(ResourceType.FLOUR, 1)), //ASIYAB
     IRON_MINE("iron mine", ProductionCenter.class, 100, 0, ResourceType.WOOD, 20, 2, 0,false, null, new Resources(ResourceType.IRON, 10)), //MADAN AHAN
@@ -32,22 +32,21 @@ public enum BuildingType {
     QUARRY("quarry", ProductionCenter.class, 300, 0, ResourceType.WOOD, 20, 3, 0, false, null, new Resources(ResourceType.STONE, 10)), //MADAN SANG
     STOCKPILE("stockpile", Storage.class, 500, 0, null, 0, 0, 0, false, null, null), //ANBAR
     WOODCUTTER("woodcutter", ProductionCenter.class,100, 0, ResourceType.WOOD, 3,  1, 0, false, null, new Resources(ResourceType.WOOD, 10)), //CHOOB BOR
-    //todo any idea about unemployed human maybe resource
+
     HOVEL("hovel", UnitCreation.class, 100, 0, ResourceType.WOOD, 6, 0 ,0, false, null, null), //KHANE
     CHURCH("church", UnitCreation.class, 800, 250, null, 0, 0, 0, false, null, null), //KELISA
     CATHEDRAL("cathedral", UnitCreation.class,1200, 1000, null, 0,0,0, false, null, null), //KELISA JAME
     ARMOURER("armourer", ProductionCenter.class,300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.IRON, 6), new DefensiveWeapon(DefenseType.METAL_ARMOR, 1)), //ZEREH SAZI
-    //todo : what about blackSmith?
+
     BLACKSMITH("blacksmith", ProductionCenter.class, 300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.IRON, 6), null), //SAKHTEMAN AHANGARY
     FLETCHER( "fletcher",ProductionCenter.class, 300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.WOOD, 6), new Weapon(WeaponType.BOW, 1)), //KAMAN SAZI
-    //todo: again?
     POLE_TURNER("pole_turner",  ProductionCenter.class, 300, 100, ResourceType.WOOD, 10, 1, 0,false, new Resources(ResourceType.IRON, 6), null), //NEYZE SAZI
     OIL_SMELTER("oil smelter", ProductionCenter.class,300, 100, ResourceType.STONE, 10, 0, 1, true, null, new Weapon(WeaponType.PETROLEUM, 5)), //KARKHANE ZOB
     PITCH_DITCH("pitch ditch", Traps.class, 300, 0, ResourceType.PITCH, 2, 0, 0, true, null, null), //KHANDAGH GHIR  ** 2 PITCH PER 5 SQUARE
     CAGED_WAR_DOGES("caged war dogs", Traps.class, 100, 100, ResourceType.WOOD, 10, 0, 0, true, null, null), //GHAFASE SAG HAYE JANGI
     SIEGE_TENT("siege tent", Building.class, 100, 0, null, 0, 0, 1, true, null, null), //CHADOR MOHASERE
-    //todo: think about this
-    STABLE("stable", ProductionCenter.class, 300,400, ResourceType.WOOD, 20, 0, 0, true, null, null), //ESTABL
+
+    STABLE("stable", UnitCreation.class, 300,400, ResourceType.WOOD, 20, 0, 0, true, null, null), //ESTABL
     APPLE_GARDEN("apple garden", ProductionCenter.class, 100, 0, ResourceType.WOOD, 5, 1,0, false, null, new Food(FoodType.APPLES, 5)), //BAGH SIB
     DAIRY_PRODUCTS("dairy products", ProductionCenter.class, 100, 0, ResourceType.WOOD, 10, 1, 0, false, null, new Food(FoodType.CHEESE, 5)), //TOLIDAT LABANI
 

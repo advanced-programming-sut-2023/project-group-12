@@ -33,6 +33,8 @@ public enum UnitType {
     BLACK_MONK(400, 150, 0.2, 1, 1, 0, 15, 0.2, 0, null, null, false, false, false, "black monk"),
 
 
+    HORSE(100, 0, 0, 3, 0, 0, 0, 0, 0, null, null, false, false, false, "horse")
+
 ;
     private int hitPoint;
     private int attackPower;

@@ -16,7 +16,9 @@ public class ProductionCenter extends Building{
 
         switch (buildingType) {
             case INN:
-                //todo
+                source = buildingType.getResources();
+                product1 = null;
+                product2 = null;
                 break;
             case BLACKSMITH:
                 product1 = new Weapon(WeaponType.MACE, 1);
@@ -28,9 +30,8 @@ public class ProductionCenter extends Building{
                 product2 = new Weapon(WeaponType.PIKE, 1);
                 source = buildingType.getResources();
                 break;
-            case OX_TETHER:
-                //todo
-                break;
+//            case OX_TETHER:
+//                break;
             default:
                 product1 = buildingType.getOutputProperty();
                 product2 = null;
@@ -65,6 +66,9 @@ public class ProductionCenter extends Building{
         }
         if(product2 != null){
             getOwner().addToProperty(product2);
+        }
+        if(getBuildingType() == BuildingType.INN){
+            getOwner().addPopularity(2);
         }
 
     }

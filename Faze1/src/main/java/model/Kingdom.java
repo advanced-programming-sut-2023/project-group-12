@@ -524,4 +524,6 @@ public class Kingdom {
     public void removeFromSiegeBuildings(Building siege) {
         siegeBuildings.remove(siege);
     }
+
+
 }

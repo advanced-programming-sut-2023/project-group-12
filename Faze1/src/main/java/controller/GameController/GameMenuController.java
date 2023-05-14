@@ -126,6 +126,9 @@ public class GameMenuController {
         if (newGame.getCurrentMap().getMap()[x][y].getBuilding() == null) {
             return "there is not any building here!";
         }
+        if(newGame.getCurrentMap().getMap()[x][y].getBuilding().getOwner() != newGame.getCurrentKingdom()){
+            return "this building is not for you!";
+        }
         newGame.selectBuilding(x, y);
         BuildingController.building = newGame.getSelectedBuilding();
         return "building selected successfully!";
@@ -265,11 +268,13 @@ public class GameMenuController {
         if (type.isEmpty()) {
             return "type can't be empty";
         }
-// todo : check if type is correct
         int x = Integer.parseInt(xCoordinate);
         int y = Integer.parseInt(yCoordinate);
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
+        }
+        if(UnitType.getUnitTypeByName(type) == null){
+            return "your unit type is incorrect!";
         }
         newGame.clearSelectedUnits();
         int selected = 0, yours = 0;
