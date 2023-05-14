@@ -1,10 +1,13 @@
 package controller;
 
+import model.Game;
+import model.Kingdom;
 import model.User;
 import model.UserDatabase;
-import model.map.Map;
+import view.GameMenu;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class StartMenuController {
     public String addPlayer(String username) {
@@ -63,11 +66,19 @@ public class StartMenuController {
         return true;
     }
 
-    public String startGame() {
+    public String canStartGame() {
         if (UserDatabase.getPlayers().size() < 2) {
             return "There must be at least 2 players";
         }
         // if there's no map the game can't be started
         return "game started successfully";
+    }
+
+    public void playGame(Scanner scanner) {
+        GameMenu menu = new GameMenu();
+        ArrayList<Kingdom> players = new ArrayList<>();
+        for (int i = 0; i < UserDatabase.getPlayers().size(); i++)
+            players.add(new Kingdom(UserDatabase.getPlayers().get(i), UserDatabase.getCurrentMap().getHeadSquares().get(i)));
+        menu.run(scanner, new Game(UserDatabase.getCurrentMap(), players));
     }
 }
