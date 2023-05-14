@@ -1,9 +1,11 @@
-package controller.mapmenu;
+package controller.GameController.mapmenu;
 
 import model.UserDatabase;
 import model.map.Map;
 import model.map.TextureType;
 import model.people.Unit;
+
+import java.util.ArrayList;
 
 import static controller.GameController.GameMenuController.checkNumber;
 
@@ -97,7 +99,7 @@ public class MapMenuController {
             map.getMap()[x - 1][y - 1].setBuilding(null);
             map.getMap()[x - 1][y - 1].setTextureType(TextureType.EARTH);
             map.getMap()[x - 1][y - 1].setTree(null);
-            map.getMap()[x - 1][y - 1].setUnits(null);
+            map.getMap()[x - 1][y - 1].setUnits(new ArrayList<>());
             return "cell cleared successfully";
         } else
             return "your coordinate is incorrect";
@@ -281,7 +283,7 @@ public class MapMenuController {
             if (!map.getMap()[x - 1][y - 1].getUnits().isEmpty()) {
                 output += "\n";
                 for (Unit unit : map.getMap()[x - 1][y - 1].getUnits()) {
-                    output += unit.getUnitType().name().toLowerCase() + " owner = " + unit.getHomeland().getOwner().getUsername() + "\n";
+                    output += "\t" + unit.getUnitType().name().toLowerCase() + ", owner = " + unit.getHomeland().getOwner().getUsername() + "\n";
                 }
             } else
                 output += "NONE" + "\n";

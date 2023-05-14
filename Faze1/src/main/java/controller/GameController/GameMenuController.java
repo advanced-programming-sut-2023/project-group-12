@@ -1,9 +1,11 @@
 package controller.GameController;
 
+import model.Building.Building;
 import model.Building.BuildingType;
 import model.Equipment.Equipment;
 import model.Equipment.EquipmentType;
 import model.Game;
+import model.Kingdom;
 import model.Property.WeaponType;
 import model.User;
 import model.UserDatabase;
@@ -62,10 +64,10 @@ public class GameMenuController {
             return "there is already an enemy in this cell and you cannot drop it!";
         }
         int check = 0;
-        if(buildingType == BuildingType.STOCKPILE){
+        if (buildingType == BuildingType.STOCKPILE) {
             ArrayList<Cell> neighbors = newGame.neighbors(x, y);
-            for(Cell cell : neighbors){
-                if(cell.getBuilding().getBuildingType() == buildingType){
+            for (Cell cell : neighbors) {
+                if (cell.getBuilding().getBuildingType() == buildingType) {
                     check = 1;
                     break;
                 }
@@ -286,7 +288,7 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
             return "this unit can't move";
         }
-        return newGame.moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getxPosition(), x, y,newGame.getSelectedUnits());// todo : some how give me the current coordinates
+        return newGame.moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getxPosition(), x, y, newGame.getSelectedUnits());// todo : some how give me the current coordinates
     }
 
     public String patrolUnit(String x1Coordinate, String y1Coordinate, String x2Coordinate, String y2Coordinate) {
@@ -372,7 +374,8 @@ public class GameMenuController {
         }
         return "mode set successfully!";
     }
-// todo: disband is not done yet
+
+    // todo: disband is not done yet
     public String disbandUnit() {
         if (newGame.getSelectedUnits().size() == 0 || newGame.getSelectedUnits() == null) {
             return "no unit to disband";
@@ -386,27 +389,38 @@ public class GameMenuController {
         if (equipmentName.isEmpty()) {
             return "equipment name can't be empty";
         }
-        for (Unit unit: newGame.getSelectedUnits()) {
-            if (unit.getUnitType() != UnitType.ENGINEER){
+        for (Unit unit : newGame.getSelectedUnits()) {
+            if (unit.getUnitType() != UnitType.ENGINEER) {
                 return "this type of units can't build equipment!";
             }
         }
         EquipmentType equipmentType = EquipmentType.getEquipmentTypeByName(equipmentName);
-        if(equipmentType == null){
+        if (equipmentType == null) {
             return "equipment name is invalid!";
         }
         ArrayList<Unit> availableEngineers = new ArrayList<>();
-        for (Unit unit: newGame.getSelectedUnits()) {
-            if (!unit.isBusy()) {
-                availableEngineers.add(unit);
-            }
+        for (Unit unit : newGame.getSelectedUnits()) {
+            if (!unit.isBusy()) availableEngineers.add(unit);
+            if (availableEngineers.size() == equipmentType.getEngineerCount()) break;
         }
-        if(availableEngineers.size() < equipmentType.getEngineerCount()){
-            return "you don't have enough engineers for build "+equipmentName;
+        if (availableEngineers.size() < equipmentType.getEngineerCount()) {
+            return "you don't have enough engineers for build " + equipmentName;
         }
-        Equipment equipment = new Equipment(equipmentType,newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(), newGame.getCurrentKingdom());
-        newGame.getCurrentKingdom().addEquipment(equipment);
-        return "equipment "+equipmentName + "build successfully!";
+        if (equipmentType.getCost() > newGame.getSelectedUnits().get(0).getHomeland().getGold()) {
+            return "you don't have enough gold";
+        }
+        for (Unit e : availableEngineers) e.setBusy(true);
+
+//        Equipment equipment = new Equipment(equipmentType,newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(), newGame.getCurrentKingdom());
+//        newGame.getCurrentKingdom().addEquipment(equipment);
+        newGame.getCurrentKingdom().addGold(-equipmentType.getCost());
+        Building siegeTent = new Building(BuildingType.SIEGE_TENT, newGame.getCurrentKingdom(), newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition());
+        newGame.getCurrentKingdom().addToSiegeBuildings(siegeTent);
+        siegeTent.setEquipmentType(equipmentType);
+        siegeTent.setDelay(equipmentType.getDelay());
+        newGame.getCurrentMap().getMap()[ newGame.getSelectedUnits().get(0).getxPosition()][newGame.getSelectedUnits().get(0).getyPosition()].setBuilding(siegeTent);
+        newGame.getCurrentMap().getMap()[ newGame.getSelectedUnits().get(0).getxPosition()][newGame.getSelectedUnits().get(0).getyPosition()].setHeight(siegeTent.getHeight());
+        return "equipment " + equipmentName + "build successfully!";
     }
 
     public String digTunnel(String xCoordinate, String yCoordinate) {
@@ -447,12 +461,12 @@ public class GameMenuController {
         if (!(newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.BOW) || !(newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.CROSS_BOW)) {
             return "please enter a different command for non bowmen troops";
         }
-        if (!newGame.isEnemyExistsInCell(x,y)) {
+        if (!newGame.isEnemyExistsInCell(x, y)) {
             return "there's no enemy here";
         }
         newGame.getAttackingUnits().clear();
         newGame.getAttackingUnits().addAll(newGame.getSelectedUnits());
-        newGame.airAttack(x,y);
+        newGame.airAttack(x, y);
         return "fight is done successfully";
     }
 
@@ -476,12 +490,12 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.BOW || newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.CROSS_BOW) {
             return "please enter a different command for bowmen";
         }
-        if (!newGame.isEnemyExistsInCell(x,y)) {
+        if (!newGame.isEnemyExistsInCell(x, y)) {
             return "there's no enemy here";
         }
         newGame.getAttackingUnits().clear();
         newGame.getAttackingUnits().addAll(newGame.getSelectedUnits());
-        return newGame.groundAttack(x,y);
+        return newGame.groundAttack(x, y);
     }
 
     public static String checkNumber(String X) {
@@ -517,5 +531,27 @@ public class GameMenuController {
 
     public User getWinner() {//todo : this returns the winner of the game
         return null;
+    }
+
+    public void checkEquipment(Kingdom kingdom){
+        for (int i = kingdom.getSiegeBuildings().size() - 1; i >= 0 ; i++) {
+            Building tent = kingdom.getSiegeBuildings().get(i);
+            if (tent.getDelay() == 0) {
+                EquipmentType equipmentType = tent.getEquipmentType();
+                Cell cell = newGame.getCurrentMap().getMap()[tent.getxPosition()][tent.getyPosition()];
+                cell.setBuilding(null);
+                int totalNumberOfEngineers = equipmentType.getEngineerCount();
+                for (Unit unit : cell.getUnits()) {
+                    if (totalNumberOfEngineers == 0) break;
+                    if (unit.getUnitType() == UnitType.ENGINEER && unit.isBusy()) {
+                        unit.setBusy(false);
+                        totalNumberOfEngineers--;
+                    }
+                }
+                Equipment equipment = new Equipment(equipmentType, tent.getxPosition(),tent.getyPosition(),kingdom);
+                kingdom.removeFromSiegeBuildings(tent);
+                cell.addUnits(equipment);
+            } else tent.subtractDelay(1);
+        }
     }
 }

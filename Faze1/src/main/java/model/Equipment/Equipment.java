@@ -1,40 +1,17 @@
 package model.Equipment;
 
 import model.Kingdom;
+import model.people.Unit;
 
-public class Equipment {
-    private int hitPoint;
-
+public class Equipment extends Unit {
     private EquipmentType equipmentType;
-
-    private int xPosition;
-
-    private int yPosition;
-
-    private Kingdom owner;
-
     public Equipment(EquipmentType equipmentType, int xPosition, int yPosition, Kingdom owner) {
+        super(owner, xPosition, yPosition);
         this.equipmentType = equipmentType;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
-        this.owner = owner;
+        this.homeland = owner;
         hitPoint = equipmentType.getHitPoint();
-    }
-
-    public int getHitPoint() {
-        return hitPoint;
-    }
-
-    public int getyPosition() {
-        return yPosition;
-    }
-
-    public int getxPosition() {
-        return xPosition;
-    }
-
-    public Kingdom getOwner() {
-        return owner;
     }
 
     public EquipmentType getEquipmentType() {

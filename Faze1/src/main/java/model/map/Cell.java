@@ -10,20 +10,22 @@ public class Cell {
 
     private int xCoordinate;
     private int yCoordinate;
-
-    public Cell(int xCoordinate, int yCoordinate) {
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
-    }
-
     private TextureType TextureType = model.map.TextureType.EARTH;
+    private boolean isPassable;
+
 
     private Tree tree = null;
+
     private Building building = null;
     private int height = 0;
     private ArrayList<Unit> units = new ArrayList<>();
     private boolean isInThePath = false;
     private Cell father = null;
+    public Cell(int xCoordinate, int yCoordinate) {
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
+        isPassable = getTextureType().isPassable();
+    }
 
     public void setFather(Cell father) {
         this.father = father;
@@ -62,8 +64,6 @@ public class Cell {
     }
 
     public ArrayList<Unit> getUnits() {
-        if (units == null)
-            units = new ArrayList<>();
         return units;
     }
 
@@ -74,11 +74,9 @@ public class Cell {
     public void moveUnit(Unit unit) {
         units.remove(unit);
     }
-
     public void setUnits(ArrayList<Unit> units) {
         this.units = units;
     }
-    private boolean isPassable = true;
 
     public boolean isPassable() {
         return isPassable;

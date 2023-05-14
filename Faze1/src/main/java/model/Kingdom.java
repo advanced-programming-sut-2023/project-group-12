@@ -51,6 +51,8 @@ public class Kingdom {
 
     private ArrayList<UnitCreation> allUnitCreations = new ArrayList<>();
 
+    private ArrayList<Building> siegeBuildings = new ArrayList<>();
+
     private User owner;
 
     private Cell HeadSquare;
@@ -512,5 +514,15 @@ public class Kingdom {
         defensiveWeapons.add(storage);
     }
 
+    public ArrayList<Building> getSiegeBuildings() {
+        return siegeBuildings;
+    }
 
+    public void addToSiegeBuildings(Building siege){
+        siegeBuildings.add(siege);
+    }
+
+    public void removeFromSiegeBuildings(Building siege) {
+        siegeBuildings.remove(siege);
+    }
 }

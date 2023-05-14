@@ -21,7 +21,7 @@ public class ShopMenu {
                 System.out.print(controller.showPriceList());
             }
             else if (buyAndSell.find()) {
-                System.out.println(controller.buyOrSell(buyAndSell.group("action"), buyAndSell.group("name"), Integer.parseInt(buyAndSell.group("number"))));
+                System.out.println(controller.buyOrSell(buyAndSell.group("action"), buyAndSell.group("name"), buyAndSell.group("number")));
             }
             else if (input.equals("back")) {
                 return;

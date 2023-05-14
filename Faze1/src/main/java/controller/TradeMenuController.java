@@ -10,6 +10,8 @@ import model.Trade;
 
 import java.util.ArrayList;
 
+import static controller.GameController.GameMenuController.checkNumber;
+
 public class TradeMenuController {
 
     private Game game;
@@ -44,7 +46,17 @@ public class TradeMenuController {
         return output;
     }
 
-    public String trade(String resourceType, int resourceAmount, int price, String message, String receiverName) {
+    public String trade(String resourceType, String stringRecourseAmount, String stringPrice, String message, String receiverName) {
+        String output = checkNumber(stringRecourseAmount);
+        if (!output.equals("")) {
+            return output;
+        }
+        output = checkNumber(stringPrice);
+        if (!output.equals("")) {
+            return output;
+        }
+        int resourceAmount = Integer.parseInt(stringRecourseAmount);
+        int price = Integer.parseInt(stringPrice);
         if (game.getCurrentKingdom().getPropertyByName(resourceType) != null) {
             if (getUserByNameInThisGame(receiverName) != null) {
                 if (resourceAmount > 0) {
@@ -66,14 +78,19 @@ public class TradeMenuController {
             return "there's no " + resourceType;
     }
 
-    public String acceptTrade(int tradeId, String message) {
+    public String acceptTrade(String id, String message) {
+        String output = checkNumber(id);
+        if (!output.equals("")) {
+            return output;
+        }
+        int tradeId = Integer.parseInt(id);
         if (tradeId <= game.getCurrentKingdom().getTrades().size() &&
                 tradeId > 0) {
             if (game.getCurrentKingdom().equals(game.getCurrentKingdom().getTrades().get(tradeId - 1).getSender())) {
                 game.getCurrentKingdom().getTrades().get(tradeId - 1).doTrade(message);
                 return "trade accepted";
             } else
-                return "You can\'t accept trade that you create it";
+                return "You can't accept trade that you create it";
         } else
             return "wrong trade ID";
     }

@@ -4,14 +4,16 @@ import model.Kingdom;
 import model.map.Cell;
 
 public class Unit {
-    private Kingdom homeland;
+    protected Kingdom homeland;
 
-    private int xPosition;
+    private boolean isOily;
 
-    private int yPosition;
+    protected int xPosition;
+
+    protected int yPosition;
 
     private UnitType unitType ;
-    private int hitPoint;
+    protected int hitPoint;
     private String mode;
     private int speed;
     private boolean beingHit = false;
@@ -49,6 +51,15 @@ public class Unit {
         isBusy = false;
         this.hitPoint = unitType.getHitPoint();
         this.speed = unitType.getMoveSpeed() * 10;
+        isOily = false;
+    }
+
+    public Unit(Kingdom homeland, int xPosition, int yPosition) {
+        this.homeland = homeland;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        isBusy = false;
+        isOily = false;
     }
 
     public UnitType getUnitType() {

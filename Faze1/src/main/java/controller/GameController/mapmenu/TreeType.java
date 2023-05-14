@@ -1,4 +1,4 @@
-package controller.mapmenu;
+package controller.GameController.mapmenu;
 
 import model.map.Tree;
 
