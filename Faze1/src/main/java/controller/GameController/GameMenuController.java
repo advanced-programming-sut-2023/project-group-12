@@ -572,4 +572,7 @@ public class GameMenuController {
     public String showBuildings () {
         return newGame.showBuildings();
     }
+    public String showPeople () {
+        return newGame.showPeople();
+    }
 }

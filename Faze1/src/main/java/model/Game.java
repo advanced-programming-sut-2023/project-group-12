@@ -168,6 +168,9 @@ public class Game {
 
     //todo: check the move method
     public String moveUnit(int xStart, int yStart, int xEnd, int yEnd, ArrayList<Unit> units) {
+        if ((xEnd == xStart) && (yEnd == yStart)) {
+            return "units are already there";
+        }
         //todo: handle the method for special cases
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
         if (path == null) {
@@ -175,8 +178,8 @@ public class Game {
         }
         //todo : check if there's trap in the way
         int speed = units.get(0).getSpeed();
-        for (Unit unit:units) {
-            path.get((Math.min(speed,path.size()-1))).addUnits(unit);
+        for (Unit unit : units) {
+            path.get((Math.min(speed, path.size() - 1))).addUnits(unit);
         }
         for (int i = 0; i < speed && i < path.size() - 2; i++) {
             for (int j = units.size() - 1; j >= 0; j--) {
@@ -278,11 +281,17 @@ public class Game {
     public ArrayList<Kingdom> getPlayers() {
         return players;
     }
-// todo : handle bowmen
+
+    // todo : handle bowmen
     public String groundAttack(int x, int y) {
         ArrayList<Cell> path = finalPath(attackingUnits.get(0).getxPosition(), attackingUnits.get(0).getyPosition(), x, y);
         if (path == null) {
-            return "enemy can't be reached";
+            if (x != attackingUnits.get(0).getxPosition() || y != attackingUnits.get(0).getyPosition())
+                return "enemy can't be reached";
+            else {
+                fight(x, y);
+                return "fight is done";
+            }
         }
         if (path.size() - 1 > attackingUnits.get(0).getSpeed()) {
             return "enemy out of range, please move your units closer";
@@ -301,6 +310,7 @@ public class Game {
                 if (unit1.getHomeland() != unit.getHomeland()) {
                     oneIsDead:
                     while (true) {
+                        System.out.println(unit.getHitPoint() + " " + unit1.getHitPoint());
                         if (unit.getHitPoint() > 0) {
                             if (unit1.getHitPoint() > 0) {
                                 if (!unit1.isBeingHit()) {
@@ -360,8 +370,10 @@ public class Game {
     public void setCurrentKingdom(Kingdom currentKingdom) {
         this.currentKingdom = currentKingdom;
     }
+
     private ArrayList<Kingdom> kingdoms = new ArrayList<>();
-    public String  showBuildings () {
+
+    public String showBuildings() {
         String output = "";
         for (int i = 0; i < currentMap.getDimension(); i++) {
             for (int j = 0; j < currentMap.getDimension(); j++) {
@@ -369,6 +381,21 @@ public class Game {
                 if (cell.getBuilding() != null) {
                     if (cell.getBuilding().getOwner() == currentKingdom) {
                         output += cell.getBuilding().toString();
+                    }
+                }
+            }
+        }
+        return output;
+    }
+
+    public String showPeople() {
+        String output = "";
+        for (int i = 0; i < currentMap.getDimension(); i++) {
+            for (int j = 0; j < currentMap.getDimension(); j++) {
+                Cell cell = currentMap.getMap()[i][j];
+                for (Unit unit : cell.getUnits()) {
+                    if (unit.getHomeland() == currentKingdom) {
+                        output += unit.toString() + "\n";
                     }
                 }
             }

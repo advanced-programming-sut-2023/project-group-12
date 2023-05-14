@@ -67,6 +67,10 @@ public class GameMenu {
                         output = controller.showBuildings();
                         System.out.println(output);
                     }
+                    else if (input.equalsIgnoreCase("show people")) {
+                        output = controller.showPeople();
+                        System.out.println(output);
+                    }
                     else if (selectBuilding.find()) {
                         output = controller.selectBuilding((selectBuilding.group("xCoordinate")), (selectBuilding.group("yCoordinate")));
                         System.out.println(output);
