@@ -87,4 +87,12 @@ public class Cell {
     public TextureType getTextureType() {
         return TextureType;
     }
+
+    public int getxCoordinate() {
+        return xCoordinate;
+    }
+
+    public int getyCoordinate() {
+        return yCoordinate;
+    }
 }

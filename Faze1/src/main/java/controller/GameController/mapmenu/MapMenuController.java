@@ -1,5 +1,6 @@
 package controller.GameController.mapmenu;
 
+import java.util.Random;
 import model.UserDatabase;
 import model.map.Map;
 import model.map.TextureType;
@@ -105,7 +106,7 @@ public class MapMenuController {
             return "your coordinate is incorrect";
     }
 
-    public String dropRock(String a, String b, char direction) {
+    public String dropRock(String a, String b, String directionString) {
 
         String output = checkNumber(a);
         if (!output.equals("")) {
@@ -115,6 +116,13 @@ public class MapMenuController {
         if (!output.equals("")) {
             return output;
         }
+        if (directionString.isEmpty()) {
+            return "direction can't be empty";
+        }
+        if (directionString.length() > 1) {
+            return "Enter correct direction";
+        }
+        char direction = directionString.toCharArray()[0];
         int x = Integer.parseInt(a);
         int y = Integer.parseInt(b);
 
@@ -128,6 +136,28 @@ public class MapMenuController {
                     setCellTexture(String.valueOf(x), String.valueOf(y), "rockW");
                 } else if (Character.toString(direction).equals("s")) {
                     setCellTexture(String.valueOf(x), String.valueOf(y), "rockS");
+                } else if (Character.toString(direction).equals("r")) {
+                    String textureType = "";
+                    Random random = new Random();
+                    int randomNumber = random.nextInt(4);
+                    switch (randomNumber) {
+                        case 0:
+                            textureType = "rockN";
+                            break;
+                        case 1:
+                            textureType = "rockE";
+                            break;
+                        case 2:
+                            textureType = "rockW";
+                            break;
+                        case 3:
+                            textureType = "rockS";
+                            break;
+                        default:
+                            textureType = "rockN";
+                            break;
+                    }
+                    setCellTexture(String.valueOf(x), String.valueOf(y), textureType);
                 }
                 return "rock drop successfully";
             }
@@ -222,6 +252,21 @@ public class MapMenuController {
     }
 
     public String mapUp(String direction, String stringValue) {
+        String output = checkNumber(stringValue);
+        if (!output.equals("")) {
+            return output;
+        }
+        if (direction.equals("")) {
+            return "enter direction";
+        }
+        output = "";
+        for (int i = 0; i < direction.length(); i++) {
+            output += mapUpOneDirection(String.valueOf(direction.charAt(i)), stringValue) + "\n";
+        }
+        return output;
+    }
+
+    private String mapUpOneDirection(String direction, String stringValue) {
 
         String output = checkNumber(stringValue);
         if (!output.equals("")) {

@@ -1,5 +1,8 @@
 package controller;
 
+import controller.GameController.GameMenuController;
+import model.Building.BuildingType;
+import model.Building.Storage;
 import model.Game;
 import model.Kingdom;
 import model.User;
@@ -77,8 +80,14 @@ public class StartMenuController {
     public void playGame(Scanner scanner) {
         GameMenu menu = new GameMenu();
         ArrayList<Kingdom> players = new ArrayList<>();
-        for (int i = 0; i < UserDatabase.getPlayers().size(); i++)
-            players.add(new Kingdom(UserDatabase.getPlayers().get(i), UserDatabase.getCurrentMap().getHeadSquares().get(i)));
+        for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
+            Kingdom kingdom = new Kingdom(UserDatabase.getPlayers().get(i), UserDatabase.getCurrentMap().getHeadSquares().get(i));
+            players.add(kingdom);
+            kingdom.addToStockPiles(new Storage(BuildingType.STOCKPILE, kingdom,
+                    kingdom.getHeadSquare().getxCoordinate() - 1,
+                    kingdom.getHeadSquare().getyCoordinate()));
+            UserDatabase.getCurrentMap().getMap()[kingdom.getHeadSquare().getxCoordinate() - 1][kingdom.getHeadSquare().getyCoordinate()].setBuilding(kingdom.getStockPiles().get(0));
+        }
         menu.run(scanner, new Game(UserDatabase.getCurrentMap(), players));
     }
 }
