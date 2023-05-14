@@ -98,11 +98,13 @@ public enum BuildingType {
     }
 
     public static BuildingType getBuildingTypeByName(String type){
-        BuildingType buildingType = null;
+        if(type.charAt(0) == '\"'){
+            type = type.substring(1, type.length() - 1);
+        }
         for(BuildingType building : BuildingType.values())
             if (building.buildingName.equals(type))
-                buildingType = building;
-        return buildingType;
+                return building;
+        return null;
     }
 
     public int getHitPoint() {

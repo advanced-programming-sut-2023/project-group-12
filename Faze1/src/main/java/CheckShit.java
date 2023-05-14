@@ -10,13 +10,14 @@ public class CheckShit {
 
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
-        Matcher matcher = RegisterMenuCommands.getMatcher(input, RegisterMenuCommands.USER_CREATE);
-        if (matcher.find()) {
-            System.out.println(matcher.group("username"));
-            System.out.println(matcher.group("password"));
-            System.out.println(matcher.group("slogan"));
-            System.out.println(matcher.group("nickname"));
-            System.out.println(matcher.group("email"));
+        String newLine;
+        if(input.charAt(0) == '\"'){
+            newLine = input.substring(1, input.length() - 1);
         }
+        else {
+            newLine = input;
+        }
+        System.out.println(newLine);
+
     }
 }
