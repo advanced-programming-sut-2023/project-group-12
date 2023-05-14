@@ -18,7 +18,15 @@ public class BuildingController {
 
     private Game newGame;
 
+    public BuildingController(Game newGame) {
+        this.newGame = newGame;
+        this.building = newGame.getSelectedBuilding();
+    }
+
     public String repair(Building building){
+        if (newGame.getSelectedBuilding() == null) {
+            return "No building has been selected";
+        }
         if(!building.getBuildingType().getIsPartOfCastle()){
             return "this building is not part of the castle!";
         }

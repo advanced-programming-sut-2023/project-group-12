@@ -10,8 +10,8 @@ public enum MapMenuCommands {
     DROP_ROCK ("(?=.*-x)(?=.*-y)(?=.*-d)^droprock(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -d (?<direction>(n|e|w|s|r)))){3}$"),
     DROP_TREE ("(?=.*-x)(?=.*-y)(?=.*-t)^droptree(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -t (?<type>\\S*))){3}$"),
     SHOW_DETAILS("^show detail -x (?<x>[-]?\\d*) -y (?<y>[-]?\\d*)$"),
-    MAP_UP("^map up -d (?<direction>n|e|w|s) -n (?<number>[-]?\\d*)$"),
-    SHOW_MAP("^show map -x (?<x>[-]?\\d*) -y (?<y>[-]?\\d*)$"),
+    MAP_UP("(?=.*-d)(?=.*-n)^map up(( -d (?<direction>n|e|w|s))|( -n (?<number>[-]?\\d*))){2}$"),
+    SHOW_MAP("(?=.*-x)(?=.*-y)^show map(( -x (?<x>[-]?\\d*))|( -y (?<y>[-]?\\d*))){2}$"),
     SELECT_MAP("^select this map$");
     private String regex;
 

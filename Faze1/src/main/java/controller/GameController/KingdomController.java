@@ -6,6 +6,11 @@ import model.Property.FoodType;
 
 public class KingdomController {
     private Kingdom currentKingdom ;//todo: we should set this
+
+    public KingdomController(Kingdom currentKingdom) {
+        this.currentKingdom = currentKingdom;
+    }
+
     // todo : different kinds of food = added popularity
     public String setFoodRate(String number) throws NumberFormatException {
         // does the popularity change every month or just once ?
@@ -65,6 +70,9 @@ public class KingdomController {
     // religion is all about buildings
     public String setFearRate (String number) throws NumberFormatException{//positive fear -> negative popularity
         int rate;
+        if (number.isEmpty()) {
+            return "rate can't be empty";
+        }
         try {
             rate = Integer.parseInt(number);
         } catch (NumberFormatException e) {

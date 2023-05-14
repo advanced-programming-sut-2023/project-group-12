@@ -219,7 +219,7 @@ public class MapMenuController {
         return false;
     }
 
-    private void setMapFloor(int x1, int y1, int x2, int y2, TextureType type) {
+    private void setMapFloor(int x1, int y1, int x2, int y2, TextureType type) {//todo : exlain this to me why is y2 < y1
         for (int i = x1; i <= x2; i++)
             for (int j = y2; j <= y1; j++)
                 map.getMap()[i - 1][j - 1].setTextureType(type);

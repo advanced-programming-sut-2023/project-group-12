@@ -4,11 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands {
-    //todo : should we have some keeps ready for people or should we let them have their own ?
-    CHOOSE_COLOR("^choose color -c (?<color>\\S*)$"),// do we need this or what ?
-    CHOOSE_KEEP("^choose keep -n (?<number>\\d)$"),// we only need one digit for keep location//todo: handle empty for here ?
-    CHANGE_COLOR("^change color -c (?<color>\\S*)$"),
-    CHANGE_KEEP("^change keep -n (?<number>\\d)$"),// if the number is 1 remove the keep
     SHOW_POPULARITY_FACTORS("^show popularity factors$"),
     SHOW_POPULARITY("^show popularity$"),
     SHOW_FOOD_LIST("^show food list$"),

@@ -56,9 +56,9 @@ public class Kingdom {
     private Cell HeadSquare;
 
     private double gold;
-    private int fearRate;
-    private int taxRate;
-    private int foodRate;
+    private int fearRate = 0;
+    private int taxRate = 0;
+    private int foodRate = 0;
     private int popularity;
 
     public int getPopularity() {

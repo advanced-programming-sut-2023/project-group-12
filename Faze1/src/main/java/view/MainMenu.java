@@ -2,6 +2,7 @@ package view;
 
 import Commands.MainMenuCommands;
 import controller.LoginMenuController;
+import controller.MainMenuController;
 import model.UserDatabase;
 
 import java.security.NoSuchAlgorithmException;
@@ -15,6 +16,7 @@ public class MainMenu {
         System.out.println("Welcome to main menu");
         String input;
         Matcher mapMenu, profileMenu, startMenu, userLogout;
+        MainMenuController controller = new MainMenuController();
         while (true) {
             input = scanner.nextLine();
             mapMenu = MainMenuCommands.getMatcher(input, MainMenuCommands.GO_TO_MAP_MENU);
@@ -51,8 +53,10 @@ public class MainMenu {
                 menu.run(scanner);
                 System.out.println("Welcome back to main menu");
             } else if (userLogout.find()) {
+                controller.removeUserLoggedIn();
                 System.out.println("user logged out successfully!");
-                return;
+                EnterMenu menu = new EnterMenu();
+                menu.run(scanner);
             } else {
                 System.out.println("Invalid command!");
             }

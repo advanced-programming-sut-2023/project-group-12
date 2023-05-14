@@ -20,12 +20,12 @@ public class TradeMenu {
             trade = TradeMenuCommands.getMatcher(input,TradeMenuCommands.TRADE);
             accept = TradeMenuCommands.getMatcher(input,TradeMenuCommands.TRADE_ACCEPT);
             if (tradeList.find()) {
-                System.out.println(controller.showAllTrades());
+                System.out.print(controller.showAllTrades());
             }
-            else if (trade.find()) {
+            else if (trade.find()) {// todo: no integer
                 System.out.println(controller.trade(trade.group("type"), Integer.parseInt(trade.group("amount")), Integer.parseInt(trade.group("price")), trade.group("message"), trade.group("receiverName")));
             }
-            else if (accept.find()) {
+            else if (accept.find()) {//todo : don't pass integer
                 System.out.println(controller.acceptTrade(Integer.parseInt(accept.group("id")), accept.group("message")));
             }
             else if (tradeHistory.find()) {

@@ -53,27 +53,27 @@ public class ShopMenuController {
                             game.getCurrentKingdom().addGold(((Food) property).getType().getSellPrice() * amount);
                             return action + " " + name + " successfully completed";
                         } else
-                            return "You have not enough" + name;
+                            return "You have not enough " + name;
                     } else if (property instanceof Weapon) {
                         if (amount <= game.getCurrentKingdom().getNumberOfProperties(property)) {
                             game.getCurrentKingdom().addToProperty(property);
                             game.getCurrentKingdom().addGold(((Weapon) property).getWeaponType().getSellPrice() * amount);
                             return action + " " + name + " successfully complected";
                         } else
-                            return "You have not enough" + name;
+                            return "You have not enough " + name;
                     } else if (property instanceof Resources) {
                         if (amount <= game.getCurrentKingdom().getNumberOfProperties(property)) {
                             game.getCurrentKingdom().addToProperty(property);
                             game.getCurrentKingdom().addGold(((Resources) property).getResourceType().getSellPrice() * amount);
                             return action + " " + name + " successfully completed";
                         } else
-                            return "You have not enough" + name;
+                            return "You have not enough " + name;
                     } else if (property instanceof DefensiveWeapon) {
                         if (amount <= game.getCurrentKingdom().getNumberOfProperties(property)) {
                             game.getCurrentKingdom().addToProperty(property);
                             game.getCurrentKingdom().addGold(((DefensiveWeapon) property).getDefenseType().getSellPrice() * amount);
                         } else
-                            return "You have not enough" + name;
+                            return "You have not enough " + name;
                     }
                 }
                 return "";

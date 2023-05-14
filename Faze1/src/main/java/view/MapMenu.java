@@ -56,9 +56,9 @@ public class MapMenu {
             else if (dropTree.find()) {
                 System.out.println(controller.dropTree(Integer.parseInt(dropTree.group("xCoordinate")), Integer.parseInt(dropTree.group("yCoordinate")), dropTree.group("type")));
             } else if (showMap.find()) {
-                System.out.println(controller.showMap(Integer.parseInt(showMap.group("x")), Integer.parseInt(showMap.group("y"))));
+                System.out.print(controller.showMap(Integer.parseInt(showMap.group("x")), Integer.parseInt(showMap.group("y"))));
             } else if (mapUp.find()) {
-                System.out.println(controller.mapUp(mapUp.group("direction"), Integer.parseInt(mapUp.group("number"))));
+                System.out.print(controller.mapUp(mapUp.group("direction"), Integer.parseInt(mapUp.group("number"))));
             } else if (showDetail.find()) {
                 System.out.print(controller.showDetail(Integer.parseInt(showDetail.group("x")), Integer.parseInt(showDetail.group("y"))));
             } else if (selectMap.find()) {

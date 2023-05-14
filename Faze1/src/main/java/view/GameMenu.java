@@ -10,45 +10,16 @@ import java.util.regex.Matcher;
 
 public class GameMenu {
     //todo: do everything based on the current player
+
     public void run(Scanner scanner, Game game) {
         System.out.println("Welcome to the game");
         String input, output;
         GameMenuController controller = new GameMenuController(game);
-        Matcher chooseColor, chooseKeep, changeColor, changeKeep, dropBuilding, selectBuilding, createUnit, setFoodRate,
-                setTaxRate, showTaxRate, setFearRate, showPopularityFactors, showPopularity, showFoodList, showFoodRate,
-                dropUnit, repair, selectUnit, moveUnit, patrolUnit, stopPatrolling, setMode, groundAttack, airAttack,
-                pourOil, digTunnel, buildEquipment, disbandUnit, goToShopMenu, goToTradeMenu, goToMapMenu;
-        for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
-            while (true) {
-                input = scanner.nextLine();
-                chooseColor = GameMenuCommands.getMatcher(input, GameMenuCommands.CHOOSE_COLOR);
-                chooseKeep = GameMenuCommands.getMatcher(input, GameMenuCommands.CHOOSE_KEEP);
-                changeColor = GameMenuCommands.getMatcher(input, GameMenuCommands.CHANGE_COLOR);
-                changeKeep = GameMenuCommands.getMatcher(input, GameMenuCommands.CHANGE_KEEP);
-                if (chooseColor.find()) {
-                    output = controller.chooseColor(chooseColor.group("color"));
-                    System.out.println(output);
-                } else if (chooseKeep.find()) {
-                    output = controller.chooseKeep((chooseKeep.group("number")));
-                    System.out.println(output);
-                } else if (changeColor.find()) {
-                    output = controller.changeColor(changeColor.group("color"));
-                    System.out.println(output);
-                } else if (changeKeep.find()) {
-                    output = controller.changeKeep((changeKeep.group("number")));
-                    System.out.println(output);
-                } else if (input.equalsIgnoreCase("next")) {
-                    if (i == UserDatabase.getPlayers().size() - 1) {
-                        System.out.println("all players are done, it's time for the first player to start playing");
-                    } else {
-                        System.out.println("player " + UserDatabase.getPlayers().get(i).getUsername() + " is done, it's time for player " + UserDatabase.getPlayers().get(i+1).getUsername());
-                    }
-                    break;
-                } else {
-                    System.out.println("invalid command");
-                }
-            }
-        }
+        Matcher dropBuilding, selectBuilding, createUnit, setFoodRate, setTaxRate, showTaxRate,
+                setFearRate, showPopularityFactors, showPopularity, showFoodList, showFoodRate,
+                dropUnit, repair, selectUnit, moveUnit, patrolUnit, stopPatrolling, setMode,
+                groundAttack, airAttack, pourOil, digTunnel, buildEquipment, disbandUnit,
+                goToShopMenu, goToTradeMenu, goToMapMenu;
         while (controller.getNumberOfRemainingPlayers() > 1) {
             for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
                 //todo : handle the current player
@@ -92,16 +63,16 @@ public class GameMenu {
                         output = controller.createUnit(createUnit.group("type"), (createUnit.group("count")));
                         System.out.println(output);
                     } else if (setFoodRate.find()) {
-                        output = controller.setFoodRate(setFoodRate.group("number"));
+                        output = controller.setFoodRate(setFoodRate.group("rate"));
                         System.out.println(output);
                     } else if (setTaxRate.find()) {
-                        output = controller.setTaxRate(setTaxRate.group("number"));
+                        output = controller.setTaxRate(setTaxRate.group("rate"));
                         System.out.println(output);
                     } else if (showTaxRate.find()) {
                         output = controller.showTaxRate();
                         System.out.println(output);
                     } else if (setFearRate.find()) {
-                        output = controller.setFearRate(setFearRate.group("number"));
+                        output = controller.setFearRate(setFearRate.group("rate"));
                         System.out.println(output);
                     } else if (showPopularityFactors.find()) {
                         output = controller.showPopularityFactors();
@@ -170,15 +141,24 @@ public class GameMenu {
                         menu.run(scanner);
                         System.out.println("Now you are in the game menu");
                     } else if (input.equalsIgnoreCase("next")) {
-                        if (i == UserDatabase.getPlayers().size()-1) {
+                        if (i == UserDatabase.getPlayers().size() - 1) {
                             System.out.println("player " + UserDatabase.getPlayers().get(i).getUsername() + " is done");
                             System.out.println("player " + UserDatabase.getPlayers().get(0).getUsername() + "'s turn");
-                        }
-                        else {
+                        } else {
                             System.out.println("player " + UserDatabase.getPlayers().get(i).getUsername() + " is done");
-                            System.out.println("player " + UserDatabase.getPlayers().get(i+1).getUsername() + "'s turn");
+                            System.out.println("player " + UserDatabase.getPlayers().get(i + 1).getUsername() + "'s turn");
                         }
-                    } else {
+                    } else if (input.equalsIgnoreCase("pause")) {
+                        PauseMenu menu = new PauseMenu();
+                        output = menu.run(scanner);
+                        if (output.equalsIgnoreCase("exit")) {
+                            System.out.println("game over!");
+                            System.out.println("welcome back to start menu");
+                            return;
+                        } else if (output.equalsIgnoreCase("resume"))
+                        continue;
+                    }
+                    else {
                         System.out.println("invalid command!");
                     }
                 }

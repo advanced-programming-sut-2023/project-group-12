@@ -15,7 +15,7 @@ public class StartMenu {
     public void run (Scanner scanner) {
         System.out.println("Welcome to start menu");
         String input;
-        Matcher chooseMap, addPlayer, removePlayer, removeAllPlayers, startGame, addRandomPlayers;
+        Matcher addPlayer, removePlayer, removeAllPlayers, startGame, addRandomPlayers;
         StartMenuController controller = new StartMenuController();
         while (true) {
             input = scanner.nextLine();
@@ -23,7 +23,6 @@ public class StartMenu {
             removePlayer = StartMenuCommands.getMatcher(input, StartMenuCommands.REMOVE_PLAYER);
             removeAllPlayers = StartMenuCommands.getMatcher(input, StartMenuCommands.REMOVE_ALL_PLAYERS);
             startGame = StartMenuCommands.getMatcher(input, StartMenuCommands.START_GAME);
-//          addRandomPlayers = StartMenuCommands.getMatcher(input, StartMenuCommands.ADD_RANDOM_PLAYERS);
             if (input.equalsIgnoreCase("back")) {
                 System.out.println("Welcome to main menu");
                 return;

@@ -4,9 +4,11 @@ import model.UserDatabase;
 
 public class EnterMenuController {
     public void resetStayLoggedIn() {
-        UserDatabase.getCurrentUser().setStayLoggedIn(false);
+        if (UserDatabase.getCurrentUser() != null)
+            UserDatabase.getCurrentUser().setStayLoggedIn(false);
     }
-    public void saveUsers () {
+
+    public void saveUsers() {
         UserDatabase.saveUsers();
     }
 }

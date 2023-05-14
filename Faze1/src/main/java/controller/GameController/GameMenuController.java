@@ -14,9 +14,11 @@ import model.people.UnitType;
 import java.util.ArrayList;
 
 public class GameMenuController {
-
+    //todo : I think for move and fight we should have some units set to do that thing and let them do it at the end
     public GameMenuController(Game newGame) {
         this.newGame = newGame;
+        this.buildingController = new BuildingController(newGame);
+        this.kingdomController = new KingdomController(newGame.getCurrentKingdom());// todo : is it okay ?
     }
 
     private Game newGame;
@@ -25,8 +27,8 @@ public class GameMenuController {
         this.newGame = newGame;
     }
 
-    private KingdomController kingdomController = new KingdomController();
-    private BuildingController buildingController = new BuildingController();
+    private KingdomController kingdomController;
+    private BuildingController buildingController;
 
     public Game getNewGame() {
         return newGame;
@@ -170,8 +172,10 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
+        if (UnitType.getUnitTypeByName(type) == null) {
+            return "unit name is not correct";
+        }
         //todo : return the result of dropUnit
-
         return "";
     }
 
@@ -299,6 +303,15 @@ public class GameMenuController {
         if (!isUnitSelected().equals("true")) {
             return isUnitSelected();
         }
+        if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
+            return "this unit can't move";
+        }
+        if (!newGame.getCurrentMap().getMap()[x1][y1].isPassable()) {
+            return "the end point is not a valid destination, troops can't be there";
+        }
+        if (!newGame.getCurrentMap().getMap()[x2][y2].isPassable()) {
+            return "the start point is not a valid destination, troops can't be there";
+        }
         newGame.getPatrollingUnits().clear();
         newGame.getPatrollingUnits().addAll(newGame.getSelectedUnits());
         newGame.patrolUnit(x1, y1, x2, y2);
@@ -345,7 +358,7 @@ public class GameMenuController {
     }
 // todo: disband is not done yet
     public String disbandUnit() {
-        if (newGame.getSelectedUnits().size() == 0) {
+        if (newGame.getSelectedUnits().size() == 0 || newGame.getSelectedUnits() == null) {
             return "no unit to disband";
         }
         //moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(),);//todo : where's the keep?
