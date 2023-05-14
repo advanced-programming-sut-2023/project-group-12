@@ -363,4 +363,18 @@ public class Game {
         this.currentKingdom = currentKingdom;
     }
     private ArrayList<Kingdom> kingdoms = new ArrayList<>();
+    public String  showBuildings () {
+        String output = "";
+        for (int i = 0; i < currentMap.getDimension(); i++) {
+            for (int j = 0; j < currentMap.getDimension(); j++) {
+                Cell cell = currentMap.getMap()[i][j];
+                if (cell.getBuilding() != null) {
+                    if (cell.getBuilding().getOwner() == currentKingdom) {
+                        output += cell.getBuilding().toString();
+                    }
+                }
+            }
+        }
+        return output;
+    }
 }
