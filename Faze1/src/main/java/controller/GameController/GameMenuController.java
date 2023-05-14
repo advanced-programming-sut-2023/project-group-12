@@ -96,6 +96,7 @@ public class GameMenuController {
             return "there is not any building here!";
         }
         newGame.selectBuilding(x, y);
+        BuildingController.building = newGame.getSelectedBuilding();
         return "building selected successfully!";
     }
 
@@ -175,8 +176,14 @@ public class GameMenuController {
         if (UnitType.getUnitTypeByName(type) == null) {
             return "unit name is not correct";
         }
-        //todo : return the result of dropUnit
-        return "";
+        for (int i = 0; i < number; i++) {
+            Unit unit = new Unit(newGame.getCurrentKingdom(),UnitType.getUnitTypeByName(type),x,y);
+            unit.setxPosition(x);
+            unit.setyPosition(y);
+            newGame.getCurrentMap().getMap()[x][y].addUnits(unit);
+            newGame.getCurrentKingdom().addUnit(unit);
+        }
+        return "units dropped successfully!";
     }
 
     public String setFoodRate(String number) throws NumberFormatException {
@@ -234,15 +241,21 @@ public class GameMenuController {
             return "your coordinates are not correct";
         }
         newGame.clearSelectedUnits();
-        int selected = 0;
+        int selected = 0, yours = 0;
         if (newGame.getCurrentMap().getMap()[x][y].getUnits() == null) {
             return "there's no unit here!";
         }
         for (Unit unit : newGame.getCurrentMap().getMap()[x][y].getUnits()) {
-            if (unit.getUnitType() == UnitType.getUnitTypeByName(type)) {
-                newGame.setSelectedUnits(unit);
-                selected++;
+            if (unit.getHomeland() == newGame.getCurrentKingdom()) {
+                if (unit.getUnitType() == UnitType.getUnitTypeByName(type)) {
+                    newGame.setSelectedUnits(unit);
+                    selected++;
+                }
+                yours++;
             }
+        }
+        if (yours == 0) {
+            return "None of your units are here";
         }
         if (selected == 0) {
             return "There's no unit of this type here";
@@ -261,11 +274,14 @@ public class GameMenuController {
         }
         int x = Integer.parseInt(xCoordinate);
         int y = Integer.parseInt(yCoordinate);
-        if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
+        if (x < 0 || y < 0 || x > newGame.getCurrentMap().getDimension() || y > newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
         if (!newGame.getCurrentMap().getMap()[x][y].isPassable()) {
             return "the destination is not a valid destination, troops can't be there";
+        }
+        if (newGame.getSelectedUnits() == null || newGame.getSelectedUnits().size() == 0) {
+            return "there's no unit selected";
         }
         if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
             return "this unit can't move";

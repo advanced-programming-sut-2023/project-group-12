@@ -21,7 +21,7 @@ public class Cell {
     private Tree tree = null;
     private Building building = null;
     private int height = 0;
-    private ArrayList<Unit> units = null;
+    private ArrayList<Unit> units = new ArrayList<>();
     private boolean isInThePath = false;
     private Cell father = null;
 
@@ -78,7 +78,7 @@ public class Cell {
     public void setUnits(ArrayList<Unit> units) {
         this.units = units;
     }
-    private boolean isPassable;
+    private boolean isPassable = true;
 
     public boolean isPassable() {
         return isPassable;

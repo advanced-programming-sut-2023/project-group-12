@@ -5,6 +5,8 @@ import model.Kingdom;
 import model.Property.*;
 import model.map.TextureType;
 
+import java.util.Arrays;
+
 public enum BuildingType {
     //name, class, hitPoint, goldPrice, resourcePrice, resourceCount, workerCount, engineerCount
     SMALL_STONE_GATEHOUSE("Small stone gatehouse", Gate.class, 1000, 0, null, 0, 0, 0, true, null, null),//darvaze sangi koochak
@@ -97,12 +99,13 @@ public enum BuildingType {
         this.outputProperty = outputProperty;
     }
 
-    public static BuildingType getBuildingTypeByName(String type){
-        BuildingType buildingType = null;
-        for(BuildingType building : BuildingType.values())
-            if (building.buildingName.equals(type))
-                buildingType = building;
-        return buildingType;
+    public static BuildingType getBuildingTypeByName(String type){//todo : into dorost kon
+        for(BuildingType building : BuildingType.values()) {
+            if (building.buildingName.equals(type)) {
+                return building;
+            }
+        }
+        return null;
     }
 
     public int getHitPoint() {

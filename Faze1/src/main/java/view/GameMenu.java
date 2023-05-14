@@ -1,8 +1,11 @@
 package view;
 
 import Commands.GameMenuCommands;
+import controller.GameController.BuildingController;
 import controller.GameController.GameMenuController;
+import controller.GameController.KingdomController;
 import model.Game;
+import model.Kingdom;
 import model.UserDatabase;
 
 import java.util.Scanner;
@@ -22,6 +25,8 @@ public class GameMenu {
                 goToShopMenu, goToTradeMenu, goToMapMenu;
         while (controller.getNumberOfRemainingPlayers() > 1) {
             for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
+                //todo : set the current kingdom according to player
+                BuildingController buildingController = new BuildingController(game);
                 //todo : handle the current player
                 while (true) {
                     input = scanner.nextLine();
@@ -54,7 +59,7 @@ public class GameMenu {
                     goToMapMenu = GameMenuCommands.getMatcher(input, GameMenuCommands.GO_TO_MAP_MENU);
 
                     if (dropBuilding.find()) {
-                        output = controller.dropBuilding((dropBuilding.group("x")), (dropBuilding.group("y")), dropBuilding.group("type"));
+                        output = controller.dropBuilding((dropBuilding.group("xCoordinate")), (dropBuilding.group("yCoordinate")), dropBuilding.group("type"));
                         System.out.println(output);
                     } else if (selectBuilding.find()) {
                         output = controller.selectBuilding((selectBuilding.group("x")), (selectBuilding.group("y")));
