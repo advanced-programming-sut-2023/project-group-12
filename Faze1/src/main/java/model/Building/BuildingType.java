@@ -32,30 +32,31 @@ public enum BuildingType {
     QUARRY("quarry", ProductionCenter.class, 300, 0, ResourceType.WOOD, 20, 3, 0, false, null, new Resources(ResourceType.STONE, 10)), //MADAN SANG
     STOCKPILE("stockpile", Storage.class, 500, 0, null, 0, 0, 0, false, null, null), //ANBAR
     WOODCUTTER("woodcutter", ProductionCenter.class,100, 0, ResourceType.WOOD, 3,  1, 0, false, null, new Resources(ResourceType.WOOD, 10)), //CHOOB BOR
-
+    //todo any idea about unemployed human maybe resource
     HOVEL("hovel", UnitCreation.class, 100, 0, ResourceType.WOOD, 6, 0 ,0, false, null, null), //KHANE
     CHURCH("church", UnitCreation.class, 800, 250, null, 0, 0, 0, false, null, null), //KELISA
     CATHEDRAL("cathedral", UnitCreation.class,1200, 1000, null, 0,0,0, false, null, null), //KELISA JAME
     ARMOURER("armourer", ProductionCenter.class,300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.IRON, 6), new DefensiveWeapon(DefenseType.METAL_ARMOR, 1)), //ZEREH SAZI
-
+    //todo : what about blackSmith?
     BLACKSMITH("blacksmith", ProductionCenter.class, 300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.IRON, 6), null), //SAKHTEMAN AHANGARY
     FLETCHER( "fletcher",ProductionCenter.class, 300, 100, ResourceType.WOOD, 20, 1, 0, false, new Resources(ResourceType.WOOD, 6), new Weapon(WeaponType.BOW, 1)), //KAMAN SAZI
+    //todo: again?
     POLE_TURNER("pole_turner",  ProductionCenter.class, 300, 100, ResourceType.WOOD, 10, 1, 0,false, new Resources(ResourceType.IRON, 6), null), //NEYZE SAZI
     OIL_SMELTER("oil smelter", ProductionCenter.class,300, 100, ResourceType.STONE, 10, 0, 1, true, null, new Weapon(WeaponType.PETROLEUM, 5)), //KARKHANE ZOB
     PITCH_DITCH("pitch ditch", Traps.class, 300, 0, ResourceType.PITCH, 2, 0, 0, true, null, null), //KHANDAGH GHIR  ** 2 PITCH PER 5 SQUARE
     CAGED_WAR_DOGES("caged war dogs", Traps.class, 100, 100, ResourceType.WOOD, 10, 0, 0, true, null, null), //GHAFASE SAG HAYE JANGI
     SIEGE_TENT("siege tent", Building.class, 100, 0, null, 0, 0, 1, true, null, null), //CHADOR MOHASERE
-
-    STABLE("stable", UnitCreation.class, 300,400, ResourceType.WOOD, 20, 0, 0, true, null, null), //ESTABL
+    //todo: think about this
+    STABLE("stable", ProductionCenter.class, 300,400, ResourceType.WOOD, 20, 0, 0, true, null, null), //ESTABL
     APPLE_GARDEN("apple garden", ProductionCenter.class, 100, 0, ResourceType.WOOD, 5, 1,0, false, null, new Food(FoodType.APPLES, 5)), //BAGH SIB
     DAIRY_PRODUCTS("dairy products", ProductionCenter.class, 100, 0, ResourceType.WOOD, 10, 1, 0, false, null, new Food(FoodType.CHEESE, 5)), //TOLIDAT LABANI
 
-    HOPS_FARM("hops farm", ProductionCenter.class, 100, 0, ResourceType.WOOD, 15, 1,0, false, null, new Resources(ResourceType.BARELY, 5)), //MAZRAE JO
-    HUNTER_POST("hunter post", ProductionCenter.class, 300, 0, ResourceType.WOOD, 5, 1,0, false, null, new Food(FoodType.MEAT, 5)), //POST SHEKAR
-    WHEAT_FARM("wheat farm", ProductionCenter.class, 300, 0, ResourceType.WOOD, 15, 1, 0, false, null, new Resources(ResourceType.WHEAT, 10)), //MAZRAE GANDOM
-    BAKERY("bakery", ProductionCenter.class, 300, 0 ,ResourceType.WOOD, 10, 1, 0, false, new Resources(ResourceType.FLOUR, 7), new Food(FoodType.BREAD, 2)), //NANVAEI
-    BREWERY("brewery",ProductionCenter.class, 300, 0 ,ResourceType.WOOD, 10, 1, 0, false, new Resources(ResourceType.BARELY, 6), new Resources(ResourceType.ALE, 4)), //ABJO SAZI
-    FOOD_STOCKPILE("food stockpile", Storage.class, 500, 0, ResourceType.WOOD, 5, 0,0, false, null, null) ,//ANBAR GHAZA
+    HOPS_FARM("hops farm", ProductionCenter.class, 100, 0, ResourceType.WOOD, 15, 1,0, false, null, new Resources(ResourceType.BARELY, 5)),
+    HUNTER_POST("hunter post", ProductionCenter.class, 300, 0, ResourceType.WOOD, 5, 1,0, false, null, new Food(FoodType.MEAT, 5)),
+    WHEAT_FARM("wheat farm", ProductionCenter.class, 300, 0, ResourceType.WOOD, 15, 1, 0, false, null, new Resources(ResourceType.WHEAT, 10)),
+    BAKERY("bakery", ProductionCenter.class, 300, 0 ,ResourceType.WOOD, 10, 1, 0, false, new Resources(ResourceType.FLOUR, 7), new Food(FoodType.BREAD, 2)),
+    BREWERY("brewery",ProductionCenter.class, 300, 0 ,ResourceType.WOOD, 10, 1, 0, false, new Resources(ResourceType.BARELY, 6), new Resources(ResourceType.ALE, 4)),
+    FOOD_STOCKPILE("food stockpile", Storage.class, 500, 0, ResourceType.WOOD, 5, 0,0, false, null, null),
 
     WALL("wall", Wall.class, 200, 0, ResourceType.STONE, 10, 0, 0,  false, null, null),
 

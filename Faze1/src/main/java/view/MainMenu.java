@@ -10,8 +10,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class MainMenu {
-    // private User currentUser;
-    //todo : the getting map from Userdata base thing is not good
     public void run(Scanner scanner) throws NoSuchAlgorithmException {
         System.out.println("Welcome to main menu");
         String input;
@@ -27,8 +25,19 @@ public class MainMenu {
                 if (mapMenu.group("size").isEmpty()) {
                     System.out.println("Size can't be empty");
                 }
-                int size = Integer.parseInt(mapMenu.group("size"));
-                int kingdomNumber = Integer.parseInt(mapMenu.group("kingdomNumber"));
+                if (mapMenu.group("kingdomNumber").isEmpty()) {
+                    System.out.println("Kingdom number can't be empty");
+                }
+                int size;
+                int kingdomNumber;
+                try {
+                    size = Integer.parseInt(mapMenu.group("size"));
+                    kingdomNumber = Integer.parseInt(mapMenu.group("kingdomNumber"));
+                }
+                catch (NumberFormatException e) {
+                    System.out.println("You must input numbers");
+                    continue;
+                }
                 if (!(size == 200 || size == 400) ) {
                     System.out.println("Size must be 200 or 400");
                     continue;
@@ -45,7 +54,7 @@ public class MainMenu {
                 menu.run(scanner);
                 System.out.println("Welcome back to main menu");
             } else if (startMenu.find()) {
-                if (UserDatabase.getCurrentMap() == null) {
+                if (!controller.isMapSelected()) {
                     System.out.println("Go back to map menu and choose your map");
                     continue;
                 }

@@ -35,7 +35,8 @@ public class EnterMenu {
             }
             else if (input.equalsIgnoreCase("exit")) {
                 System.out.println("Thanks for being with us!");
-                return;
+                controller.saveUsers();
+                System.exit(0);
             }
             else {
                 System.out.println("Please try again!");

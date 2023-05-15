@@ -5,7 +5,7 @@ import model.Property.Food;
 import model.Property.FoodType;
 
 public class KingdomController {
-    private Kingdom currentKingdom ;//todo: we should set this
+    private Kingdom currentKingdom ;
 
     public KingdomController(Kingdom currentKingdom) {
         this.currentKingdom = currentKingdom;
@@ -13,7 +13,6 @@ public class KingdomController {
 
     // todo : different kinds of food = added popularity
     public String setFoodRate(String number) throws NumberFormatException {
-        // does the popularity change every month or just once ?
         int rate;
         try {
             rate = Integer.parseInt(number);
@@ -32,9 +31,9 @@ public class KingdomController {
         }
         currentKingdom.setFoodRate(rate);
         currentKingdom.setPopularity(popularity + 4 * rate);
-        // food will decrease monthly
+        // food will decrease monthly todo
         return "Food rate set successfully";
-    }
+    }//todo
     public String setTaxRate(String number) throws NumberFormatException {
         int rate;
         try {
@@ -52,7 +51,7 @@ public class KingdomController {
             return "You don't have enough gold, come back later";
         }
         currentKingdom.setTaxRate(rate);
-        // gold will reduce monthly
+        // gold will reduce monthly todo
         if (rate <= 0) {
             currentKingdom.setPopularity(popularity + rate *(-2) + 1);
         }
@@ -67,7 +66,7 @@ public class KingdomController {
     public String showTaxRate () {
         return "Your tax rate is: " + currentKingdom.getTaxRate();
     }
-    // religion is all about buildings
+    // religion is all about buildings todo
     public String setFearRate (String number) throws NumberFormatException{//positive fear -> negative popularity
         int rate;
         if (number.isEmpty()) {
@@ -88,11 +87,11 @@ public class KingdomController {
     }
 
     public String showPopularityFactors() {
-        //todo : religion and see if there's others
         return "Your popularity factors are: \n" +
                 "Food rate: " + currentKingdom.getFoodRate() + "\n" +
                 "Tax rate: " + currentKingdom.getTaxRate() + "\n" +
-                "Fear rate: " + currentKingdom.getFearRate();
+                "Fear rate: " + currentKingdom.getFearRate()+"\n"+
+                "Religious people: " + currentKingdom.getReligiousPeople();
     }
 
     public String showPopularity() {

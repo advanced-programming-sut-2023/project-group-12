@@ -8,6 +8,14 @@ public class Tower extends Building{
     private int defendRange;
 
 
+    public int getFireRange() {
+        return fireRange;
+    }
+
+    public int getDefendRange() {
+        return defendRange;
+    }
+
     public Tower(BuildingType buildingType, Kingdom owner, int xPosition, int yPosition) {
         super(buildingType, owner, xPosition, yPosition);
         switch (buildingType) {

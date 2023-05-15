@@ -18,7 +18,6 @@ import model.people.UnitType;
 import java.util.ArrayList;
 
 public class GameMenuController {
-    //todo : I think for move and fight we should have some units set to do that thing and let them do it at the end
     public GameMenuController(Game newGame) {
         this.newGame = newGame;
         this.buildingController = new BuildingController(newGame);
@@ -28,8 +27,9 @@ public class GameMenuController {
     private Game newGame;
 
     public void buildKingdoms() {
-        for (User user : UserDatabase.getUsers()) {
-            Kingdom kingdom = new Kingdom(user);
+        for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
+            User user = UserDatabase.getPlayers().get(i);
+            Kingdom kingdom = new Kingdom(user, newGame.getCurrentMap().getHeadSquares().get(i));
             newGame.getKingdoms().add(kingdom);
         }
     }
@@ -42,6 +42,7 @@ public class GameMenuController {
             }
         }
     }
+
     public void setNewGame(Game newGame) {
         this.newGame = newGame;
     }
@@ -195,7 +196,7 @@ public class GameMenuController {
             return "units can't be on buildings";
         }
         for (int i = 0; i < number; i++) {
-            Unit unit = new Unit(newGame.getCurrentKingdom(),UnitType.getUnitTypeByName(type),x,y);
+            Unit unit = new Unit(newGame.getCurrentKingdom(), UnitType.getUnitTypeByName(type), x, y);
             unit.setxPosition(x);
             unit.setyPosition(y);
             newGame.getCurrentMap().getMap()[x][y].addUnits(unit);
@@ -328,6 +329,7 @@ public class GameMenuController {
         }
         setDestination(xEnd, yEnd);
         newGame.getMovingUnits().add(newGame.getSelectedUnits());
+        resetSelectedUnits();
         return "units set to move";
     }
 
@@ -391,6 +393,7 @@ public class GameMenuController {
             }
         }
         newGame.getPatrollingUnits().add(patrollingUnits);
+        resetSelectedUnits();
         return "units sent to patrol successfully";
     }
 
@@ -438,7 +441,9 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().size() == 0 || newGame.getSelectedUnits() == null) {
             return "no unit to disband";
         }
-        //moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(),);//todo : where's the keep?
+        newGame.moveUnitWithSpeed(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(),
+                newGame.getCurrentKingdom().getHeadSquare().getxCoordinate(), newGame.getCurrentKingdom().getHeadSquare().getyCoordinate(),
+                1000, newGame.getSelectedUnits());
         newGame.getSelectedUnits().clear();
         return "units disbanded successfully!";
     }
@@ -495,11 +500,11 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        return "";
+        return "this feature is not available yet";
     }
 
     public String pourOil(String direction) {
-        return "";
+        return "this feature is not available yet";
     }
 
     public String airAttack(String xCoordinate, String yCoordinate) {
@@ -516,13 +521,14 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        if (newGame.getSelectedUnits().get(0).getUnitType().getRange() == 0) {
+        if (!isBowMan(newGame.getSelectedUnits().get(0))) {
             return "please enter a different command for non bowmen troops";
         }
         if (!newGame.isEnemyExistsInCell(x, y)) {
             return "there's no enemy here";
         }
-        if (Math.pow(x - newGame.getSelectedUnits().get(0).getxPosition(), 2) + Math.pow(y - newGame.getSelectedUnits().get(0).getyPosition(), 2) > newGame.getSelectedUnits().get(0).getUnitType().getRange()) {
+        if (Math.pow(x - newGame.getSelectedUnits().get(0).getxPosition(), 2) + Math.pow(y - newGame.getSelectedUnits().get(0).getyPosition(), 2) > newGame.getSelectedUnits().get(0).getUnitType().getRange()
+                || Math.pow(x - newGame.getSelectedUnits().get(0).getxPosition(), 2) + Math.pow(y - newGame.getSelectedUnits().get(0).getyPosition(), 2) < newGame.getSelectedUnits().get(0).getUnitType().getSecondRange()) {
             return "your target is out of range";
         }
         if (newGame.getAttackingUnits().size() != 0) {
@@ -535,7 +541,15 @@ public class GameMenuController {
         }
         setDestination(x, y);
         newGame.getAttackingUnits().add(newGame.getSelectedUnits());
+        resetSelectedUnits();
         return "fight is being done successfully";
+    }
+
+    public static boolean isBowMan(Unit unit) {
+        if (unit.getUnitType().getSecondRange() != 0) {
+            return true;
+        }
+        return false;
     }
 
     public String groundAttack(String xCoordinate, String yCoordinate) {
@@ -555,7 +569,7 @@ public class GameMenuController {
         if (!isUnitSelected().equals("true")) {
             return isUnitSelected();
         }
-        if (newGame.getSelectedUnits().get(0).getUnitType().getRange() > 0) {
+        if (isBowMan(newGame.getSelectedUnits().get(0))) {
             return "please enter a different command for bowmen";
         }
         if (!newGame.isEnemyExistsInCell(x, y)) {
@@ -579,6 +593,7 @@ public class GameMenuController {
         }
         setDestination(x, y);
         newGame.getAttackingUnits().add(newGame.getSelectedUnits());
+        resetSelectedUnits();
         return "attack is being done successfully";
     }
 
@@ -623,13 +638,13 @@ public class GameMenuController {
         int x2 = Integer.parseInt(X2);
         int y2 = Integer.parseInt(Y2);
         if (x1 < 0 || y1 < 0 || x1 >= newGame.getCurrentMap().getDimension() || y1 >= newGame.getCurrentMap().getDimension()
-        || x2 < 0 || y2 < 0 || x2 >= newGame.getCurrentMap().getDimension() || y2 >= newGame.getCurrentMap().getDimension()) {
+                || x2 < 0 || y2 < 0 || x2 >= newGame.getCurrentMap().getDimension() || y2 >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
         if (newGame.getPatrollingUnits() == null || newGame.getPatrollingUnits().size() == 0) {
             return "there's no unit patrolling";
         }
-        for (PatrollingUnits units: newGame.getPatrollingUnits()) {
+        for (PatrollingUnits units : newGame.getPatrollingUnits()) {
             if (units.getxStart() == x1 && units.getyStart() == y1 && units.getxEnd() == x2 && units.getyEnd() == y2) {
                 newGame.getPatrollingUnits().remove(units);
                 return "patrolling stopped";
@@ -677,29 +692,68 @@ public class GameMenuController {
     }
 
     public void endTurnMoves() {
+        if (newGame.getMovingUnits() == null) return;
         for (ArrayList<Unit> units : newGame.getMovingUnits()) {
-            newGame.moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), units.get(0).getDestinationX(),units.get(0).getDestinationY(), units);
+            newGame.moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), units.get(0).getDestinationX(), units.get(0).getDestinationY(), units);
         }
     }
-    private void setDestination (int xEnd, int yEnd) {
+
+    private void setDestination(int xEnd, int yEnd) {
         for (Unit unit : newGame.getSelectedUnits()) {
             unit.setDestinationX(xEnd);
             unit.setDestinationY(yEnd);
         }
     }
-    public void endTurnFights () {
-        for (ArrayList<Unit> units:newGame.getAttackingUnits()) {
+
+    public void endTurnFights() {
+        if (newGame.getAttackingUnits() == null) return;
+        for (ArrayList<Unit> units : newGame.getAttackingUnits()) {
             if (units.get(0).getUnitType().getRange() == 0) {
-                newGame.groundAttack(units.get(0).getDestinationX(), units.get(0).getDestinationY(),units);
-            }
-            else {
-                newGame.airAttack(units.get(0).getDestinationX(), units.get(0).getDestinationY(),units);
+                newGame.groundAttack(units.get(0).getDestinationX(), units.get(0).getDestinationY(), units);
+            } else {
+                newGame.airAttack(units.get(0).getDestinationX(), units.get(0).getDestinationY(), units);
             }
         }
     }
-    public void endOfTurnPatrolling () {
-        for (PatrollingUnits units: newGame.getPatrollingUnits()) {
+
+    public void endOfTurnPatrolling() {
+        if (newGame.getPatrollingUnits() == null) return;
+        for (PatrollingUnits units : newGame.getPatrollingUnits()) {
             newGame.patrolUnit(units);
         }
+    }
+
+    public void resetSelectedUnits() {
+        newGame.setSelectedUnits(null);
+    }
+
+    public boolean isDefeated(Kingdom kingdom) {
+        if (kingdom.getKing().getHitPoint() == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public Kingdom getCurrentKingdom() {
+        return newGame.getCurrentKingdom();
+    }
+
+    public int getNumberOfRemainingPlayers() {
+        int n = 0;
+        for (Kingdom kingdom : newGame.getKingdoms()) {
+            if (!isDefeated(kingdom)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public User getWinner() {
+        for (Kingdom kingdom : newGame.getKingdoms()) {
+            if (!isDefeated(kingdom)) {
+                return kingdom.getOwner();
+            }
+        }
+        return null;
     }
 }
