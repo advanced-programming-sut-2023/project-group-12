@@ -105,8 +105,6 @@ public class BuildingController {
         if(unitType.getDefence() != null){
             building.getOwner().spendProperties(new DefensiveWeapon(unitType.getDefence(), count));
         }
-
-
         return "soldiers created successfully!";
     }
 }
