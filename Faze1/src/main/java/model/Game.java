@@ -156,7 +156,7 @@ public class Game {
         return "";
     }
 
-    private void moveUnitWithSpeed(int xStart, int yStart, int xEnd, int yEnd, int speed, ArrayList<Unit> units) {
+    public void moveUnitWithSpeed(int xStart, int yStart, int xEnd, int yEnd, int speed, ArrayList<Unit> units) {
         //todo: handle the method for special cases
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
         for (int i = 0; i < speed && i < path.size() - 2; i++) {

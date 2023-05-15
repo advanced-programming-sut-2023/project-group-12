@@ -12,8 +12,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GameMenu {
-    //todo: do everything based on the current player
-
     public void run(Scanner scanner, Game game) {
         System.out.println("Welcome to the game");
         String input, output;
@@ -60,16 +58,13 @@ public class GameMenu {
                     if (dropBuilding.find()) {
                         output = controller.dropBuilding((dropBuilding.group("xCoordinate")), (dropBuilding.group("yCoordinate")), dropBuilding.group("type"));
                         System.out.println(output);
-                    }
-                    else if (input.equalsIgnoreCase("show buildings")) {
+                    } else if (input.equalsIgnoreCase("show buildings")) {
                         output = controller.showBuildings();
                         System.out.println(output);
-                    }
-                    else if (input.equalsIgnoreCase("show people")) {
+                    } else if (input.equalsIgnoreCase("show people")) {
                         output = controller.showPeople();
                         System.out.println(output);
-                    }
-                    else if (selectBuilding.find()) {
+                    } else if (selectBuilding.find()) {
                         output = controller.selectBuilding((selectBuilding.group("xCoordinate")), (selectBuilding.group("yCoordinate")));
                         System.out.println(output);
                     } else if (createUnit.find()) {
@@ -111,22 +106,22 @@ public class GameMenu {
                     } else if (selectBuilding.find()) {
                         output = controller.selectBuilding(selectBuilding.group("xCoordinate"), selectBuilding.group("yCoordinate"));
                         System.out.println(output);
-                    } else if (moveUnit.find()) {//todo : the same as patrolling
+                    } else if (moveUnit.find()) {
                         output = controller.moveUnit(moveUnit.group("xCoordinate"), moveUnit.group("yCoordinate"));
                         System.out.println(output);
-                    } else if (patrolUnit.find()) {//todo : maybe here just set a patrolling unit and do their job at the end of every turn
+                    } else if (patrolUnit.find()) {
                         output = controller.patrolUnit(patrolUnit.group("x1Coordinate"), patrolUnit.group("y1Coordinate"), patrolUnit.group("x2Coordinate"), patrolUnit.group("y2Coordinate"));
                         System.out.println(output);
                     } else if (stopPatrolling.find()) {
-                        output = controller.stopPatrolling(stopPatrolling.group("x1Coordinate"),stopPatrolling.group("y1Coordinate"),stopPatrolling.group("x2Coordinate"),stopPatrolling.group("y2Coordinate"));
+                        output = controller.stopPatrolling(stopPatrolling.group("x1Coordinate"), stopPatrolling.group("y1Coordinate"), stopPatrolling.group("x2Coordinate"), stopPatrolling.group("y2Coordinate"));
                         System.out.println(output);
                     } else if (setMode.find()) {
                         output = controller.setMode(setMode.group("xCoordinate"), setMode.group("yCoordinate"), setMode.group("mode"), setMode.group("type"));
                         System.out.println(output);
-                    } else if (groundAttack.find()) {//todo: maybe the same as patrolling
+                    } else if (groundAttack.find()) {
                         output = controller.groundAttack(groundAttack.group("xCoordinate"), groundAttack.group("yCoordinate"));
                         System.out.println(output);
-                    } else if (airAttack.find()) {//todo: maybe the same as patrolling
+                    } else if (airAttack.find()) {
                         output = controller.airAttack(airAttack.group("xCoordinate"), airAttack.group("yCoordinate"));
                         System.out.println(output);
                     } else if (pourOil.find()) {
@@ -171,16 +166,15 @@ public class GameMenu {
                             System.out.println("welcome back to start menu");
                             return;
                         } else if (output.equalsIgnoreCase("resume"))
-                        continue;
-                    }
-                    else {
+                            continue;
+                    } else {
                         System.out.println("invalid command!");
                     }
                 }
                 controller.endTurnMoves();
                 controller.endTurnFights();
                 controller.endOfTurnPatrolling();
-
+                controller.resetSelectedUnits();
             }
             if (controller.getNumberOfRemainingPlayers() == 1) {
                 System.out.println("player " + controller.getWinner().getUsername() + " won the game!");

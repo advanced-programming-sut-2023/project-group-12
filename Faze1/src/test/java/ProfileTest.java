@@ -43,11 +43,6 @@ public class ProfileTest {
     public void changePasswordTest() throws Exception {
         Assertions.assertEquals("Password can't be empty", profileController.changePassword("", "Davood"));
         Assertions.assertEquals("New password can't be empty", profileController.changePassword("Davood", ""));
-//        Assertions.assertEquals("Your password <Mahone> is wrong", profileController.changePassword("Mahone", "salam"));
-//        Assertions.assertEquals("You should choose a new password", profileController.changePassword("Davood", "Davood"));
-//        Assertions.assertEquals(RegisterMenuController.isPasswordWeak("sa"), profileController.changePassword("Davood", "sa"));
-//        Assertions.assertEquals("Your password <Davood> changed to <pAssw0r!> successfully", profileController.changePassword("Davood", "pAssw0r!"));
-
     }
 
 

@@ -16,15 +16,10 @@ import java.util.Scanner;
 
 public class Kingdom {
 
-    public Kingdom(User owner, Cell headSquare) {
-        this.owner = owner;
-        this.HeadSquare = headSquare;
-    }
 
     private int population;
 
     private int unEmployed;
-
     private ArrayList<Trade> trades = new ArrayList<>();
 
     private ArrayList<Trade> tradesHistory = new ArrayList<>();
@@ -61,12 +56,21 @@ public class Kingdom {
     private int taxRate = 0;
     private int foodRate = 0;
     private int popularity = 100;
+    private int religiousPeople = 0;
+
+    public int getReligiousPeople() {
+        return religiousPeople;
+    }
+
+    public void setReligiousPeople(int religiousPeople) {
+        this.religiousPeople = religiousPeople;
+    }
 
     public int getPopularity() {
         return popularity;
     }
 
-    public Kingdom(User owner){
+    public Kingdom(User owner, Cell headSquare){
         this.owner = owner;
         gold = 500;
         fearRate = 0;
@@ -75,6 +79,7 @@ public class Kingdom {
         foodRate = 0;
         population = 15;
         unEmployed = 15;
+        this.HeadSquare = headSquare;
     }
 
     public void setPopularity(int popularity) {
