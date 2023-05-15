@@ -653,13 +653,7 @@ public class GameMenuController {
         return "No units patrolling with the given coordinates";
     }
 
-    public int getNumberOfRemainingPlayers() {//todo : this is needed to end the game if there's only one player left
-        return UserDatabase.getPlayers().size();
-    }
 
-    public User getWinner() {//todo : this returns the winner of the game
-        return null;
-    }
 
     public void checkEquipment(Kingdom kingdom) {
         for (int i = kingdom.getSiegeBuildings().size() - 1; i >= 0; i++) {

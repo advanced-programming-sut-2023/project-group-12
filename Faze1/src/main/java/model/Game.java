@@ -105,24 +105,22 @@ public class Game {
     }
 
     public void nextTurn() {
-        //TODO: add unit method for each turn
         int currentKingdomNumber = -1;
+
         for (int i = 0; i < players.size(); i++) {
             if (currentKingdom == players.get(i)) {
                 currentKingdomNumber = i;
             }
         }
+        for (ProductionCenter productionCenter : currentKingdom.getAllProductionCenters()) {
+            productionCenter.run();
+        }
+        for (UnitCreation unitCreation : currentKingdom.getAllUnitCreations()) {
+            unitCreation.run();
+        }
         if (currentKingdomNumber == (players.size() - 1)) {
             roundsPassed++;
             currentKingdom = players.get(0);
-            for (Kingdom kingdom : players) {
-                for (ProductionCenter productionCenter : kingdom.getAllProductionCenters()) {
-                    productionCenter.run();
-                }
-                for (UnitCreation unitCreation : kingdom.getAllUnitCreations()) {
-                    unitCreation.run();
-                }
-            }
         } else {
             currentKingdom = players.get(currentKingdomNumber + 1);
         }
