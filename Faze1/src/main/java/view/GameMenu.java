@@ -120,7 +120,7 @@ public class GameMenu {
                         output = controller.patrolUnit(patrolUnit.group("x1Coordinate"), patrolUnit.group("y1Coordinate"), patrolUnit.group("x2Coordinate"), patrolUnit.group("y2Coordinate"));
                         System.out.println(output);
                     } else if (stopPatrolling.find()) {
-                        output = controller.stopPatrolling();
+                        output = controller.stopPatrolling(stopPatrolling.group("x1Coordinate"),stopPatrolling.group("y1Coordinate"),stopPatrolling.group("x2Coordinate"),stopPatrolling.group("y2Coordinate"));
                         System.out.println(output);
                     } else if (setMode.find()) {
                         output = controller.setMode(setMode.group("xCoordinate"), setMode.group("yCoordinate"), setMode.group("mode"), setMode.group("type"));
@@ -179,6 +179,10 @@ public class GameMenu {
                         System.out.println("invalid command!");
                     }
                 }
+                controller.endTurnMoves();
+                controller.endTurnFights();
+                controller.endOfTurnPatrolling();
+
             }
             if (controller.getNumberOfRemainingPlayers() == 1) {
                 System.out.println("player " + controller.getWinner().getUsername() + " won the game!");

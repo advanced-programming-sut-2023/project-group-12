@@ -19,8 +19,8 @@ public enum GameMenuCommands {
     REPAIR("^repair$"),// todo : make it have a bug
     SELECT_UNIT("(?=.*-x)(?=.*-y)(?=.*-type)^select unit(( -type (?<type>\\S*|(\"[^\"]*\")))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){3}$"),//todo : clear selected after a while
     MOVE_UNIT("(?=.*-x)(?=.*-y)^move unit to(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),// todo: why only once ?
-    PATROL_UNIT("(?=.*-x1)(?=.*-y1)(?=.*-x2)(?=.*-y2)^patrol unit(( -x1 (?<x1Coordinate>[-]?\\d*))|( -y1 (?<y1Coordinate>[-]?\\d*))|( -x2 (?<x2Coordinate>[-]?\\d*))|( -y2 (?<y2Coordinate>[-]?\\d*))){4}$"),//todo : in next turn
-    STOP_PATROLLING("^stop patrolling$"),
+    PATROL_UNIT("(?=.*-x1)(?=.*-y1)(?=.*-x2)(?=.*-y2)^patrol unit(( -x1 (?<x1Coordinate>[-]?\\d*))|( -y1 (?<y1Coordinate>[-]?\\d*))|( -x2 (?<x2Coordinate>[-]?\\d*))|( -y2 (?<y2Coordinate>[-]?\\d*))){4}$"),
+    STOP_PATROLLING("(?=.*-x1)(?=.*-y1)(?=.*-x2)(?=.*-y2)^stop patrolling(( -x1 (?<x1Coordinate>[-]?\\d*))|( -y1 (?<y1Coordinate>[-]?\\d*))|( -x2 (?<x2Coordinate>[-]?\\d*))|( -y2 (?<y2Coordinate>[-]?\\d*))){4}$"),
     SET_MODE("(?=.*-x)(?=.*-y)(?=.*-s)(?=.*-type)^set(( -type (?<type>\\S*|(\"[^\"]*\")))|( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))|( -s (?<mode>\\S*))){4}$"),// todo : in next turn
     GROUND_ATTACK("^attack -e (?<xCoordinate>[-]?\\d*) (?<yCoordinate>[-]?\\d*)$"),// todo: what happens to the units
     AIR_ATTACK("(?=.*-x)(?=.*-y)^attack(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),//todo : handle all of them
@@ -28,12 +28,6 @@ public enum GameMenuCommands {
     DIG_TUNNEL("(?=.*-x)(?=.*-y)^dig tunnel(( -x (?<xCoordinate>[-]?\\d*))|( -y (?<yCoordinate>[-]?\\d*))){2}$"),
     BUILD_EQUIPMENT("^build -q (?<equipmentName>\\S+|(\"[^\"]*\"))$"),
     DISBAND_UNIT("^disband unit$"),//todo : go back to your farm
-    //DROP_GATE(""),
-    //BUILD_WALL(""),
-    //PUT_STAIRS(""),
-    //DITCH("dig, cancel digging, remove ditch"),
-    //BURN OIL("")
-    //HANDLE PAGE 26 OF DOC
     GO_TO_TRADE_MENU("^go to trade menu$"),
     GO_TO_SHOP_MENU("^go to shop menu$"),
     GO_TO_MAP_MENU("^go to map menu$")

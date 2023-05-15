@@ -12,8 +12,6 @@ public enum TextureType {
     GRASS(true, false),
     MEADOW(true, false),
     DENSE_MEADOW(true, false),
-
-
     OIL(true, true),
     PLAIN(true, true),
     SHALLOW_WATER(true, true),

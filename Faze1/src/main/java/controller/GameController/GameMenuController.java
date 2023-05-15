@@ -1,14 +1,11 @@
 package controller.GameController;
 
+import model.*;
 import model.Building.Building;
 import model.Building.BuildingType;
 import model.Equipment.Equipment;
 import model.Equipment.EquipmentType;
-import model.Game;
-import model.Kingdom;
 import model.Property.WeaponType;
-import model.User;
-import model.UserDatabase;
 import model.map.Cell;
 import model.people.Unit;
 import model.people.UnitType;
@@ -24,13 +21,15 @@ public class GameMenuController {
     }
 
     private Game newGame;
-    public void buildKingdoms () {
+
+    public void buildKingdoms() {
         for (User user : UserDatabase.getUsers()) {
             Kingdom kingdom = new Kingdom(user);
             newGame.getKingdoms().add(kingdom);
         }
     }
-    public void setCurrentKingdom (User user) {
+
+    public void setCurrentKingdom(User user) {
         for (Kingdom kingdom : newGame.getKingdoms()) {
             if (kingdom.getOwner().equals(user)) {
                 newGame.setCurrentKingdom(kingdom);
@@ -38,6 +37,7 @@ public class GameMenuController {
             }
         }
     }
+
     public void setNewGame(Game newGame) {
         this.newGame = newGame;
     }
@@ -136,31 +136,6 @@ public class GameMenuController {
         return buildingController.createUnit(type, number);
     }
 
-    // todo : for Mahdi
-    public String chooseColor(String color) {
-        //todo: what do we do with this?
-        String playerColor;
-        try {
-            color = color.toLowerCase();
-        } catch (NullPointerException e) {
-            return "color can't be empty";
-        }
-        return "";
-    }
-
-    public String changeColor(String color) {
-        return "";
-    }
-
-    public String chooseKeep(String keepNumber) {
-        return "";
-    }
-
-    public String changeKeep(String keepNumber) {
-        return "";
-    }
-
-    //
     public String dropUnit(String X, String Y, String type, String count) {
         String output = checkNumber(X);
         if (!output.equals("")) {
@@ -193,8 +168,14 @@ public class GameMenuController {
         if (UnitType.getUnitTypeByName(type) == null) {
             return "unit name is not correct";
         }
+        if (!newGame.getCurrentMap().getMap()[x][y].getTextureType().isPassable()) {
+            return "units can't be here!";
+        }
+        if (newGame.getCurrentMap().getMap()[x][y].getBuilding() != null) {
+            return "units can't be on buildings";
+        }
         for (int i = 0; i < number; i++) {
-            Unit unit = new Unit(newGame.getCurrentKingdom(),UnitType.getUnitTypeByName(type),x,y);
+            Unit unit = new Unit(newGame.getCurrentKingdom(), UnitType.getUnitTypeByName(type), x, y);
             unit.setxPosition(x);
             unit.setyPosition(y);
             newGame.getCurrentMap().getMap()[x][y].addUnits(unit);
@@ -303,7 +284,29 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
             return "this unit can't move";
         }
-        return newGame.moveUnit(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getxPosition(), x, y, newGame.getSelectedUnits());// todo : some how give me the current coordinates
+        int xStart = newGame.getSelectedUnits().get(0).getxPosition();
+        int yStart = newGame.getSelectedUnits().get(0).getyPosition();
+        int xEnd = x;
+        int yEnd = y;
+        if (xStart == xEnd && yStart == yEnd) {
+            return "you are already here";
+        }
+        ArrayList<Cell> path = newGame.finalPath(xStart, yStart, xEnd, yEnd);
+        if (path == null) {
+            return "no path found for these units";
+        }
+        if (newGame.getMovingUnits().size() != 0) {
+            for (ArrayList<Unit> units : newGame.getMovingUnits()) {
+                if (units.get(0).getxPosition() == newGame.getSelectedUnits().get(0).getxPosition()
+                        && units.get(0).getyPosition() == newGame.getSelectedUnits().get(0).getyPosition()) {
+                    newGame.getMovingUnits().remove(units);
+                    break;
+                }
+            }
+        }
+        setDestination(xEnd, yEnd);
+        newGame.getMovingUnits().add(newGame.getSelectedUnits());
+        return "units set to move";
     }
 
     public String patrolUnit(String x1Coordinate, String y1Coordinate, String x2Coordinate, String y2Coordinate) {
@@ -345,10 +348,28 @@ public class GameMenuController {
         if (!newGame.getCurrentMap().getMap()[x2][y2].isPassable()) {
             return "the start point is not a valid destination, troops can't be there";
         }
-        newGame.getPatrollingUnits().clear();
-        newGame.getPatrollingUnits().addAll(newGame.getSelectedUnits());
-        newGame.patrolUnit(x1, y1, x2, y2);
-        return "patrolling started successfully";
+        int xStart = newGame.getSelectedUnits().get(0).getxPosition();
+        int yStart = newGame.getSelectedUnits().get(0).getyPosition();
+        ArrayList<Cell> path1 = newGame.finalPath(xStart, yStart, x1, y1);
+        ArrayList<Cell> path2 = newGame.finalPath(xStart, yStart, x2, y2);
+        if (path1 == null && path2 == null) {
+            return "no path found to the patrolling points";
+        }
+        if (path1.size()-1 > newGame.getSelectedUnits().get(0).getSpeed() && path2.size()-1 > newGame.getSelectedUnits().get(0).getSpeed()) {
+            return "the points are too far to patrol";
+        }
+        ArrayList<Cell> path = newGame.finalPath(x1, y1, x2, y2);
+        if (path == null) {
+            return "there's no path between patrolling points";
+        }
+        PatrollingUnits patrollingUnits = new PatrollingUnits(x1, y1, x2, y2, newGame.getSelectedUnits(),newGame);
+        for (PatrollingUnits units : newGame.getPatrollingUnits()) {
+            if (units.getxStart() == patrollingUnits.getxStart() && units.getyStart() == patrollingUnits.getyStart() && units.getxEnd() == patrollingUnits.getxEnd() && units.getyEnd() == patrollingUnits.getyEnd()) {
+                newGame.getPatrollingUnits().remove(units);
+            }
+        }
+        newGame.getPatrollingUnits().add(patrollingUnits);
+        return "units sent to patrol successfully";
     }
 
     public String setMode(String xCoordinate, String yCoordinate, String mode, String type) {
@@ -433,8 +454,8 @@ public class GameMenuController {
         newGame.getCurrentKingdom().addToSiegeBuildings(siegeTent);
         siegeTent.setEquipmentType(equipmentType);
         siegeTent.setDelay(equipmentType.getDelay());
-        newGame.getCurrentMap().getMap()[ newGame.getSelectedUnits().get(0).getxPosition()][newGame.getSelectedUnits().get(0).getyPosition()].setBuilding(siegeTent);
-        newGame.getCurrentMap().getMap()[ newGame.getSelectedUnits().get(0).getxPosition()][newGame.getSelectedUnits().get(0).getyPosition()].setHeight(siegeTent.getHeight());
+        newGame.getCurrentMap().getMap()[newGame.getSelectedUnits().get(0).getxPosition()][newGame.getSelectedUnits().get(0).getyPosition()].setBuilding(siegeTent);
+        newGame.getCurrentMap().getMap()[newGame.getSelectedUnits().get(0).getxPosition()][newGame.getSelectedUnits().get(0).getyPosition()].setHeight(siegeTent.getHeight());
         return "equipment " + equipmentName + "build successfully!";
     }
 
@@ -473,16 +494,26 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        if (!(newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.BOW) || !(newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.CROSS_BOW)) {
+        if (newGame.getSelectedUnits().get(0).getUnitType().getRange() == 0) {
             return "please enter a different command for non bowmen troops";
         }
         if (!newGame.isEnemyExistsInCell(x, y)) {
             return "there's no enemy here";
         }
-        newGame.getAttackingUnits().clear();
-        newGame.getAttackingUnits().addAll(newGame.getSelectedUnits());
-        newGame.airAttack(x, y);
-        return "fight is done successfully";
+        if (Math.pow(x - newGame.getSelectedUnits().get(0).getxPosition(), 2) + Math.pow(y - newGame.getSelectedUnits().get(0).getyPosition(), 2) > newGame.getSelectedUnits().get(0).getUnitType().getRange()) {
+            return "your target is out of range";
+        }
+        if (newGame.getAttackingUnits().size() != 0) {
+            for (ArrayList<Unit> units : newGame.getAttackingUnits()) {
+                if (units.get(0).getxPosition() == newGame.getSelectedUnits().get(0).getxPosition() && units.get(0).getyPosition() == newGame.getSelectedUnits().get(0).getyPosition()) {
+                    newGame.getAttackingUnits().remove(units);
+                    break;
+                }
+            }
+        }
+        setDestination(x, y);
+        newGame.getAttackingUnits().add(newGame.getSelectedUnits());
+        return "fight is being done successfully";
     }
 
     public String groundAttack(String xCoordinate, String yCoordinate) {
@@ -502,15 +533,31 @@ public class GameMenuController {
         if (!isUnitSelected().equals("true")) {
             return isUnitSelected();
         }
-        if (newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.BOW || newGame.getSelectedUnits().get(0).getUnitType().getWeapon() == WeaponType.CROSS_BOW) {
+        if (newGame.getSelectedUnits().get(0).getUnitType().getRange() > 0) {
             return "please enter a different command for bowmen";
         }
         if (!newGame.isEnemyExistsInCell(x, y)) {
             return "there's no enemy here";
         }
-        newGame.getAttackingUnits().clear();
-        newGame.getAttackingUnits().addAll(newGame.getSelectedUnits());
-        return newGame.groundAttack(x, y);
+        ArrayList<Cell> path = newGame.finalPath(newGame.getSelectedUnits().get(0).getxPosition(), newGame.getSelectedUnits().get(0).getyPosition(), x, y);
+        if (path == null) {
+            if (x != newGame.getSelectedUnits().get(0).getxPosition() || y != newGame.getSelectedUnits().get(0).getyPosition())
+                return "enemy can't be reached";
+        }
+        if (path.size() - 1 > newGame.getSelectedUnits().get(0).getSpeed()) {
+            return "enemy out of range, please move your units closer";
+        }
+        if (newGame.getAttackingUnits().size() != 0) {
+            for (ArrayList<Unit> units : newGame.getAttackingUnits()) {
+                if (units.get(0).getxPosition() == newGame.getSelectedUnits().get(0).getxPosition() && units.get(0).getyPosition() == newGame.getSelectedUnits().get(0).getyPosition()) {
+                    newGame.getAttackingUnits().remove(units);
+                    break;
+                }
+            }
+        }
+        setDestination(x, y);
+        newGame.getAttackingUnits().add(newGame.getSelectedUnits());
+        return "attack is being done successfully";
     }
 
     public static String checkNumber(String X) {
@@ -532,24 +579,52 @@ public class GameMenuController {
         return "true";
     }
 
-    public String stopPatrolling() {
+    public String stopPatrolling(String X1, String Y1, String X2, String Y2) {
+        String output = checkNumber(X1);
+        if (!output.equals("")) {
+            return output;
+        }
+        output = checkNumber(Y1);
+        if (!output.equals("")) {
+            return output;
+        }
+        int x1 = Integer.parseInt(X1);
+        int y1 = Integer.parseInt(Y1);
+        output = checkNumber(X2);
+        if (!output.equals("")) {
+            return output;
+        }
+        output = checkNumber(Y2);
+        if (!output.equals("")) {
+            return output;
+        }
+        int x2 = Integer.parseInt(X2);
+        int y2 = Integer.parseInt(Y2);
+        if (x1 < 0 || y1 < 0 || x1 >= newGame.getCurrentMap().getDimension() || y1 >= newGame.getCurrentMap().getDimension()
+        || x2 < 0 || y2 < 0 || x2 >= newGame.getCurrentMap().getDimension() || y2 >= newGame.getCurrentMap().getDimension()) {
+            return "your coordinates are not correct";
+        }
         if (newGame.getPatrollingUnits() == null || newGame.getPatrollingUnits().size() == 0) {
             return "there's no unit patrolling";
         }
-        newGame.getPatrollingUnits().clear();
-        return "patrolling stopped";
+        for (PatrollingUnits units: newGame.getPatrollingUnits()) {
+            if (units.getxStart() == x1 && units.getyStart() == y1 && units.getxEnd() == x2 && units.getyEnd() == y2) {
+                newGame.getPatrollingUnits().remove(units);
+                return "patrolling stopped";
+            }
+        }
+        return "No units patrolling with the given coordinates";
     }
 
     public int getNumberOfRemainingPlayers() {//todo : this is needed to end the game if there's only one player left
         return UserDatabase.getPlayers().size();
     }
-
     public User getWinner() {//todo : this returns the winner of the game
         return null;
     }
 
-    public void checkEquipment(Kingdom kingdom){
-        for (int i = kingdom.getSiegeBuildings().size() - 1; i >= 0 ; i++) {
+    public void checkEquipment(Kingdom kingdom) {
+        for (int i = kingdom.getSiegeBuildings().size() - 1; i >= 0; i++) {
             Building tent = kingdom.getSiegeBuildings().get(i);
             if (tent.getDelay() == 0) {
                 EquipmentType equipmentType = tent.getEquipmentType();
@@ -563,16 +638,45 @@ public class GameMenuController {
                         totalNumberOfEngineers--;
                     }
                 }
-                Equipment equipment = new Equipment(equipmentType, tent.getxPosition(),tent.getyPosition(),kingdom);
+                Equipment equipment = new Equipment(equipmentType, tent.getxPosition(), tent.getyPosition(), kingdom);
                 kingdom.removeFromSiegeBuildings(tent);
                 cell.addUnits(equipment);
             } else tent.subtractDelay(1);
         }
     }
-    public String showBuildings () {
+
+    public String showBuildings() {
         return newGame.showBuildings();
     }
-    public String showPeople () {
+
+    public String showPeople() {
         return newGame.showPeople();
+    }
+
+    public void endTurnMoves() {
+        for (ArrayList<Unit> units : newGame.getMovingUnits()) {
+            newGame.moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), units.get(0).getDestinationX(),units.get(0).getDestinationY(), units);
+        }
+    }
+    private void setDestination (int xEnd, int yEnd) {
+        for (Unit unit : newGame.getSelectedUnits()) {
+            unit.setDestinationX(xEnd);
+            unit.setDestinationY(yEnd);
+        }
+    }
+    public void endTurnFights () {
+        for (ArrayList<Unit> units:newGame.getAttackingUnits()) {
+            if (units.get(0).getUnitType().getRange() == 0) {
+                newGame.groundAttack(units.get(0).getDestinationX(), units.get(0).getDestinationY(),units);
+            }
+            else {
+                newGame.airAttack(units.get(0).getDestinationX(), units.get(0).getDestinationY(),units);
+            }
+        }
+    }
+    public void endOfTurnPatrolling () {
+        for (PatrollingUnits units: newGame.getPatrollingUnits()) {
+            newGame.patrolUnit(units);
+        }
     }
 }

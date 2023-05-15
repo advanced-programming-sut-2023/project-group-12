@@ -3,19 +3,39 @@ package model.people;
 import model.Kingdom;
 import model.map.Cell;
 
+import javax.swing.*;
+
 public class Unit {
     protected Kingdom homeland;
-    private boolean isOily;
+    protected boolean isOily;
     protected int xPosition;
 
     protected int yPosition;
+    protected int destinationX;
+    protected int destinationY;
 
-    private UnitType unitType ;
+    public int getDestinationX() {
+        return destinationX;
+    }
+
+    public void setDestinationX(int destinationX) {
+        this.destinationX = destinationX;
+    }
+
+    public int getDestinationY() {
+        return destinationY;
+    }
+
+    public void setDestinationY(int destinationY) {
+        this.destinationY = destinationY;
+    }
+
+    protected UnitType unitType ;
     protected int hitPoint;
-    private String mode;
-    private int speed;
-    private boolean beingHit = false;
-    private boolean hittingSomeOne = false;
+    protected String mode = "standing";
+    protected int speed;
+    protected boolean beingHit = false;
+    protected boolean hittingSomeOne = false;
 
     public boolean isBeingHit() {
         return beingHit;
@@ -35,7 +55,7 @@ public class Unit {
     public void decreaseHitPoint(int damage) {
         this.hitPoint = hitPoint - damage;
     }
-    private boolean isBusy;
+    protected boolean isBusy;
     public int getSpeed() {
         return speed;
     }
@@ -103,6 +123,6 @@ public class Unit {
         isBusy = busy;
     }
     public String toString(){
-        return this.getUnitType().getName();
+        return this.getUnitType().getName()+" "+this.getHitPoint()+" "+this.getxPosition()+" "+this.getyPosition()+" "+this.getMode();
     }
 }
