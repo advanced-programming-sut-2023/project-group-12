@@ -301,7 +301,7 @@ public class GameMenuController {
         if (!newGame.getCurrentMap().getMap()[x][y].isPassable()) {
             return "the destination is not a valid destination, troops can't be there";
         }
-        if (newGame.getSelectedUnits() == null || newGame.getSelectedUnits().size() == 0) {
+        if (newGame.getSelectedUnits().get(0) == null || newGame.getSelectedUnits().size() == 0) {
             return "there's no unit selected";
         }
         if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
