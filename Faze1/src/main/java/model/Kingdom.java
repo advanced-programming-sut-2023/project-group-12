@@ -60,7 +60,7 @@ public class Kingdom {
     private int fearRate = 0;
     private int taxRate = 0;
     private int foodRate = 0;
-    private int popularity;
+    private int popularity = 100;
 
     public int getPopularity() {
         return popularity;

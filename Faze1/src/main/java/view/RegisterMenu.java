@@ -9,7 +9,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class RegisterMenu {
-    //todo : if the username already exists you can't handle the registration
     public void run(Scanner scanner) {
         System.out.println("Welcome to register menu!");
         String input;
@@ -18,9 +17,8 @@ public class RegisterMenu {
         while (true) {
             input = scanner.nextLine();
             userCreate = RegisterMenuCommands.getMatcher(input, RegisterMenuCommands.USER_CREATE);
-            // todo: add show current menu
+
             if (userCreate.find()) {
-                // todo : handle empty fields' spaces
                 if (UserCreate(scanner, userCreate, controller)) return;
             } else if (input.equalsIgnoreCase("back")) {
                 return;
@@ -46,7 +44,7 @@ public class RegisterMenu {
                 slogan = RegisterMenuController.generateRandomSlogan();
             }
         }
-        if (userCreate.group("password") != null) {
+        if (!userCreate.group("password").equalsIgnoreCase("random")) {
             password = userCreate.group("password");
             passwordRepeat = userCreate.group("passwordRepeat");
         } else {
@@ -94,14 +92,14 @@ public class RegisterMenu {
     private static boolean register(Scanner scanner, Matcher userCreate, RegisterMenuController controller, String password, String slogan) {
         Matcher questionPick;
         String input;
-        if (userCreate.group("random") != null) {
+        if (userCreate.group("password").equalsIgnoreCase("random")) {
             System.out.println("This is your password: " + password);
             System.out.println("Please confirm it: ");
             while (true) {
                 input = scanner.nextLine();
-                if (!input.equals(password)) {
+                if (!password.equals(input)) {
                     System.out.println("The confirmation doesn't match the password, please try again");
-                } else if (input.equals(password)) {
+                } else {
                     System.out.println("Password confirmed successfully");
                     break;
                 }

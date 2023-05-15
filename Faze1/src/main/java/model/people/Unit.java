@@ -83,7 +83,6 @@ public class Unit {
     public UnitType getUnitType() {
         return unitType;
     }
-
     public int getHitPoint() {
         return hitPoint;
     }

@@ -1,4 +1,4 @@
-package controller.GameController.mapmenu;
+package controller.mapmenu;
 
 import java.util.Random;
 import model.UserDatabase;
