@@ -25,6 +25,9 @@ public class GameMenu {
         while (controller.getNumberOfRemainingPlayers() > 1) {
             for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
                 controller.setCurrentKingdom(UserDatabase.getPlayers().get(i));
+                if (controller.isDefeated(controller.getCurrentKingdom())) {
+                    continue;
+                }
                 while (true) {
                     input = scanner.nextLine();
                     dropBuilding = GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING);
@@ -177,6 +180,10 @@ public class GameMenu {
                 controller.resetSelectedUnits();
             }
             if (controller.getNumberOfRemainingPlayers() == 1) {
+                if (controller.getWinner() == null) {
+                    System.out.println("no body won the game!");
+                    return;
+                }
                 System.out.println("player " + controller.getWinner().getUsername() + " won the game!");
                 System.out.println("game over!");
                 return;

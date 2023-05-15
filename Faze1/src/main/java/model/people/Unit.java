@@ -65,15 +65,14 @@ public class Unit {
         this.unitType = unitType;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
-        hitPoint = unitType.getHitPoint();
-        isBusy = false;
         this.hitPoint = unitType.getHitPoint();
         this.speed = unitType.getMoveSpeed() * 10;
+        isBusy = false;
         isOily = false;
     }
 
-    public Unit(Kingdom homeland, int xPosition, int yPosition) {
-        this.homeland = homeland;
+    public Unit(Kingdom kingdom, int xPosition, int yPosition) {
+        this.homeland = kingdom;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         isBusy = false;

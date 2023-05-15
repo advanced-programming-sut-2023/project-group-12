@@ -8,6 +8,7 @@ import model.Equipment.Equipment;
 import model.Property.*;
 import model.map.Cell;
 import model.people.Unit;
+import model.people.UnitType;
 import model.people.soldier.Soldier;
 
 import java.util.ArrayList;
@@ -57,6 +58,11 @@ public class Kingdom {
     private int foodRate = 0;
     private int popularity = 100;
     private int religiousPeople = 0;
+    private Unit king;
+
+    public Unit getKing() {
+        return king;
+    }
 
     public int getReligiousPeople() {
         return religiousPeople;
@@ -80,6 +86,7 @@ public class Kingdom {
         population = 15;
         unEmployed = 15;
         this.HeadSquare = headSquare;
+        this.king = new Unit(this, UnitType.KING,this.getHeadSquare().getxCoordinate(),this.getHeadSquare().getyCoordinate());
     }
 
     public void setPopularity(int popularity) {
