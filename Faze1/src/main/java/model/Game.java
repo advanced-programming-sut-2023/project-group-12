@@ -2,7 +2,7 @@ package model;
 
 import controller.GameController.GameMenuController;
 import model.Building.*;
-import model.Property.WeaponType;
+
 import model.map.Cell;
 import model.people.Unit;
 import model.map.Map;
