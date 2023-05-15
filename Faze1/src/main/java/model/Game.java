@@ -1,5 +1,6 @@
 package model;
 
+import controller.GameController.GameMenuController;
 import model.Building.*;
 import model.Property.WeaponType;
 import model.map.Cell;
@@ -125,7 +126,6 @@ public class Game {
         }
     }
 
-    //todo : this at the beginning of each turn
     public String patrolUnit(PatrollingUnits patrollingUnit) {
         int xStart = patrollingUnit.getxStart();
         int yStart = patrollingUnit.getyStart();
@@ -277,7 +277,6 @@ public class Game {
         return players;
     }
 
-    // todo : handle bowmen
     public String groundAttack(int x, int y, ArrayList<Unit>units) {
         ArrayList<Cell> path = finalPath(units.get(0).getxPosition(), units.get(0).getyPosition(), x, y);
         if (path == null) {
@@ -305,7 +304,6 @@ public class Game {
                 if (unit1.getHomeland() != unit.getHomeland()) {
                     oneIsDead:
                     while (true) {
-                        System.out.println(unit.getHitPoint() + " " + unit1.getHitPoint());
                         if (unit.getHitPoint() > 0) {
                             if (unit1.getHitPoint() > 0) {
                                 if (!unit1.isBeingHit()) {
@@ -353,11 +351,38 @@ public class Game {
     }
 
     private void unitOnUnitFight(Unit attacker, Unit mast) {
-        mast.decreaseHitPoint(attacker.getUnitType().getAttackPower());
+        if (!GameMenuController.isBowMan(attacker)) {
+            if (mast.getxPosition() == attacker.getxPosition() && mast.getyPosition() == attacker.getyPosition()) {
+                mast.decreaseHitPoint(attacker.getUnitType().getAttackPower());
+            }
+        }
+        else {
+            int range = attacker.getUnitType().getRange();
+            int range2 = attacker.getUnitType().getSecondRange();
+            Cell cell = this.getCurrentMap().getMap()[attacker.getxPosition()][attacker.getyPosition()];
+            if (cell.getBuilding()!= null && cell.getBuilding() instanceof Tower) {
+                Tower tower = (Tower) cell.getBuilding();
+                range += tower.getFireRange();
+                range2 += tower.getDefendRange();
+            }
+            if (Math.pow(mast.getxPosition() - attacker.getxPosition(), 2) + Math.pow(mast.getyPosition() - attacker.getyPosition(), 2) <= range &&
+            Math.pow(mast.getxPosition() - attacker.getxPosition(), 2) + Math.pow(mast.getyPosition() - attacker.getyPosition(), 2) >= range2) {
+                mast.decreaseHitPoint(attacker.getUnitType().getAttackPower());
+            }
+        }
     }
 
-    public void airAttack(int x, int y,ArrayList<Unit>units) {// is it okay todo: ask mohammad
-        if (Math.pow(x - units.get(0).getxPosition(), 2) + Math.pow(y - units.get(0).getyPosition(), 2) <= units.get(0).getUnitType().getRange()) {
+    public void airAttack(int x, int y,ArrayList<Unit>units) {
+        int range = units.get(0).getUnitType().getRange();
+        int range2 = units.get(0).getUnitType().getSecondRange();
+        Cell cell = this.getCurrentMap().getMap()[units.get(0).getxPosition()][units.get(0).getyPosition()];
+        if (cell.getBuilding()!= null && cell.getBuilding() instanceof Tower) {
+            Tower tower = (Tower) cell.getBuilding();
+            range += tower.getFireRange();
+            range2 += tower.getDefendRange();
+        }
+        if (Math.pow(x - units.get(0).getxPosition(), 2) + Math.pow(y - units.get(0).getyPosition(), 2) <= range
+        && Math.pow(x - units.get(0).getxPosition(), 2) + Math.pow(y - units.get(0).getyPosition(), 2) >= range2) {
             fight(x, y,units);
         }
     }
@@ -365,7 +390,6 @@ public class Game {
     public void setCurrentKingdom(Kingdom currentKingdom) {
         this.currentKingdom = currentKingdom;
     }
-
     private ArrayList<Kingdom> kingdoms = new ArrayList<>();
 
     public String showBuildings() {

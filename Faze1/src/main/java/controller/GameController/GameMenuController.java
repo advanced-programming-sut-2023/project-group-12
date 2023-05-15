@@ -494,13 +494,14 @@ public class GameMenuController {
         if (x < 0 || y < 0 || x >= newGame.getCurrentMap().getDimension() || y >= newGame.getCurrentMap().getDimension()) {
             return "your coordinates are not correct";
         }
-        if (newGame.getSelectedUnits().get(0).getUnitType().getRange() == 0) {
+        if (!isBowMan(newGame.getSelectedUnits().get(0))) {
             return "please enter a different command for non bowmen troops";
         }
         if (!newGame.isEnemyExistsInCell(x, y)) {
             return "there's no enemy here";
         }
-        if (Math.pow(x - newGame.getSelectedUnits().get(0).getxPosition(), 2) + Math.pow(y - newGame.getSelectedUnits().get(0).getyPosition(), 2) > newGame.getSelectedUnits().get(0).getUnitType().getRange()) {
+        if (Math.pow(x - newGame.getSelectedUnits().get(0).getxPosition(), 2) + Math.pow(y - newGame.getSelectedUnits().get(0).getyPosition(), 2) > newGame.getSelectedUnits().get(0).getUnitType().getRange()
+        || Math.pow(x - newGame.getSelectedUnits().get(0).getxPosition(), 2) + Math.pow(y - newGame.getSelectedUnits().get(0).getyPosition(), 2) < newGame.getSelectedUnits().get(0).getUnitType().getSecondRange()) {
             return "your target is out of range";
         }
         if (newGame.getAttackingUnits().size() != 0) {
@@ -515,7 +516,12 @@ public class GameMenuController {
         newGame.getAttackingUnits().add(newGame.getSelectedUnits());
         return "fight is being done successfully";
     }
-
+    public static boolean isBowMan (Unit unit) {
+        if (unit.getUnitType().getSecondRange() != 0) {
+            return true;
+        }
+        return false;
+    }
     public String groundAttack(String xCoordinate, String yCoordinate) {
         String output = checkNumber(xCoordinate);
         if (!output.equals("")) {
@@ -533,7 +539,7 @@ public class GameMenuController {
         if (!isUnitSelected().equals("true")) {
             return isUnitSelected();
         }
-        if (newGame.getSelectedUnits().get(0).getUnitType().getRange() > 0) {
+        if (isBowMan(newGame.getSelectedUnits().get(0))) {
             return "please enter a different command for bowmen";
         }
         if (!newGame.isEnemyExistsInCell(x, y)) {
@@ -654,6 +660,7 @@ public class GameMenuController {
     }
 
     public void endTurnMoves() {
+        if (newGame.getMovingUnits() == null) return;
         for (ArrayList<Unit> units : newGame.getMovingUnits()) {
             newGame.moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), units.get(0).getDestinationX(),units.get(0).getDestinationY(), units);
         }
@@ -665,6 +672,7 @@ public class GameMenuController {
         }
     }
     public void endTurnFights () {
+        if (newGame.getAttackingUnits() == null) return;
         for (ArrayList<Unit> units:newGame.getAttackingUnits()) {
             if (units.get(0).getUnitType().getRange() == 0) {
                 newGame.groundAttack(units.get(0).getDestinationX(), units.get(0).getDestinationY(),units);
@@ -675,6 +683,7 @@ public class GameMenuController {
         }
     }
     public void endOfTurnPatrolling () {
+        if (newGame.getPatrollingUnits() == null) return;
         for (PatrollingUnits units: newGame.getPatrollingUnits()) {
             newGame.patrolUnit(units);
         }

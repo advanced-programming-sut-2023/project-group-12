@@ -27,8 +27,6 @@ public class GameMenu {
         while (controller.getNumberOfRemainingPlayers() > 1) {
             for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
                 controller.setCurrentKingdom(UserDatabase.getPlayers().get(i));
-                System.out.println(game.getCurrentKingdom().getOwner().getUsername());
-                BuildingController buildingController = new BuildingController(game);
                 while (true) {
                     input = scanner.nextLine();
                     dropBuilding = GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING);
