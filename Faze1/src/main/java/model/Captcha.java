@@ -119,10 +119,11 @@ public class Captcha {
         digits[9] = nine;
     }
 
-    private int minimum = 4;
-    private int maximum = 8;
-    private int captchaSize = (int) (Math.random() * (maximum - minimum + 1)) + minimum;
+    private final int minimum = 4;
+    private final int maximum = 8;
+    private final int captchaSize = (int) (Math.random() * (maximum - minimum + 1)) + minimum;
     String charactersToCreateNoise = "!@#$%^&*()_-+='\":;.>,<?/|`~";
+
     private String[] createNoise(int number) {
         int size = digits[number].length;
         String[] digitPlusNoise = new String[size];
@@ -133,7 +134,7 @@ public class Captcha {
             int length = stringBuilder.length();
             for (int j = 0; j < length; j++) {
                 if (random.nextDouble() < 0.08) {
-                    stringBuilder.setCharAt(j, (char) (charactersToCreateNoise.charAt(random.nextInt(charactersToCreateNoise.length()))));
+                    stringBuilder.setCharAt(j, charactersToCreateNoise.charAt(random.nextInt(charactersToCreateNoise.length())));
                 }
             }
             digitPlusNoise[i] = stringBuilder.toString();
@@ -141,8 +142,9 @@ public class Captcha {
         return digitPlusNoise;
     }
 
-    private String[][] createdCaptcha = new String[captchaSize][];
-    private int[] numbers = new int[captchaSize];
+    private final String[][] createdCaptcha = new String[captchaSize][];
+    private final int[] numbers = new int[captchaSize];
+
     public Captcha() {
         Random random = new Random();
         for (int i = 0; i < captchaSize; i++) {

@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-
 public class User {
-    //private ArrayList<Map> maps;
     private String username;
     private String password;
     private String nickname;
@@ -11,7 +8,7 @@ public class User {
     private String question;
 
     public void setQuestion(int number) {
-        this.question = UserDatabase.getQuestions().get(number);
+        this.question = UserDatabase.getQuestions().get(number - 1);
     }
 
     public String getQuestion() {
@@ -20,32 +17,33 @@ public class User {
 
     private String answer;
     private String slogan;
-    //a boolean for staying logged in
+
+    public void setStayLoggedIn(boolean stayLoggedIn) {
+        this.stayLoggedIn = stayLoggedIn;
+    }
+
+    public boolean isStayLoggedIn() {
+        return stayLoggedIn;
+    }
+
+    private boolean stayLoggedIn;
     private int highScore;
     private int currentScore;
     private int rank;
-    // the part where we show the user's information
-    //private Kingdom kingdom;
 
     public void setHighScore(int highScore) {
         this.highScore = highScore;
     }
 
     public void setCurrentScore(int currentScore) {
+        if (currentScore > highScore)
+            setHighScore(currentScore);
         this.currentScore = currentScore;
     }
-
-//    public Kingdom getKingdom() {
-//        return kingdom;
-//    }
 
     public void setRank(int rank) {
         this.rank = rank;
     }
-
-//    public void setKingdom(Kingdom kingdom) {
-//        this.kingdom = kingdom;
-//    }
 
     public User(String username, String password, String nickname, String email, String slogan) {
         this.username = username;
@@ -54,10 +52,6 @@ public class User {
         this.email = email;
         this.slogan = slogan;
     }
-
-//    public ArrayList<Map> getMaps() {
-//        return maps;
-//    }
 
     public String getUsername() {
         return username;
@@ -94,7 +88,7 @@ public class User {
     public String getSlogan() {
         return slogan;
     }
-    // the part in profile menu where we change information
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -114,20 +108,18 @@ public class User {
     public void setSlogan(String slogan) {
         this.slogan = slogan;
     }
-    // these methods maybe placed somewhere else
-    /**
-     this method generates a new password
-     */
-
-    private String generateRandomSlogan () {
-        // choose a slogan from slogan enum
-        return "";
-    }
 
     public void setAnswer(String answer) {
         this.answer = answer;
     }
-    // TODO: create a file for user info and encode it
 
+    private byte[] salt;
 
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
 }

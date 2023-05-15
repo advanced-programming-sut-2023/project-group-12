@@ -3,18 +3,22 @@ package view;
 import java.util.Scanner;
 
 public class PauseMenu {
-    public void run (Scanner scanner) {
+    public String run(Scanner scanner) {
+        System.out.println("Welcome to pause menu!");
         String input;
         while (true) {
             input = scanner.nextLine();
-            if (input.equals("exit")) {
-                // TODO: handle going right back to main menu
-            }
-            else if (input.equals("resume")) {
-                // TODO: handle going back to the game
-            }
-            // TODO: maybe handle saving the game!
-            else {
+            if (input.equalsIgnoreCase("exit")) {
+                System.out.println("Are you sure you want to exit? (yes/anything else)");
+                input = scanner.nextLine();
+                if (input.equalsIgnoreCase("yes")) {
+                    return "exit";
+                } else {
+                    System.out.println("exit canceled");
+                }
+            } else if (input.equalsIgnoreCase("resume")) {
+                return "resume";
+            } else {
                 System.out.println("Invalid command!");
             }
         }

@@ -23,7 +23,7 @@ public enum Type {
     BEACH(true),
     SEA(false);
 
-    private boolean passable;
+    private final boolean passable;
 
     Type(boolean passable) {
         this.passable = passable;

@@ -5,5 +5,5 @@ public enum Tree {
     CHERRY,
     OLIVE,
     COCONUT,
-    DATE;
+    DATE
 }

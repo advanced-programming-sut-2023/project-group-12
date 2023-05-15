@@ -4,42 +4,44 @@ import Commands.ProfileMenuCommands;
 import controller.ProfileController;
 import model.UserDatabase;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class ProfileMenu {
-
     private ProfileController controller;
 
-
-    public void run(Scanner scanner) {
+    public void run(Scanner scanner) throws NoSuchAlgorithmException {
+        System.out.println("Welcome to profile menu!");
         controller = new ProfileController(UserDatabase.getCurrentUser());
-        String input = scanner.nextLine();
+        String input;
         Matcher matcher;
         while (true) {
-            if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_EMAIL)) != null)
+            input = scanner.nextLine();
+            if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_EMAIL)).find())
                 changeEmail(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_USERNAME)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_USERNAME)).find())
                 changeUsername(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_NICKNAME)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_NICKNAME)).find())
                 changeNickname(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_SLOGAN)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_SLOGAN)).find())
                 changeSlogan(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_PASSWORD)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_PASSWORD)).find())
                 changePassword(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_REMOVE_SLOGAN)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_REMOVE_SLOGAN)).find())
                 removeSlogan();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_HIGH_SCORE)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_HIGH_SCORE)).find())
                 displayHighScore();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_RANK)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_RANK)).find())
                 displayRank();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_SLOGAN)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_SLOGAN)).find())
                 displaySlogan();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY)) != null)
+            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY)).find())
                 displayAll();
+            else if (input.equalsIgnoreCase("back"))
+                return;
             else
                 System.out.println("Please try again!");
-
         }
     }
 
@@ -52,7 +54,7 @@ public class ProfileMenu {
         System.out.println(controller.changeNickname(matcher.group("nickname")));
     }
 
-    private void changePassword(Matcher matcher) {
+    private void changePassword(Matcher matcher) throws NoSuchAlgorithmException {
         System.out.println(controller.changePassword(matcher.group("oldPassword"), matcher.group("newPassword")));
     }
 

@@ -4,20 +4,24 @@ import model.Captcha;
 import model.User;
 import model.UserDatabase;
 
-import java.util.regex.Matcher;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginMenuController {
-    public String login (String username, String password,boolean stayLoggedIn) {
-        if (UserDatabase.getUserByUsername(username) == null){
+    public String login(String username, String password) {
+        if (UserDatabase.getUserByUsername(username) == null) {
             return "Username and password didn't match!";
         }
-        if (!(UserDatabase.getUserByUsername(username).getPassword().equals(password))) {
-            return "Username and password didn't match!";
+        try {
+            if (!UserDatabase.verifyPassword(password, UserDatabase.getUserByUsername(username).getPassword(), UserDatabase.getUserByUsername(username).getSalt())) {
+                return "Username and password didn't match!";
+            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
-
         return "now you must answer the captcha";
     }
-    public String isCaptchaCorrect (Captcha captcha, String input) {
+
+    public String isCaptchaCorrect(Captcha captcha, String input) {
         if (input.equals("new captcha")) {
             return "new captcha is being generated";
         }
@@ -31,34 +35,49 @@ public class LoginMenuController {
         }
         return "user logged in successfully!";
     }
-    public String checkUsername (String username) {
+
+    public String checkUsername(String username) {
         // empty fields!
         if (!RegisterMenuController.isCorrectUsername(username)) {
             return "The username format is incorrect.";
-        }
-        else if (UserDatabase.getUserByUsername(username) == null) {
+        } else if (UserDatabase.getUserByUsername(username) == null) {
             return "User with this username doesn't exist.";
         }
         User user = UserDatabase.getUserByUsername(username);
-       return "Please answer your security question:\n"+user.getQuestion();
+        return "Please answer your security question:\n" + user.getQuestion();
     }
-    public String checkAnswer (String username, String answer) {
+
+    public String checkAnswer(String username, String answer) {
         if (UserDatabase.getUserByUsername(username).getAnswer().equals(answer)) {
             return "Correct. Please set your new password.";
         }
         return "Incorrect answer. please try again";
     }
-    public String setNewPassword (String username, String password, String passwordRepeat) {
+
+    public String setNewPassword(String username, String password, String passwordRepeat) {
         if (password.equals("random")) {
             String newPass = RegisterMenuController.generateRandomPassword();
-            UserDatabase.getUserByUsername(username).setPassword(newPass);
+            String hashedPass;
+            byte[] salt = UserDatabase.getUserByUsername(username).getSalt();
+            try {
+                hashedPass = UserDatabase.hashPassword(newPass, salt);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            UserDatabase.getUserByUsername(username).setPassword(hashedPass);
             return "password changed successfully. Here is your new password:\n" + newPass;
         }
-        if (RegisterMenuController.isPasswordWeak(password)) {
-            return "Password is weak. Try again.";
+        if (!RegisterMenuController.isPasswordWeak(password).equals("true")) {
+            return RegisterMenuController.isPasswordWeak(password);
         }
         if (!password.equals(passwordRepeat)) {
             return "password and password confirm don't match.";
+        }
+        byte[] salt = UserDatabase.getUserByUsername(username).getSalt();
+        try {
+            password = UserDatabase.hashPassword(password, salt);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
         UserDatabase.getUserByUsername(username).setPassword(password);
         return "password changed successfully.";
