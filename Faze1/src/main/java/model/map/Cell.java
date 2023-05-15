@@ -68,10 +68,6 @@ public class Cell {
     public void addUnits(Unit unit) {
         units.add(unit);
     }
-
-    public void moveUnit(Unit unit) {
-        units.remove(unit);
-    }
     public void setUnits(ArrayList<Unit> units) {
         this.units = units;
     }
@@ -90,5 +86,13 @@ public class Cell {
 
     public TextureType getTextureType() {
         return TextureType;
+    }
+
+    public int getxCoordinate() {
+        return xCoordinate;
+    }
+
+    public int getyCoordinate() {
+        return yCoordinate;
     }
 }

@@ -124,6 +124,7 @@ public class Kingdom {
 
     public void addToStockPiles(Storage storage){
         stockPiles.add(storage);
+
     }
 
     public void addToFoodStockPiles(Storage storage){
@@ -154,6 +155,10 @@ public class Kingdom {
 
     public void addUnit(Unit unit){
         units.add(unit);
+    }
+
+    public Cell getHeadSquare() {
+        return HeadSquare;
     }
 
     public int getAllHorses(){

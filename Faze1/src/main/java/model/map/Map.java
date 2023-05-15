@@ -1,9 +1,5 @@
 package model.map;
 
-import model.Kingdom;
-import model.UserDatabase;
-import model.people.Unit;
-import model.people.UnitType;
 
 import java.util.ArrayList;
 
@@ -27,28 +23,28 @@ public class Map {
         for (int i = 0; i < kingdomNumber; i++) {
             switch (i) {
                 case 0 :
-                    headSquares.add(map[0][0]);
+                    headSquares.add(map[1][1]);
                     break;
                 case 1 :
-                    headSquares.add(map[dimension - 1][dimension - 1]);
+                    headSquares.add(map[dimension - 2][dimension - 2]);
                     break;
                 case 2 :
-                    headSquares.add(map[0][dimension - 1]);
+                    headSquares.add(map[1][dimension - 2]);
                     break;
                 case 3 :
-                    headSquares.add(map[dimension - 1][0]);
+                    headSquares.add(map[dimension - 2][1]);
                     break;
                 case 4 :
-                    headSquares.add(map[0][dimension / 2]);
+                    headSquares.add(map[1][dimension / 2]);
                     break;
                 case 5 :
-                    headSquares.add(map[dimension / 2][0]);
+                    headSquares.add(map[dimension / 2][1]);
                     break;
                 case 6 :
-                    headSquares.add(map[dimension - 1][dimension / 2]);
+                    headSquares.add(map[dimension - 2][dimension / 2]);
                     break;
                 case 7 :
-                    headSquares.add(map[dimension / 2][dimension - 1]);
+                    headSquares.add(map[dimension / 2][dimension - 2]);
                     break;
             }
         }

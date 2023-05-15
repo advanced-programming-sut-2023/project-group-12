@@ -29,16 +29,20 @@ public class Game {
     private ArrayList<Kingdom> players;
     private Kingdom currentKingdom;
     private ArrayList<Unit> selectedUnits = new ArrayList<>();
-    private ArrayList<Unit> patrollingUnits = new ArrayList<>();
-    private ArrayList<Unit> attackingUnits = new ArrayList<>();
+    private ArrayList<ArrayList<Unit>> movingUnits = new ArrayList<>();
 
-    public ArrayList<Unit> getAttackingUnits() {
+    public ArrayList<ArrayList<Unit>> getMovingUnits() {
+        return movingUnits;
+    }
+
+    private ArrayList<PatrollingUnits> patrollingUnits = new ArrayList<>();
+    private ArrayList<ArrayList<Unit>> attackingUnits = new ArrayList<>();
+
+    public ArrayList<ArrayList<Unit>> getAttackingUnits() {
         return attackingUnits;
     }
 
-    private int patrollingUnitsNumberOfRounds = 0;
-
-    public ArrayList<Unit> getPatrollingUnits() {
+    public ArrayList<PatrollingUnits> getPatrollingUnits() {
         return patrollingUnits;
     }
 
@@ -124,33 +128,31 @@ public class Game {
     }
 
     //todo : this at the beginning of each turn
-    public String patrolUnit(int xStart, int yStart, int xEnd, int yEnd) {
-        if (finalPath(xStart, yStart, xEnd, yEnd) == null) {
-            return "no path found between the two points";
-        }
-        if (finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart) == null) {
-            return "units can't get there";
-        }
-        int speed = this.patrollingUnits.get(0).getSpeed();
-        if (patrollingUnitsNumberOfRounds % 2 == 0) {//go towards the start
-            ArrayList<Cell> path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart);
+    public String patrolUnit(PatrollingUnits patrollingUnit) {
+        int xStart = patrollingUnit.getxStart();
+        int yStart = patrollingUnit.getyStart();
+        int xEnd = patrollingUnit.getxEnd();
+        int yEnd = patrollingUnit.getyEnd();
+        int speed = patrollingUnit.getUnits().get(0).getSpeed();
+        if (patrollingUnit.getPatrollingUnitsNumberOfRounds() % 2 == 0) {//go towards the start
+            ArrayList<Cell> path = finalPath(patrollingUnit.getUnits().get(0).getxPosition(), patrollingUnit.getUnits().get(0).getyPosition(), xStart, yStart);
             if (speed < path.size()) {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart, this.patrollingUnits);
+                moveUnit(patrollingUnit.getUnits().get(0).getxPosition(), patrollingUnit.getUnits().get(0).getyPosition(), xStart, yStart, patrollingUnit.getUnits());
             } else {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xStart, yStart, this.patrollingUnits);
-                patrollingUnitsNumberOfRounds++;
+                moveUnit(patrollingUnit.getUnits().get(0).getxPosition(), patrollingUnit.getUnits().get(0).getyPosition(), xStart, yStart, patrollingUnit.getUnits());
+                patrollingUnit.setPatrollingUnitsNumberOfRounds(1);
                 speed = speed - path.size() + 1;
-                moveUnitWithSpeed(xStart, yStart, xEnd, yEnd, speed, this.patrollingUnits);
+                moveUnitWithSpeed(xStart, yStart, xEnd, yEnd, speed, patrollingUnit.getUnits());
             }
-        } else if (patrollingUnitsNumberOfRounds % 2 == 1) {//go towards the end
-            ArrayList<Cell> path = finalPath(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd);
+        } else if (patrollingUnit.getPatrollingUnitsNumberOfRounds() % 2 == 1) {//go towards the end
+            ArrayList<Cell> path = finalPath(patrollingUnit.getUnits().get(0).getxPosition(), patrollingUnit.getUnits().get(0).getyPosition(), xEnd, yEnd);
             if (speed < path.size()) {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd, this.patrollingUnits);
+                moveUnit(patrollingUnit.getUnits().get(0).getxPosition(), patrollingUnit.getUnits().get(0).getyPosition(), xEnd, yEnd, patrollingUnit.getUnits());
             } else {
-                moveUnit(this.patrollingUnits.get(0).getxPosition(), this.patrollingUnits.get(0).getyPosition(), xEnd, yEnd, this.patrollingUnits);
-                patrollingUnitsNumberOfRounds++;
+                moveUnit(patrollingUnit.getUnits().get(0).getxPosition(), patrollingUnit.getUnits().get(0).getyPosition(), xEnd, yEnd, patrollingUnit.getUnits());
+                patrollingUnit.setPatrollingUnitsNumberOfRounds(1);
                 speed = speed - path.size() + 1;
-                moveUnitWithSpeed(xEnd, yEnd, xStart, yStart, speed, this.patrollingUnits);
+                moveUnitWithSpeed(xEnd, yEnd, xStart, yStart, speed, patrollingUnit.getUnits());
             }
         }
         return "";
@@ -168,20 +170,17 @@ public class Game {
         //todo: complete the method
     }
 
-    //todo: check the move method
+    //todo: check the move method for traps and special cases
     public String moveUnit(int xStart, int yStart, int xEnd, int yEnd, ArrayList<Unit> units) {
-        if ((xEnd == xStart) && (yEnd == yStart)) {
-            return "units are already there";
-        }
-        //todo: handle the method for special cases
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
         if (path == null) {
             return "no path found for these units";
         }
-        //todo : check if there's trap in the way
         int speed = units.get(0).getSpeed();
         for (Unit unit : units) {
             path.get((Math.min(speed, path.size() - 1))).addUnits(unit);
+            unit.setxPosition(path.get((Math.min(speed, path.size() - 1))).getxCoordinate());
+            unit.setyPosition(path.get((Math.min(speed, path.size() - 1))).getyCoordinate());
         }
         for (int i = 0; i < speed && i < path.size() - 2; i++) {
             for (int j = units.size() - 1; j >= 0; j--) {
@@ -192,7 +191,7 @@ public class Game {
         //todo: complete the method
     }
 
-    private ArrayList<Cell> finalPath(int xStart, int yStart, int xEnd, int yEnd) {
+    public ArrayList<Cell> finalPath(int xStart, int yStart, int xEnd, int yEnd) {
         runPath(xStart, yStart, xEnd, yEnd);
         ArrayList<Cell> path = new ArrayList<>();
         Cell cell = currentMap.getMap()[xEnd][yEnd];
@@ -214,6 +213,7 @@ public class Game {
         for (int i = 0; i < currentMap.getDimension(); i++) {
             for (int j = 0; j < currentMap.getDimension(); j++) {
                 currentMap.getMap()[i][j].setFather(null);
+                currentMap.getMap()[i][j].setInThePath(false);
             }
         }
         return correctOrder;
@@ -248,11 +248,6 @@ public class Game {
             previousSize = currentSize;
             currentSize = way.size();
         }
-        for (int i = 0; i < currentMap.getDimension(); i++) {
-            for (int j = 0; j < currentMap.getDimension(); j++) {
-                currentMap.getMap()[i][j].setInThePath(false);
-            }
-        }
     }
 
     public ArrayList<Cell> neighbors(int x, int y) {
@@ -285,28 +280,28 @@ public class Game {
     }
 
     // todo : handle bowmen
-    public String groundAttack(int x, int y) {
-        ArrayList<Cell> path = finalPath(attackingUnits.get(0).getxPosition(), attackingUnits.get(0).getyPosition(), x, y);
+    public String groundAttack(int x, int y, ArrayList<Unit>units) {
+        ArrayList<Cell> path = finalPath(units.get(0).getxPosition(), units.get(0).getyPosition(), x, y);
         if (path == null) {
-            if (x != attackingUnits.get(0).getxPosition() || y != attackingUnits.get(0).getyPosition())
+            if (x != units.get(0).getxPosition() || y != units.get(0).getyPosition())
                 return "enemy can't be reached";
             else {
-                fight(x, y);
+                fight(x, y,units);
                 return "fight is done";
             }
         }
-        if (path.size() - 1 > attackingUnits.get(0).getSpeed()) {
+        if (path.size() - 1 > units.get(0).getSpeed()) {
             return "enemy out of range, please move your units closer";
         }
-        moveUnit(attackingUnits.get(0).getxPosition(), attackingUnits.get(0).getyPosition(), x, y, attackingUnits);
-        fight(x, y);
+        moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), x, y, units);
+        fight(x, y, units);
         return "fight is done";
     }
 
-    private void fight(int x, int y) {
+    private void fight(int x, int y,ArrayList<Unit>units) {
         Cell cell = this.getCurrentMap().getMap()[x][y];
-        for (int j = 0; j < attackingUnits.size(); j++) {
-            Unit unit = attackingUnits.get(j);
+        for (int j = 0; j < units.size(); j++) {
+            Unit unit = units.get(j);
             for (int i = 0; i < cell.getUnits().size(); i++) {
                 Unit unit1 = cell.getUnits().get(i);
                 if (unit1.getHomeland() != unit.getHomeland()) {
@@ -341,15 +336,15 @@ public class Game {
                 }
             }
         }
-        for (int i = attackingUnits.size() - 1; i >= 0; i--) {
-            if (attackingUnits.get(i).getHitPoint() <= 0)
-                attackingUnits.remove(i);
+        for (int i = units.size() - 1; i >= 0; i--) {
+            if (units.get(i).getHitPoint() <= 0)
+                units.remove(i);
         }
         for (int i = cell.getUnits().size() - 1; i >= 0; i--) {
             if (cell.getUnits().get(i).getHitPoint() <= 0)
                 cell.getUnits().remove(i);
         }
-        for (Unit unit : attackingUnits) {
+        for (Unit unit : units) {
             unit.setBeingHit(false);
             unit.setHittingSomeOne(false);
         }
@@ -363,9 +358,9 @@ public class Game {
         mast.decreaseHitPoint(attacker.getUnitType().getAttackPower());
     }
 
-    public void airAttack(int x, int y) {// is it okay todo: ask mohammad
-        if (Math.pow(x - attackingUnits.get(0).getxPosition(), 2) + Math.pow(y - attackingUnits.get(0).getyPosition(), 2) <= attackingUnits.get(0).getUnitType().getRange()) {
-            fight(x, y);
+    public void airAttack(int x, int y,ArrayList<Unit>units) {// is it okay todo: ask mohammad
+        if (Math.pow(x - units.get(0).getxPosition(), 2) + Math.pow(y - units.get(0).getyPosition(), 2) <= units.get(0).getUnitType().getRange()) {
+            fight(x, y,units);
         }
     }
 

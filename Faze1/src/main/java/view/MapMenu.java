@@ -49,7 +49,7 @@ public class MapMenu {
             }
             else if (dropRock.find()) {
                 System.out.println(controller.dropRock(dropRock.group("xCoordinate"), dropRock.group("yCoordinate"),
-                        dropRock.group("direction").toCharArray()[0]));
+                        dropRock.group("direction")));
             }
             else if (dropTree.find()) {
                 System.out.println(controller.dropTree(dropTree.group("xCoordinate"), dropTree.group("yCoordinate"),
@@ -59,7 +59,7 @@ public class MapMenu {
             } else if (mapUp.find()) {
                 System.out.println(controller.mapUp(mapUp.group("direction"), mapUp.group("number")));
             } else if (showDetail.find()) {
-                System.out.print(controller.showDetail(showDetail.group("x"), showDetail.group("y")));
+                System.out.println(controller.showDetail(showDetail.group("x"), showDetail.group("y")));
             } else if (selectMap.find()) {
                 System.out.println(controller.selectMap());
             } else if (input.equalsIgnoreCase("back")) {
