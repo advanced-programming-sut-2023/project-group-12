@@ -304,7 +304,7 @@ public class GameMenuController {
         if (!newGame.getCurrentMap().getMap()[x][y].isPassable()) {
             return "the destination is not a valid destination, troops can't be there";
         }
-        if (newGame.getSelectedUnits().get(0) == null || newGame.getSelectedUnits().size() == 0) {
+        if (newGame.getSelectedUnits().size() == 0 || newGame.getSelectedUnits().get(0) == null) {
             return "there's no unit selected";
         }
         System.out.println(newGame.getSelectedUnits().size());
@@ -689,7 +689,8 @@ public class GameMenuController {
     }
 
     public void endTurnMoves() {
-        if (newGame.getMovingUnits() == null) return;
+        if (newGame.getMovingUnits() == null || newGame.getMovingUnits().size() == 0) return;
+        if (newGame.getMovingUnits().get(0) == null) return;
         for (ArrayList<Unit> units : newGame.getMovingUnits()) {
             newGame.moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), units.get(0).getDestinationX(), units.get(0).getDestinationY(), units);
         }
@@ -752,5 +753,12 @@ public class GameMenuController {
             }
         }
         return null;
+    }
+    public void nextTurn () {
+        newGame.nextTurn();
+        endTurnMoves();
+        endTurnFights();
+        endOfTurnPatrolling();
+        resetSelectedUnits();
     }
 }

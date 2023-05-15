@@ -152,6 +152,7 @@ public class GameMenu {
                         menu.run(scanner);
                         System.out.println("Now you are in the game menu");
                     } else if (input.equalsIgnoreCase("next")) {
+                        controller.nextTurn();
                         if (i == UserDatabase.getPlayers().size() - 1) {
                             System.out.println("player " + UserDatabase.getPlayers().get(i).getUsername() + " is done");
                             System.out.println("player " + UserDatabase.getPlayers().get(0).getUsername() + "'s turn");
@@ -174,10 +175,7 @@ public class GameMenu {
                         System.out.println("invalid command!");
                     }
                 }
-                controller.endTurnMoves();
-                controller.endTurnFights();
-                controller.endOfTurnPatrolling();
-                controller.resetSelectedUnits();
+
             }
             if (controller.getNumberOfRemainingPlayers() == 1) {
                 if (controller.getWinner() == null) {

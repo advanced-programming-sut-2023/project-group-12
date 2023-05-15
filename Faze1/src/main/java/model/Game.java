@@ -176,8 +176,8 @@ public class Game {
         int speed = units.get(0).getSpeed();
         for (Unit unit : units) {
             path.get((Math.min(speed, path.size() - 1))).addUnits(unit);
-            unit.setxPosition(path.get((Math.min(speed, path.size() - 1))).getxCoordinate());
-            unit.setyPosition(path.get((Math.min(speed, path.size() - 1))).getyCoordinate());
+            unit.setxPosition(path.get(Math.min(speed, path.size() - 1)).getxCoordinate());
+            unit.setyPosition(path.get(Math.min(speed, path.size() - 1)).getyCoordinate());
         }
         for (int i = 0; i < speed && i < path.size() - 2; i++) {
             for (int j = units.size() - 1; j >= 0; j--) {
@@ -185,7 +185,6 @@ public class Game {
             }
         }
         return "units moved successfully";
-        //todo: complete the method
     }
 
     public ArrayList<Cell> finalPath(int xStart, int yStart, int xEnd, int yEnd) {
