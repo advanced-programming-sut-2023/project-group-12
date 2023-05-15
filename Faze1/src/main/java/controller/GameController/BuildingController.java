@@ -69,7 +69,7 @@ public class BuildingController {
         if(unitType == UnitType.KING || unitType == UnitType.BLACK_MONK){
             return "you can not create this unit!";
         }
-        if(building.getOwner().getUnemployed() - count < 50){
+        if(building.getOwner().getUnemployed() < count){
             return "you do not have enough people to create units!";
         }
         if(building.getOwner().getGold() < count * unitType.getCost()){
@@ -81,10 +81,10 @@ public class BuildingController {
                 return "you have not enough horse to create units!";
             }
         }
-        if(building.getOwner().getNumberOfProperties(new Weapon(unitType.getWeapon(), 0)) < count){
+        if(unitType.getWeapon() != null && building.getOwner().getNumberOfProperties(new Weapon(unitType.getWeapon(), 0)) < count){
             return "you have not enough weapon to create units!";
         }
-        if(building.getOwner().getNumberOfProperties(new DefensiveWeapon(unitType.getDefence(), 0)) < count){
+        if(unitType.getDefence() != null && building.getOwner().getNumberOfProperties(new DefensiveWeapon(unitType.getDefence(), 0)) < count){
             return "you have not enough defensive weapon to create units!";
         }
         for (int i = 0; i < count; i++) {
