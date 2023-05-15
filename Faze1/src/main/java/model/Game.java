@@ -168,10 +168,9 @@ public class Game {
         //todo: complete the method
     }
 
-    //todo: check the move method for traps and special cases
     public String moveUnit(int xStart, int yStart, int xEnd, int yEnd, ArrayList<Unit> units) {
         ArrayList<Cell> path = finalPath(xStart, yStart, xEnd, yEnd);
-        if (path == null) {
+        if (path == null || path.get(0) == null) {
             return "no path found for these units";
         }
         int speed = units.get(0).getSpeed();
