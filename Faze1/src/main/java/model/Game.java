@@ -176,13 +176,14 @@ public class Game {
         int speed = units.get(0).getSpeed();
         for (Unit unit : units) {
             path.get((Math.min(speed, path.size() - 1))).addUnits(unit);
-            unit.setxPosition(path.get(Math.min(speed, path.size() - 1)).getxCoordinate());
-            unit.setyPosition(path.get(Math.min(speed, path.size() - 1)).getyCoordinate());
-        }
-        for (int i = 0; i < speed && i < path.size() - 2; i++) {
-            for (int j = units.size() - 1; j >= 0; j--) {
-                path.get(i).getUnits().remove(units.get(j));
+            if (unit != null) {
+                unit.setxPosition(path.get(Math.min(speed, path.size() - 1)).getxCoordinate());
+
+                unit.setyPosition(path.get(Math.min(speed, path.size() - 1)).getyCoordinate());
             }
+        }
+        for (int j = units.size() - 1; j >= 0; j--) {
+            path.get(0).getUnits().remove(units.get(j));
         }
         return "units moved successfully";
     }
@@ -389,6 +390,7 @@ public class Game {
     public void setCurrentKingdom(Kingdom currentKingdom) {
         this.currentKingdom = currentKingdom;
     }
+
     private ArrayList<Kingdom> kingdoms = new ArrayList<>();
 
     public String showBuildings() {

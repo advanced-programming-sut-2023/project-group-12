@@ -697,7 +697,9 @@ public class GameMenuController {
     }
 
     private void setDestination(int xEnd, int yEnd) {
+        if (newGame.getSelectedUnits() == null) return;
         for (Unit unit : newGame.getSelectedUnits()) {
+            if (unit == null) continue;
             unit.setDestinationX(xEnd);
             unit.setDestinationY(yEnd);
         }
