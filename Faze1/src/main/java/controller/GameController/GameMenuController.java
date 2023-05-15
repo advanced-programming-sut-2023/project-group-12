@@ -307,7 +307,6 @@ public class GameMenuController {
         if (newGame.getSelectedUnits().size() == 0 || newGame.getSelectedUnits().get(0) == null) {
             return "there's no unit selected";
         }
-        System.out.println(newGame.getSelectedUnits().size());
         if (newGame.getSelectedUnits().get(0).getSpeed() == 0) {
             return "this unit can't move";
         }
