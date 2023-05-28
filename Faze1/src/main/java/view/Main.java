@@ -1,3 +1,5 @@
+package view;
+
 import model.User;
 import model.UserDatabase;
 import view.EnterMenu;
