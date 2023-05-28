@@ -198,7 +198,7 @@ public class GameMenuController {
             unit.setxPosition(x);
             unit.setyPosition(y);
             newGame.getCurrentMap().getMap()[x][y].addUnits(unit);
-            newGame.getCurrentKingdom().addUnit(unit);
+            newGame.getCurrentKingdom().getUnits().add(unit);
         }
         return "units dropped successfully!";
     }
@@ -267,7 +267,7 @@ public class GameMenuController {
         for (Unit unit : newGame.getCurrentMap().getMap()[x][y].getUnits()) {
             if (unit.getHomeland() == newGame.getCurrentKingdom()) {
                 if (unit.getUnitType() == UnitType.getUnitTypeByName(type)) {
-                    newGame.setSelectedUnits(unit);
+                    newGame.getSelectedUnits().add(unit);
                     selected++;
                 }
                 yours++;
@@ -574,7 +574,7 @@ public class GameMenuController {
             if (x != newGame.getSelectedUnits().get(0).getxPosition() || y != newGame.getSelectedUnits().get(0).getyPosition())
                 return "enemy can't be reached";
         }
-        if (path.size() - 1 > newGame.getSelectedUnits().get(0).getSpeed()) {
+        if (path != null && path.size() - 1 > newGame.getSelectedUnits().get(0).getSpeed()) {
             return "enemy out of range, please move your units closer";
         }
         if (newGame.getAttackingUnits().size() != 0) {
@@ -682,7 +682,10 @@ public class GameMenuController {
         if (newGame.getMovingUnits() == null || newGame.getMovingUnits().size() == 0) return;
         if (newGame.getMovingUnits().get(0) == null) return;
         for (ArrayList<Unit> units : newGame.getMovingUnits()) {
-            newGame.moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), units.get(0).getDestinationX(), units.get(0).getDestinationY(), units);
+            if (units == null || units.size() == 0) {
+
+            } else
+                newGame.moveUnit(units.get(0).getxPosition(), units.get(0).getyPosition(), units.get(0).getDestinationX(), units.get(0).getDestinationY(), units);
         }
     }
 

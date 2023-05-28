@@ -294,39 +294,41 @@ public class Game {
             Unit unit = units.get(j);
             for (int i = 0; i < cell.getUnits().size(); i++) {
                 Unit unit1 = cell.getUnits().get(i);
-                if (unit1.getHomeland() != unit.getHomeland()) {
-                    oneIsDead:
-                    while (true) {
-                        if (unit.getHitPoint() > 0) {
-                            if (unit1.getHitPoint() > 0) {
-                                if (!unit1.isBeingHit()) {
-                                    unitOnUnitFight(unit, unit1);
-                                    unit1.setBeingHit(true);
-                                    if (!unit1.isHittingSomeOne() && !unit.isBeingHit()) {
-                                        unitOnUnitFight(unit1, unit);
-                                        unit.setBeingHit(true);
+                if (unit1 != null && unit != null && unit1.getHomeland() != null && unit.getHomeland() != null) {
+                    if (unit1.getHomeland() != unit.getHomeland()) {
+                        oneIsDead:
+                        while (true) {
+                            if (unit.getHitPoint() > 0) {
+                                if (unit1.getHitPoint() > 0) {
+                                    if (!unit1.isBeingHit()) {
+                                        unitOnUnitFight(unit, unit1);
+                                        unit1.setBeingHit(true);
+                                        if (!unit1.isHittingSomeOne() && !unit.isBeingHit()) {
+                                            unitOnUnitFight(unit1, unit);
+                                            unit.setBeingHit(true);
+                                        }
                                     }
-                                }
-                                if (unit1.isBeingHit() && i == cell.getUnits().size() - 1) {
-                                    unitOnUnitFight(unit, unit1);
-                                    unit1.setBeingHit(true);
-                                    if (!unit1.isHittingSomeOne() && !unit.isBeingHit()) {
-                                        unitOnUnitFight(unit1, unit);
-                                        unit.setBeingHit(true);
+                                    if (unit1.isBeingHit() && i == cell.getUnits().size() - 1) {
+                                        unitOnUnitFight(unit, unit1);
+                                        unit1.setBeingHit(true);
+                                        if (!unit1.isHittingSomeOne() && !unit.isBeingHit()) {
+                                            unitOnUnitFight(unit1, unit);
+                                            unit.setBeingHit(true);
+                                        }
                                     }
+                                } else {
+                                    break;
                                 }
                             } else {
                                 break;
                             }
-                        } else {
-                            break;
                         }
                     }
                 }
             }
         }
         for (int i = units.size() - 1; i >= 0; i--) {
-            if (units.get(i).getHitPoint() <= 0)
+            if (units.get(i) != null && units.get(i).getHitPoint() <= 0)
                 units.remove(i);
         }
         for (int i = cell.getUnits().size() - 1; i >= 0; i--) {
@@ -334,12 +336,16 @@ public class Game {
                 cell.getUnits().remove(i);
         }
         for (Unit unit : units) {
-            unit.setBeingHit(false);
-            unit.setHittingSomeOne(false);
+            if (unit != null) {
+                unit.setBeingHit(false);
+                unit.setHittingSomeOne(false);
+            }
         }
         for (Unit unit : cell.getUnits()) {
-            unit.setBeingHit(false);
-            unit.setHittingSomeOne(false);
+            if (unit != null) {
+                unit.setBeingHit(false);
+                unit.setHittingSomeOne(false);
+            }
         }
     }
 
@@ -408,7 +414,7 @@ public class Game {
             for (int j = 0; j < currentMap.getDimension(); j++) {
                 Cell cell = currentMap.getMap()[i][j];
                 for (Unit unit : cell.getUnits()) {
-                    if (unit.getHomeland() == currentKingdom) {
+                    if (unit!= null && unit.getHomeland() != null && unit.getHomeland() == currentKingdom) {
                         output += unit + "\n";
                     }
                 }

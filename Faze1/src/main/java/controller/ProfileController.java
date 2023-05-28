@@ -46,7 +46,7 @@ public class ProfileController {
         if (oldPassword.equals(currentUser.getPassword())) {
             if (RegisterMenuController.isPasswordWeak(newPassword).equals("true")) {
                 if (!UserDatabase.hashPassword(newPassword, currentUser.getSalt()).equals(oldPassword)) {
-                    currentUser.setPassword(newPassword);
+                    currentUser.setPassword(UserDatabase.hashPassword(newPassword,currentUser.getSalt()));
                     return "Your password <" + oldPasswordToShow + "> changed to <" + newPassword + "> successfully";
                 }
                 return "You should choose a new password";
