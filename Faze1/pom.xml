@@ -116,6 +116,16 @@
             <version>13</version>
             <type>pom</type>
         </dependency>
+        <dependency>
+            <groupId>javafx-wrapper</groupId>
+            <artifactId>javafx-wrapper</artifactId>
+            <version>0.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.diirt.javafx</groupId>
+            <artifactId>javafx</artifactId>
+            <version>3.1.7</version>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -123,5 +133,12 @@
         <maven.compiler.target>13</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <repositories>
+        <repository>
+            <id>clojars</id>
+            <name>Clojars</name>
+            <url>https://repo.clojars.org/</url>
+        </repository>
+    </repositories>
 
 </project>

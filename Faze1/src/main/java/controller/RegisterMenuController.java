@@ -47,7 +47,12 @@ public class RegisterMenuController {
         userRegister.setSalt(salt);
         return "register successfully!";
     }
-
+    public static boolean isUsernameUsed (String username) {
+        if (UserDatabase.getUserByUsername(username) != null) {
+            return true;
+        }
+        return false;
+    }
     public String showQuestions() {
         String output = "Please select your security question and answer it.\n";
         for (int i = 0; i < 3; i++) {

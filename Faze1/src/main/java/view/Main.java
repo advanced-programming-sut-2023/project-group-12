@@ -22,7 +22,7 @@ public class Main {
             }
         }
         EnterMenu menu = new EnterMenu();
-        menu.run(scanner);
+//        menu.run(scanner);
         UserDatabase.saveUsers();
     }
 

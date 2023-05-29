@@ -62,7 +62,7 @@ public class MainMenu {
                 controller.removeUserLoggedIn();
                 System.out.println("user logged out successfully!");
                 EnterMenu menu = new EnterMenu();
-                menu.run(scanner);
+//                menu.run(scanner);
             } else {
                 System.out.println("Invalid command!");
             }
