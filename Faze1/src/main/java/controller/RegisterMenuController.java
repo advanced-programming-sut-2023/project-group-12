@@ -2,6 +2,7 @@ package controller;
 
 import model.User;
 import model.UserDatabase;
+import view.SecurityQuestionMenu;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -12,6 +13,21 @@ import java.util.regex.Pattern;
 
 public class RegisterMenuController {
     private User userRegister;
+
+    public static String getFamousSlogans() {
+        ArrayList<String> slogans = new ArrayList<>();
+        for (User user : UserDatabase.getUsers()) {
+            if (!user.getSlogan().equals("")) {
+                slogans.add(user.getSlogan());
+            }
+        }
+        Collections.shuffle(slogans);
+        String output = "";
+        for (int i = 0; i < 3; i++) {
+            output += (i + 1) + ". " + slogans.get(i) + "\n";
+        }
+        return output;
+    }
 
     public String register(String username, String password, String passwordConfirmation, String email, String nickname, String slogan) {
         String emailToUpper = email.toUpperCase();
@@ -45,6 +61,7 @@ public class RegisterMenuController {
         slogan = slogan.replace("\"", "");
         userRegister = new User(username, password, nickname, email, slogan);
         userRegister.setSalt(salt);
+        SecurityQuestionMenu.setUser(userRegister);
         return "register successfully!";
     }
     public static boolean isUsernameUsed (String username) {
@@ -71,10 +88,10 @@ public class RegisterMenuController {
         return "question and answer selected!";
     }
 
-    public void addUser(String answer, int questionNumber) {
-        userRegister.setAnswer(answer);
-        userRegister.setQuestion(questionNumber);
-        UserDatabase.addUser(userRegister);
+    public static void addUser(User user, String answer, int questionNumber) {
+        user.setAnswer(answer);
+        user.setQuestion(questionNumber);
+        UserDatabase.addUser(user);
 
         UserDatabase.saveUsers();
     }
@@ -88,16 +105,16 @@ public class RegisterMenuController {
             return "Password is too short";
         }
         if (!capitalLetterPattern.matcher(password).find()) {
-            return "Password must contain a capital letter!";
+            return "Password must contain\na capital letter!";
         }
         if (!smallLetterPattern.matcher(password).find()) {
-            return "Password must contain a small letter!";
+            return "Password must contain\na small letter!";
         }
         if (!digitPattern.matcher(password).find()) {
-            return "Password must contain a digit!";
+            return "Password must contain\na digit!";
         }
         if (!elseCharacterPattern.matcher(password).find()) {
-            return "Password must contain a non-word character!";
+            return "Password must contain\na non-word character!";
         }
         return "true";
     }
