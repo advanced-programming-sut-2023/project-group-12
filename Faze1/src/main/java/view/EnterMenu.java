@@ -73,7 +73,13 @@ public class EnterMenu extends Application {// todo : fix the details missing
         login.setPrefWidth(100);
         login.setLayoutY(height / 2 - 30);
         login.setPrefHeight(30);
-        login.setOnAction(this::login);
+        login.setOnAction(actionEvent -> {
+            try {
+                login(actionEvent);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         return login;
     }
 
@@ -110,8 +116,8 @@ public class EnterMenu extends Application {// todo : fix the details missing
         System.exit(0);
     }
 
-    private void login(ActionEvent actionEvent) {
-        //new LoginMenu().start(stage);
+    private void login(ActionEvent actionEvent) throws Exception {
+        new LoginMenu().start(stage);
     }
 
     public void register(ActionEvent actionEvent) throws Exception {

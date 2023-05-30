@@ -51,11 +51,11 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         TextField nickname = nicknameField(width, height);
         setRegisterNickname(width, height, nickname);
         CheckBox wantSlogan = getSloganCheckBox(width, height);
-        Label label = getSloganLabel(pane, width, height, wantSlogan);
-        resetButton(pane, username, password, email, nickname);
-        submitButton(pane);
+        Button reset = resetButton(pane, username, password, email, nickname);
+        Button submit = submitButton(pane);
+        Label label = getSloganLabel(pane, width, height, wantSlogan, reset, submit);
         setBackGround(pane);
-        pane.getChildren().addAll(username, usernameErrorLabel, password, passwordErrorLabel, email, nickname, label, wantSlogan,emailErrorLabel,nicknameErrorLabel);
+        pane.getChildren().addAll(username, usernameErrorLabel, password, passwordErrorLabel, email, nickname, label, wantSlogan, emailErrorLabel, nicknameErrorLabel);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
@@ -110,8 +110,10 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         });
     }
 
-    private void submitButton(Pane pane) {
+    private Button submitButton(Pane pane) {
         Button submit = new Button("submit");
+        submit.setLayoutX(pane.getPrefWidth() / 2 - 20);
+        submit.setLayoutY(pane.getPrefHeight() / 2 + 120);
         submit.setOnMouseClicked(event -> {
             //todo: handle errors
             if (isUsernameOkay && isPasswordOkay) {
@@ -121,8 +123,7 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
                 } else if (registerEmail.equals("")) {
                     emailErrorLabel.setText("Email can't be empty");
                     return;
-                }
-                else {
+                } else {
                     nicknameErrorLabel.setText("");
                     emailErrorLabel.setText("");
                 }
@@ -154,13 +155,14 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
             }
 
         });
-        submit.setLayoutX(0);
-        submit.setLayoutY(0);
         pane.getChildren().add(submit);
+        return submit;
     }
 
-    private void resetButton(Pane pane, TextField username, PasswordField password, TextField email, TextField nickname) {
+    private Button resetButton(Pane pane, TextField username, PasswordField password, TextField email, TextField nickname) {
         Button reset = new Button("reset");
+        reset.setLayoutX(pane.getPrefWidth() / 2 - 80);
+        reset.setLayoutY(pane.getPrefHeight() / 2 + 120);
         reset.setOnMouseClicked(event -> {
             username.setText("");
             password.setText("");
@@ -168,20 +170,22 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
             nickname.setText("");
             sloganField.setText("");
         });
-        reset.setLayoutX(100);
-        reset.setLayoutY(0);
         pane.getChildren().add(reset);
+        return reset;
     }
 
-    private Label getSloganLabel(Pane pane, double width, double height, CheckBox wantSlogan) {
+    private Label getSloganLabel(Pane pane, double width, double height, CheckBox wantSlogan, Button reset, Button submit) {
         Label label = new Label("Do you want to have a slogan?");
         label.setLayoutX(width / 2 - 100);
         label.setLayoutY(height / 2 + 80);
         wantSlogan.setOnMouseClicked(event -> {
             if (wantSlogan.isSelected()) {
-                sloganField = sloganField(width, height, pane);
+                sloganField = sloganField(width, height, pane, reset, submit);
                 pane.getChildren().add(sloganField);
             } else {
+                reset.setLayoutY(height / 2 + 120);
+                submit.setLayoutY(height / 2 + 120);
+                sloganErrorLabel.setText("");
                 pane.getChildren().remove(randomSlogan);
                 pane.getChildren().remove(famousSlogans);
                 famousSlogans.setSelected(false);
@@ -194,8 +198,10 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         return label;
     }
 
-    private TextField sloganField(double width, double height, Pane pane) {
+    private TextField sloganField(double width, double height, Pane pane, Button reset, Button submit) {
         TextField slogan = new TextField();
+        reset.setLayoutY(height / 2 + 220);
+        submit.setLayoutY(height / 2 + 220);
         slogan.setPromptText("Slogan");
         slogan.setLayoutX(width / 2 - 100);
         slogan.setLayoutY(height / 2 + 110);
@@ -242,6 +248,15 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
                 pane.getChildren().remove(slogans);
             }
         });
+        if (pane.getChildren().contains(sloganErrorLabel)) {
+            pane.getChildren().remove(sloganErrorLabel);
+        }
+        if (pane.getChildren().contains(randomSlogan)) {
+            pane.getChildren().remove(randomSlogan);
+        }
+        if (pane.getChildren().contains(famousSlogans)) {
+            pane.getChildren().remove(famousSlogans);
+        }
         pane.getChildren().addAll(sloganErrorLabel, randomSlogan, famousSlogans);
         return slogan;
     }
