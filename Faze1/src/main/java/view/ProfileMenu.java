@@ -2,87 +2,108 @@ package view;
 
 import Commands.ProfileMenuCommands;
 import controller.ProfileController;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import model.UserDatabase;
 
+import java.awt.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class ProfileMenu {
-    private ProfileController controller;
-
-    public void run(Scanner scanner) throws NoSuchAlgorithmException {
-        System.out.println("Welcome to profile menu!");
-        controller = new ProfileController(UserDatabase.getCurrentUser());
-        String input;
-        Matcher matcher;
-        while (true) {
-            input = scanner.nextLine();
-            if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_EMAIL)).find())
-                changeEmail(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_USERNAME)).find())
-                changeUsername(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_NICKNAME)).find())
-                changeNickname(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_SLOGAN)).find())
-                changeSlogan(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_PASSWORD)).find())
-                changePassword(matcher);
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_REMOVE_SLOGAN)).find())
-                removeSlogan();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_HIGH_SCORE)).find())
-                displayHighScore();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_RANK)).find())
-                displayRank();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_SLOGAN)).find())
-                displaySlogan();
-            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY)).find())
-                displayAll();
-            else if (input.equalsIgnoreCase("back"))
-                return;
-            else
-                System.out.println("Please try again!");
-        }
-    }
-
-
-    private void changeUsername(Matcher matcher) {
-        System.out.println(controller.changeUsername(matcher.group("username")));
-    }
-
-    private void changeNickname(Matcher matcher) {
-        System.out.println(controller.changeNickname(matcher.group("nickname")));
-    }
-
-    private void changePassword(Matcher matcher) throws NoSuchAlgorithmException {
-        System.out.println(controller.changePassword(matcher.group("oldPassword"), matcher.group("newPassword")));
-    }
-
-    private void changeEmail(Matcher matcher) {
-        System.out.println(controller.changeEmail(matcher.group("email")));
-    }
-
-    private void changeSlogan(Matcher matcher) {
-        System.out.println(controller.changeSlogan(matcher.group("slogan")));
-    }
-
-    private void removeSlogan() {
-        System.out.println(controller.removeSlogan());
-    }
-
-    private void displayHighScore() {
-        System.out.println(controller.displayHighScore());
-    }
-
-    private void displayRank() {
-        System.out.println(controller.displayRank());
-    }
-
-    private void displaySlogan() {
-        System.out.println(controller.displaySlogan());
-    }
-
-    private void displayAll() {
-        System.out.println(controller.displayAll());
+public class ProfileMenu extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
+        Pane pane = new Pane();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        pane.setPrefSize(width, height);
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
     }
 }
+//    private ProfileController controller;
+//
+//    public void run(Scanner scanner) throws NoSuchAlgorithmException {
+//        System.out.println("Welcome to profile menu!");
+//        controller = new ProfileController(UserDatabase.getCurrentUser());
+//        String input;
+//        Matcher matcher;
+//        while (true) {
+//            input = scanner.nextLine();
+//            if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_EMAIL)).find())
+//                changeEmail(matcher);
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_USERNAME)).find())
+//                changeUsername(matcher);
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_NICKNAME)).find())
+//                changeNickname(matcher);
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_SLOGAN)).find())
+//                changeSlogan(matcher);
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_CHANGE_PASSWORD)).find())
+//                changePassword(matcher);
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_REMOVE_SLOGAN)).find())
+//                removeSlogan();
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_HIGH_SCORE)).find())
+//                displayHighScore();
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_RANK)).find())
+//                displayRank();
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY_SLOGAN)).find())
+//                displaySlogan();
+//            else if ((matcher = ProfileMenuCommands.getMatcher(input, ProfileMenuCommands.PROFILE_DISPLAY)).find())
+//                displayAll();
+//            else if (input.equalsIgnoreCase("back"))
+//                return;
+//            else
+//                System.out.println("Please try again!");
+//        }
+//    }
+//
+//
+//    private void changeUsername(Matcher matcher) {
+//        System.out.println(controller.changeUsername(matcher.group("username")));
+//    }
+//
+//    private void changeNickname(Matcher matcher) {
+//        System.out.println(controller.changeNickname(matcher.group("nickname")));
+//    }
+//
+//    private void changePassword(Matcher matcher) throws NoSuchAlgorithmException {
+//        System.out.println(controller.changePassword(matcher.group("oldPassword"), matcher.group("newPassword")));
+//    }
+//
+//    private void changeEmail(Matcher matcher) {
+//        System.out.println(controller.changeEmail(matcher.group("email")));
+//    }
+//
+//    private void changeSlogan(Matcher matcher) {
+//        System.out.println(controller.changeSlogan(matcher.group("slogan")));
+//    }
+//
+//    private void removeSlogan() {
+//        System.out.println(controller.removeSlogan());
+//    }
+//
+//    private void displayHighScore() {
+//        System.out.println(controller.displayHighScore());
+//    }
+//
+//    private void displayRank() {
+//        System.out.println(controller.displayRank());
+//    }
+//
+//    private void displaySlogan() {
+//        System.out.println(controller.displaySlogan());
+//    }
+//
+//    private void displayAll() {
+//        System.out.println(controller.displayAll());
+//    }
