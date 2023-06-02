@@ -15,8 +15,10 @@ import model.User;
 import model.UserDatabase;
 
 import java.awt.*;
+import java.io.BufferedReader;
 
 public class EnterMenu extends Application {// todo : fix the details missing
+
     public static void main(String[] args) {
         UserDatabase.loadUsers();
         launch(args);
@@ -42,7 +44,7 @@ public class EnterMenu extends Application {// todo : fix the details missing
         Button register = getRegister(width, height);
         Button login = getLogin(width, height);
         Button exit = getExit(width, height);
-        pane.getChildren().addAll(text, login, register,exit);
+        pane.getChildren().addAll(text, login, register, exit);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
@@ -99,7 +101,8 @@ public class EnterMenu extends Application {// todo : fix the details missing
         });
         return register;
     }
-    private Button getExit (double width, double height) {
+
+    private Button getExit(double width, double height) {
         Button exit = new Button("Exit");
         exit.setLayoutY(0);
         exit.setLayoutX(width - 50);
@@ -117,11 +120,27 @@ public class EnterMenu extends Application {// todo : fix the details missing
     }
 
     private void login(ActionEvent actionEvent) throws Exception {
+        UserDatabase.setAreWeLoggingIn(true);
         new LoginMenu().start(stage);
     }
 
     public void register(ActionEvent actionEvent) throws Exception {
+        UserDatabase.setAreWeLoggingIn(false);
         new RegisterMenu().start(stage);
+    }
+
+    public static void getBackToMe(Stage stage, Pane pane) {
+        Button back = new Button("back");
+        pane.getChildren().add(back);
+        back.setLayoutX(0);
+        back.setLayoutY(0);
+        back.setOnMouseClicked(event -> {
+            try {
+                new EnterMenu().start(stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
 

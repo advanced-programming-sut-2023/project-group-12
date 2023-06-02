@@ -14,6 +14,17 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class UserDatabase {
+    private static boolean areWeLoggingIn = false;
+
+    public static void setAreWeLoggingIn(boolean setter) {
+        areWeLoggingIn = setter;
+    }
+
+    public static boolean isAreWeLoggingIn() {
+        return areWeLoggingIn;
+    }
+
+    //todo : set this for the captcha menu
     private static User currentUser;
     private static final ArrayList<String> questions;
 
