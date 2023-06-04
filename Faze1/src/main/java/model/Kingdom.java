@@ -22,38 +22,39 @@ public class Kingdom {
     private final ArrayList<Trade> trades = new ArrayList<>();
 
     private final ArrayList<Trade> tradesHistory = new ArrayList<>();
+    private ArrayList<Soldier> engineers = new ArrayList<Soldier>();
+    private ArrayList<Unit> units = new ArrayList<Unit>();
 
+    private ArrayList<Soldier> soldiers = new ArrayList<Soldier>();
 
-    private final ArrayList<Soldier> engineers = new ArrayList<Soldier>();
-    private final ArrayList<Unit> units = new ArrayList<Unit>();
+    private ArrayList<Storage> stables = new ArrayList<Storage>();
 
-    private final ArrayList<Soldier> soldiers = new ArrayList<Soldier>();
+    private ArrayList<Storage> weapons = new ArrayList<>();
 
-    private final ArrayList<Storage> stables = new ArrayList<Storage>();
+    private ArrayList<Storage> defensiveWeapons = new ArrayList<>();
 
-    private final ArrayList<Storage> weapons = new ArrayList<>();
+    private ArrayList<Storage> stockPiles = new ArrayList<>();
 
-    private final ArrayList<Storage> defensiveWeapons = new ArrayList<>();
+    private ArrayList<Storage> foodStockPiles = new ArrayList<>();
+
+    private User owner;
+    private int gold;
+    private int fearRate;
+    private int texRate;
+    private int foodRate;
 
     private final ArrayList<Equipment> equipments = new ArrayList<>();
 
-    private final ArrayList<Storage> stockPiles = new ArrayList<>();
-
-    private final ArrayList<Storage> foodStockPiles = new ArrayList<>();
 
     private final ArrayList<ProductionCenter> allProductionCenters = new ArrayList<>();
 
     private final ArrayList<UnitCreation> allUnitCreations = new ArrayList<>();
 
     private final ArrayList<Building> siegeBuildings = new ArrayList<>();
-    private final User owner;
 
     private final Cell HeadSquare;
 
-    private double gold;
-    private int fearRate = 0;
     private int taxRate = 0;
-    private int foodRate = 0;
     private int popularity = 100;
     private int religiousPeople = 0;
     private final Unit king;
@@ -178,8 +179,32 @@ public class Kingdom {
         return total;
     }
 
+    public int getAllWeaponByWeaponType(WeaponType weaponType) {
+        int total = 0;
+        for (Storage storage : weapons) {
+            for (int i = 0; i < storage.getBalance().size(); i++) {
+                if (((Weapon) storage.getBalance().get(i)).getWeaponType() == weaponType) {
+                    total += storage.getBalance().get(i).getValue();
+                }
+            }
 
-    public void addGold(double amount) {
+        }
+        return total;
+    }
+
+    public int getAllDefensiveWeaponByDefenseType(DefenseType defenseType) {
+        int total = 0;
+        for (Storage storage : defensiveWeapons) {
+            for (int i = 0; i < storage.getBalance().size(); i++) {
+                if (((DefensiveWeapon) storage.getBalance().get(i)).getDefenseType() == defenseType) {
+                    total += storage.getBalance().get(i).getValue();
+                }
+            }
+        }
+        return total;
+    }
+
+    public void addGold(int amount) {
         gold += amount;
     }
 
@@ -373,6 +398,7 @@ public class Kingdom {
         }
     }
 
+
     public void spendProperties(Property property) {
         if (property instanceof Resources) {
             spendResources((Resources) property);
@@ -537,6 +563,5 @@ public class Kingdom {
     public void removeFromSiegeBuildings(Building siege) {
         siegeBuildings.remove(siege);
     }
-
 
 }

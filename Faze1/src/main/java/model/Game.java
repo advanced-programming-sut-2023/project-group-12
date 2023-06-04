@@ -10,9 +10,12 @@ import java.util.ArrayList;
 
 public class Game {
 
+
     public ArrayList<Kingdom> getKingdoms() {
         return kingdoms;
     }
+    static Game yetGame;
+
 
     public Game(Map currentMap, ArrayList<Kingdom> players) {
         this.currentMap = currentMap;
@@ -24,6 +27,7 @@ public class Game {
     private final Map currentMap;
     private Building selectedBuilding;
     private final ArrayList<Kingdom> players;
+
     private Kingdom currentKingdom;
     private final ArrayList<Unit> selectedUnits = new ArrayList<>();
     private final ArrayList<ArrayList<Unit>> movingUnits = new ArrayList<>();
@@ -121,6 +125,7 @@ public class Game {
             currentKingdom = players.get(currentKingdomNumber + 1);
         }
     }
+
 
     public String patrolUnit(PatrollingUnits patrollingUnit) {
         int xStart = patrollingUnit.getxStart();
@@ -414,7 +419,7 @@ public class Game {
             for (int j = 0; j < currentMap.getDimension(); j++) {
                 Cell cell = currentMap.getMap()[i][j];
                 for (Unit unit : cell.getUnits()) {
-                    if (unit!= null && unit.getHomeland() != null && unit.getHomeland() == currentKingdom) {
+                    if (unit != null && unit.getHomeland() != null && unit.getHomeland() == currentKingdom) {
                         output += unit + "\n";
                     }
                 }
@@ -422,4 +427,9 @@ public class Game {
         }
         return output;
     }
+
+    public static Game getYetGame() {
+        return yetGame;
+    }
 }
+

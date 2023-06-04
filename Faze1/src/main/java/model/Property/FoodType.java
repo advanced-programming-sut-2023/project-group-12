@@ -8,6 +8,7 @@ public enum FoodType {
 
     private final int buyPrice;
 
+
     FoodType(int buyPrice) {
         this.buyPrice = buyPrice;
     }

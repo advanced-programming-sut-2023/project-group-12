@@ -4,7 +4,6 @@ import model.Kingdom;
 import model.Property.*;
 
 import java.util.ArrayList;
-
 public class Storage extends Building {
     private BuildingType buildingType;
 
@@ -62,6 +61,13 @@ public class Storage extends Building {
         return balance;
     }
 
+    public void addToBalance(Property property) {
+        for (Property myProperty : balance) {
+            if (myProperty.equals(property)) {
+                myProperty.addValue(property.getValue());
+            }
+        }
+    }
 
     public Food getFoodByFoodType(FoodType foodType) {
         for (Property property : balance) {
@@ -71,7 +77,6 @@ public class Storage extends Building {
         }
         return null;
     }
-
     public Weapon getWeaponByWeaponType(WeaponType weaponType) {
         for (Property property : balance) {
             if (property instanceof Weapon)
