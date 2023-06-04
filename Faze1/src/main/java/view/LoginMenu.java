@@ -38,6 +38,7 @@ public class LoginMenu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        UserDatabase.setAreWeLoggingIn(true);
         VBox vBox = new VBox();
         VBox vBox1 = new VBox(usernameError, passwordError);
         Pane pane = new Pane(vBox, vBox1);
@@ -46,6 +47,7 @@ public class LoginMenu extends Application {
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
         pane.setPrefSize(width, height);
+        EnterMenu.getBackToMe(stage,pane);
         TextField username = new TextField();
         username.setPromptText("Username");
         PasswordField password = new PasswordField();
@@ -74,12 +76,13 @@ public class LoginMenu extends Application {
                 try {
                     String hashedPass = UserDatabase.hashPassword(password.getText(),UserDatabase.getUserByUsername(username.getText()).getSalt());
                     if (hashedPass.equals(UserDatabase.getUserByUsername(username.getText()).getPassword())) {
-//                        UserDatabase.loginUser(username.getText());
-//                        new MainMenu().start(stage);
+                        CaptchaMenu captchaMenu = new CaptchaMenu();
+                        captchaMenu.setLogginInUsername(username.getText());
+                        captchaMenu.start(EnterMenu.getStage());
                     } else {
                         passwordError.setText("Wrong password");
                     }
-                } catch (NoSuchAlgorithmException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }

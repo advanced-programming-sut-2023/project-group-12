@@ -25,6 +25,7 @@ public class SecurityQuestionMenu extends Application {
     public static void setUser(User user) {
         SecurityQuestionMenu.user = user;
     }
+
     private Captcha captcha = new Captcha();
 
     @Override
@@ -69,16 +70,15 @@ public class SecurityQuestionMenu extends Application {
             });
             submit.setOnMouseClicked(event1 -> {
                 if (!answer.getText().equals("")) {
-                    RegisterMenuController.addUser(user, answer.getText(), comoBox.getSelectionModel().getSelectedIndex()+1);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("User created successfully!");
-                    alert.show();
+                    CaptchaMenu captchaMenu = new CaptchaMenu();
+                    captchaMenu.setRegisteringUser(user);
+                    captchaMenu.setUserAnswer(answer.getText());
+                    captchaMenu.setUserQuestionNumber(comoBox.getSelectionModel().getSelectedIndex() + 1);
                     try {
-                        new EnterMenu().start(EnterMenu.getStage());
+                        captchaMenu.start(EnterMenu.getStage());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
-
                 }
             });
         });

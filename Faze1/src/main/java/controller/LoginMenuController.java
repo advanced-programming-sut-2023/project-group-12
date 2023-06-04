@@ -21,20 +21,20 @@ public class LoginMenuController {
         return "now you must answer the captcha";
     }
 
-    public String isCaptchaCorrect(Captcha captcha, String input) {
-        if (input.equals("new captcha")) {
-            return "new captcha is being generated";
-        }
-        for (int i = 0; i < captcha.getNumbers().length; i++) {
-            if (input.charAt(i) - '0' > 9 || input.charAt(i) - '0' < 0) {
-                return "incorrect input. The captcha contains digits from 0 to 9";
-            }
-            if (input.charAt(i) - '0' != captcha.getNumbers()[i]) {
-                return "incorrect captcha";
-            }
-        }
-        return "user logged in successfully!";
-    }
+//    public String isCaptchaCorrect(Captcha captcha, String input) {
+//        if (input.equals("new captcha")) {
+//            return "new captcha is being generated";
+//        }
+//        for (int i = 0; i < captcha.getNumbers().length; i++) {
+//            if (input.charAt(i) - '0' > 9 || input.charAt(i) - '0' < 0) {
+//                return "incorrect input. The captcha contains digits from 0 to 9";
+//            }
+//            if (input.charAt(i) - '0' != captcha.getNumbers()[i]) {
+//                return "incorrect captcha";
+//            }
+//        }
+//        return "user logged in successfully!";
+//    }
 
     public String checkUsername(String username) {
         // empty fields!

@@ -44,6 +44,7 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
         pane.setPrefSize(width, height);
+        EnterMenu.getBackToMe(stage,pane);
         TextField username = usernameField(width, height);
         PasswordField password = passwordField(width, height, pane);
         TextField email = emailField(width, height);
