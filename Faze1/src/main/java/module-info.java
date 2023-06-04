@@ -12,5 +12,7 @@ module Faze1 {
     opens view to com.google.gson, javafx.fxml;
     exports Enums;
     opens Enums to com.google.gson, javafx.fxml;
+    exports practices;
+    opens practices to com.google.gson, javafx.fxml;
 
 }

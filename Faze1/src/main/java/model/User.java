@@ -1,11 +1,22 @@
 package model;
 
+import view.ProfileMenu;
+
 public class User {
     private String username;
     private String password;
     private String nickname;
     private String email;
     private String question;
+    private String avatar;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public void setQuestion(int number) {
         this.question = UserDatabase.getQuestions().get(number - 1);
@@ -51,6 +62,7 @@ public class User {
         this.nickname = nickname;
         this.email = email;
         this.slogan = slogan;
+        this.avatar = ProfileMenu.class.getResource("/Avatars/avatar1.png").toExternalForm();
     }
 
     public String getUsername() {

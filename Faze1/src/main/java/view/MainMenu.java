@@ -1,17 +1,16 @@
 package view;
 
-import Commands.MainMenuCommands;
-import controller.MainMenuController;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.UserDatabase;
 
 import java.awt.*;
-import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class MainMenu extends Application {
     @Override
@@ -22,15 +21,84 @@ public class MainMenu extends Application {
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
         pane.setPrefSize(width, height);
-        Button goToMapMenu = new Button("Go to map menu");
-        Button goToProfileMenu = new Button("Go to profile menu");
-        Button goToStartMenu = new Button("Go to start menu");
-        Button userLogout = new Button("User logout");
-        Button exit = new Button("Exit");
-        pane.getChildren().addAll(goToMapMenu, goToProfileMenu, goToStartMenu, userLogout, exit);
+        VBox vBox = new VBox();
+        vBox.setLayoutX(width / 2 - 100);
+        vBox.setLayoutY(height / 2 - 100);
+        Button goToProfileMenu = getProfileMenu();
+        Button goToMapMenu = new Button("Go to map menu");//todo
+        Button goToStartMenu = getStartMenu();
+        Button userLogout = getLogout();
+        Button exit = getExit();
+        vBox.getChildren().addAll(goToStartMenu, goToMapMenu, goToProfileMenu, userLogout, exit);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setSpacing(30);
+        pane.getChildren().add(vBox);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+    }
+    
+    private static Button getExit() {
+        Button exit = new Button("Exit");
+        exit.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("Are you sure you want to exit?");
+            alert.showAndWait();
+            if (alert.getResult().getText().equals("OK"))
+                System.exit(0);
+        });
+        exit.setAlignment(Pos.CENTER);
+        exit.setPrefSize(200, 30);
+        return exit;
+    }
+
+    
+    private static Button getLogout() {
+        Button userLogout = new Button("User logout");
+        userLogout.setOnMouseClicked(event -> {
+            EnterMenu enterMenu = new EnterMenu();
+            try {
+                UserDatabase.setCurrentUser(null);
+                enterMenu.start(EnterMenu.getStage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        userLogout.setAlignment(Pos.CENTER);
+        userLogout.setPrefSize(200, 30);
+        return userLogout;
+    }
+
+    
+    private static Button getStartMenu() {
+        Button goToStartMenu = new Button("Go to start menu");
+        goToStartMenu.setOnMouseClicked(event -> {
+            StartMenu startMenu = new StartMenu();
+            try {
+                startMenu.start(EnterMenu.getStage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        goToStartMenu.setAlignment(Pos.CENTER);
+        goToStartMenu.setPrefSize(200, 30);
+        return goToStartMenu;
+    }
+
+    
+    private static Button getProfileMenu() {
+        Button goToProfileMenu = new Button("Go to profile menu");
+        goToProfileMenu.setOnMouseClicked(event -> {
+            ProfileMenu profileMenu = new ProfileMenu();
+            try {
+                profileMenu.start(EnterMenu.getStage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        goToProfileMenu.setAlignment(Pos.CENTER);
+        goToProfileMenu.setPrefSize(200, 30);
+        return goToProfileMenu;
     }
 }
 //    public void run(Scanner scanner) throws NoSuchAlgorithmException {
