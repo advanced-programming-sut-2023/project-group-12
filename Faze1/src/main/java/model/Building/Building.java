@@ -9,11 +9,13 @@ import java.util.HashMap;
 
 public class Building {
     private final BuildingType buildingType;
+    private int inFireTurn;
     private int hitPoint;
     private final int xPosition;
     private final int yPosition;
     private ArrayList<Unit> people;
     private int height;
+    public boolean isOnFire;
     private HashMap<String, Integer> price;
     private final Kingdom owner;
 
@@ -27,11 +29,30 @@ public class Building {
         this.owner = owner;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
+        isOnFire = false;
         hitPoint = buildingType.getHitPoint();
+        inFireTurn = 0;
+    }
+
+    public void setInFireTurn(int inFireTurn) {
+        this.inFireTurn = inFireTurn;
+    }
+
+    public int getInFireTurn() {
+        return inFireTurn;
     }
 
     public int getHitPoint() {
         return hitPoint;
+    }
+
+    public boolean isOnFire() {
+        return isOnFire;
+    }
+
+
+    public void setOnFire(boolean onFire) {
+        isOnFire = onFire;
     }
 
     public void setHeight(Building building) {
@@ -88,6 +109,10 @@ public class Building {
 
     public void subtractDelay(int delay) {
         this.delay -= delay;
+    }
+
+    public void setHitPoint(int hitPoint) {
+        this.hitPoint = hitPoint;
     }
 
     @Override

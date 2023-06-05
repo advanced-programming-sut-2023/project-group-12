@@ -30,7 +30,7 @@ public enum UnitType {
     ENGINEER(280, 0, 0.1, 3, 0, 0, 35, 0, 3, null, null, false, true, false, "engineer"),
     BLACK_MONK(400, 150, 0.2, 1, 1, 0, 15, 0.2, 0, null, null, false, false, false, "black monk"),
 
-
+    DOCTOR(300, 0, 0, 3, 0, 0,10,0,0,null, null, false,false,false, "doctor"),
     HORSE(100, 0, 0, 3, 0, 0, 0, 0, 0, null, null, false, false, false, "horse");
     private final int hitPoint;
     private final int attackPower;
