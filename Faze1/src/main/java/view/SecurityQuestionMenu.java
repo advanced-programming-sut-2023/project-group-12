@@ -26,7 +26,6 @@ public class SecurityQuestionMenu extends Application {
         SecurityQuestionMenu.user = user;
     }
 
-    private Captcha captcha = new Captcha();
 
     @Override
     public void start(Stage stage) throws Exception {

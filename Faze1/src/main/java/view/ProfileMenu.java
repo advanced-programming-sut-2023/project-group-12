@@ -1,289 +1,390 @@
 package view;
 
+import controller.ProfileController;
 import controller.RegisterMenuController;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.User;
 import model.UserDatabase;
 
 import java.awt.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
-public class ProfileMenu extends Application {//todo : check dialog instead of label
-    private static Label usernameErrorLabel = new Label("Username can't be empty");
-    private static Label emailErrorLabel = new Label("Email can't be empty");
-    private static Label nicknameErrorLabel = new Label("Nickname can't be empty");
-    private static Label sloganErrorLabel = new Label("this is already your slogan");
+public class ProfileMenu extends Application {//todo: scoreboard, show pass, style
+    private static Label usernameErrorLabel = new Label();
+    private static Label emailErrorLabel = new Label();
+    private static Label nicknameErrorLabel = new Label();
+    private static Label sloganErrorLabel = new Label();
+    private static Label passwordErrorLabel = new Label("Password is too short");
+    private static TextField fieldToChange = new TextField();
+    private static ProfileController controller = null;
 
     @Override
     public void start(Stage stage) throws Exception {
         // JUST FOR AVOIDING ERROR
-//        User user = new User("admin", "admin", "admin", "admin", "admin");
-//        UserDatabase.setCurrentUser(user);
-        VBox vBox = fieldsPlace();
-        Pane pane = new Pane(vBox);
-        Circle circle = avatarPlace(pane);
-        pane.getChildren().add(circle);
+        UserDatabase.loadUsers();
+        UserDatabase.setCurrentUser(UserDatabase.getUsers().get(UserDatabase.getUsers().size() - 1));
+
+        controller = new ProfileController(UserDatabase.getCurrentUser());
+
+        Pane pane = new Pane();
+        Circle circle = avatarPlace(pane,stage);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
+
+        VBox vBox = getvBox(width, height, pane);
+
+        pane.getChildren().add(vBox);
+
+        pane.getChildren().add(circle);
+        circle.toFront();
+        initializePosition(width, height);
+        getBack(stage,vBox);
         pane.setPrefSize(width, height);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
     }
 
-    private static VBox fieldsPlace() {//todo : placing and styling and password
+    private static void getBack(Stage stage,VBox vBox) {
+        Button back = new Button("back");
+        back.setOnAction(actionEvent -> {
+            try {
+                new MainMenu().start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        vBox.getChildren().add(back);
+    }
+
+    private static void initializePosition(double width, double height) {
+        usernameErrorLabel.setLayoutX(width / 2 + 50);
+        usernameErrorLabel.setLayoutY(height / 2 - 100);
+        usernameErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+
+        emailErrorLabel.setLayoutX(width / 2 + 50);
+        emailErrorLabel.setLayoutY(height / 2 - 100);
+        emailErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+
+        nicknameErrorLabel.setLayoutX(width / 2 + 50);
+        nicknameErrorLabel.setLayoutY(height / 2 - 100);
+        nicknameErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+
+        sloganErrorLabel.setLayoutX(width / 2 + 50);
+        sloganErrorLabel.setLayoutY(height / 2 - 100);
+        sloganErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+
+        passwordErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+
+        fieldToChange.setLayoutX(width / 2 - 100);
+        fieldToChange.setLayoutY(height / 2 - 100);
+    }
+
+    private static VBox getvBox(double width, double height, Pane pane) {
         VBox vBox = new VBox();
-        vBox.setLayoutX(150);
-        vBox.setLayoutY(100);
-        vBox.setSpacing(20);
-        HBox username = getUsername(vBox);
-        HBox email = getEmail(vBox);
-        HBox nickname = getNickname(vBox);
-        HBox slogan = getSlogan(vBox);
-        vBox.getChildren().addAll(username, email, nickname, slogan);
+        vBox.setSpacing(10);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setLayoutX(width / 2 - 100);
+        vBox.setLayoutY(height / 2 - 100);
+        Button changeUsername = getChangeUsername(width, height, pane, vBox);
+        Button changeNickname = getChangeNickname(width, height, pane, vBox);
+        Button changeEmail = getChangeEmail(width, height, pane, vBox);
+        Button changePassword = getChangePassword(width, height, pane, vBox);
+        Button changeSlogan = getChangeSlogan(width, height, pane, vBox);
+        vBox.getChildren().addAll(changeUsername, changeNickname, changeEmail, changePassword, changeSlogan);
         return vBox;
     }
 
-    private static HBox getSlogan(VBox vBox) {
-        HBox slogan = new HBox();
-        Text sloganText = new Text("Slogan : ");
-        Text sloganField = new Text(UserDatabase.getCurrentUser().getSlogan());
-        TextField textField = new TextField();
-        CheckBox change = new CheckBox();
-        Button submit = new Button("Submit");
-        change.setOnMouseClicked(actionEvent -> {
-            if (change.isSelected()) {
-                slogan.getChildren().remove(sloganField);
-                slogan.getChildren().addAll(textField, submit);
-                if (vBox.getChildren().contains(sloganErrorLabel)) {
-                    vBox.getChildren().remove(sloganErrorLabel);
+    private static Button getChangeSlogan(double width, double height, Pane pane, VBox vBox) {
+        Button changeSlogan = new Button("Change Slogan");
+        changeSlogan.setOnMouseEntered(mouseEvent -> {
+            changeSlogan.setStyle("-fx-background-color: #ff0000; ");
+            if (UserDatabase.getCurrentUser().getSlogan().equals("")) {
+                changeSlogan.setText("slogan is empty");
+            }
+            else {
+                changeSlogan.setText("UserDatabase.getCurrentUser().getSlogan()");
+            }
+        });
+        changeSlogan.setOnMouseExited(mouseEvent -> {
+            changeSlogan.setStyle("");
+            changeSlogan.setText("Change Slogan");
+        });
+        changeSlogan.setPrefSize(200, 50);
+        changeSlogan.setOnAction(actionEvent -> {
+            fieldToChange.setPromptText("slogan");
+            fieldToChange.setText(UserDatabase.getCurrentUser().getSlogan());
+            fieldToChange.textProperty().addListener((observableValue, s, t1) -> {
+                String output = controller.changeSlogan(t1);
+                if (output.equals("true")) {
+                    sloganErrorLabel.setText("");
+                } else {
+                    sloganErrorLabel.setText(output);
+                    sloganErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
                 }
-                vBox.getChildren().add(sloganErrorLabel);
-                sloganErrorLabel.setVisible(false);
-            } else if (!sloganErrorLabel.isVisible()) {
-
-                slogan.getChildren().removeAll(textField, submit);
-                slogan.getChildren().add(sloganField);
-                vBox.getChildren().remove(sloganErrorLabel);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("this is already your slogan");
-                alert.show();
-                change.setSelected(true);
-            }
-        });
-        textField.textProperty().addListener((observableValue, s, t1) -> {
-            if (t1.equals(UserDatabase.getCurrentUser().getSlogan())) {
-                sloganErrorLabel.setVisible(true);
-            } else {
-                sloganErrorLabel.setVisible(false);
-            }
-        });
-        submit.setOnAction(actionEvent -> {
-            if (sloganErrorLabel.isVisible()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("this is already your slogan");
-                alert.show();
-                return;
-            } else {
-                if (textField.getText().isEmpty()) {
-                    textField.setText("slogan is empty");
+            });
+            Button back = new Button("back");
+            Button submit = new Button("submit");
+            Button removeSlogan = new Button("remove slogan");
+            removeSlogan.setLayoutX(width / 2);
+            removeSlogan.setLayoutY(height / 2 - 50);
+            removeSlogan.setOnAction(actionEvent1 -> {
+                if (UserDatabase.getCurrentUser().getSlogan().equals("")) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("you don't have any slogan");
+                    alert.show();
                 }
-                UserDatabase.getCurrentUser().setSlogan(textField.getText());
-                sloganField.setText(textField.getText());
-
-                slogan.getChildren().removeAll(textField, submit);
-                slogan.getChildren().add(sloganField);
-                change.setSelected(false);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("slogan changed successfully");
-                alert.showAndWait();
-            }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setContentText("are you sure you want to remove your slogan?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        controller.removeSlogan();
+                        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                        alert1.setContentText("slogan removed successfully");
+                        alert1.showAndWait();
+                        pane.getChildren().removeAll(fieldToChange, submit, back, sloganErrorLabel, removeSlogan);
+                        pane.getChildren().add(vBox);
+                    }
+                }
+            });
+            submit.setLayoutX(width / 2 - 100);
+            submit.setLayoutY(height / 2 - 50);
+            back.setLayoutX(0);
+            back.setLayoutY(0);
+            submit.setOnAction(actionEvent1 -> {
+                String output = controller.changeSlogan(fieldToChange.getText());
+                if (output.equals("true")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("slogan changed successfully");
+                    alert.showAndWait();
+                    pane.getChildren().removeAll(fieldToChange, submit, back, sloganErrorLabel, removeSlogan);
+                    pane.getChildren().add(vBox);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText(output);
+                    alert.show();
+                }
+            });
+            back.setOnAction(actionEvent1 -> {
+                pane.getChildren().removeAll(fieldToChange, back, sloganErrorLabel, submit, removeSlogan);
+                pane.getChildren().add(vBox);
+            });
+            pane.getChildren().remove(vBox);
+            pane.getChildren().addAll(fieldToChange, sloganErrorLabel, back, submit, removeSlogan);
         });
-        slogan.getChildren().addAll(change, sloganText, sloganField);
-        return slogan;
+        return changeSlogan;
     }
 
-    private static HBox getNickname(VBox vBox) {
-        HBox nickname = new HBox();
-        Text nicknameText = new Text("Nickname : ");
-        Text nicknameField = new Text(UserDatabase.getCurrentUser().getNickname());
-        TextField textField = new TextField();
-        CheckBox change = new CheckBox();
-        Button submit = new Button("Submit");
-        change.setOnMouseClicked(actionEvent -> {
-            if (change.isSelected()) {
-                nickname.getChildren().remove(nicknameField);
-                nickname.getChildren().addAll(textField, submit);
-                vBox.getChildren().add(nicknameErrorLabel);
-            } else if (!nicknameErrorLabel.isVisible()) {
-                vBox.getChildren().remove(nicknameErrorLabel);
-
-                nickname.getChildren().removeAll(textField, submit);
-                nickname.getChildren().add(nicknameField);
+    private static Button getChangePassword(double width, double height, Pane pane, VBox vBox) {
+        Button changePassword = new Button("Change Password");
+        changePassword.setOnMouseEntered(mouseEvent -> changePassword.setStyle("-fx-background-color: #ff0000;"));
+        changePassword.setOnMouseExited(mouseEvent -> changePassword.setStyle(""));
+        changePassword.setPrefSize(200, 50);
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Change Password");
+        dialog.setHeaderText("Enter your old password and new password");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        GridPane gridPane = new GridPane();
+        PasswordField oldPassword = new PasswordField();
+        oldPassword.setPromptText("old password");
+        PasswordField newPassword = new PasswordField();
+        newPassword.setPromptText("new password");
+        gridPane.add(passwordErrorLabel, 1, 1);
+        newPassword.textProperty().addListener((observableValue, s, t1) -> {
+            if (!RegisterMenuController.isPasswordWeak(t1).equals("true")) {
+                passwordErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+                passwordErrorLabel.setText(RegisterMenuController.isPasswordWeak(t1));
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Nickname can't be empty");
-                alert.show();
-                change.setSelected(true);
+                passwordErrorLabel.setText("");
             }
         });
-        textField.textProperty().addListener((observableValue, s, t1) -> {
-            if (t1.isEmpty()) {
-                nicknameErrorLabel.setVisible(true);
-            } else {
-                nicknameErrorLabel.setVisible(false);
+        gridPane.add(oldPassword, 0, 0);
+        gridPane.add(newPassword, 0, 1);
+        dialog.getDialogPane().setContent(gridPane);
+        changePassword.setOnAction(actionEvent -> {
+            Optional<Void> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                String output = null;
+                try {
+                    output = controller.changePassword(oldPassword.getText(), newPassword.getText());
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
+                if (output.equals("true")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("password changed successfully");
+                    alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText(output);
+                    alert.show();
+                }
             }
         });
-        submit.setOnMouseClicked(actionEvent -> {
-            if (textField.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Nickname can't be empty");
-                alert.show();
-            } else {
-                UserDatabase.getCurrentUser().setNickname(textField.getText());
-                nicknameField.setText(textField.getText());
-                vBox.getChildren().remove(nicknameErrorLabel);
-
-                nickname.getChildren().removeAll(textField, submit);
-                nickname.getChildren().add(nicknameField);
-                change.setSelected(false);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Nickname changed successfully");
-                alert.showAndWait();
-            }
-        });
-        nickname.getChildren().addAll(change, nicknameText, nicknameField);
-        return nickname;
+        return changePassword;
     }
 
-    private static HBox getEmail(VBox vBox) {
-        HBox email = new HBox();
-        Text emailText = new Text("Email : ");
-        Text emailField = new Text(UserDatabase.getCurrentUser().getEmail());
-        TextField textField = new TextField();
-        CheckBox change = new CheckBox();
-        Button submit = new Button("Submit");
-        change.setOnMouseClicked(actionEvent -> {
-            if (change.isSelected()) {
-                email.getChildren().remove(emailField);
-                email.getChildren().addAll(textField, submit);
-                vBox.getChildren().add(emailErrorLabel);
-            } else if (!emailErrorLabel.isVisible()) {
-                vBox.getChildren().remove(emailErrorLabel);
-
-                email.getChildren().removeAll(textField, submit);
-                email.getChildren().add(emailField);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Email is not correct");
-                alert.showAndWait();
-                change.setSelected(true);
-            }
+    private static Button getChangeEmail(double width, double height, Pane pane, VBox vBox) {
+        Button changeEmail = new Button("Change Email");
+        changeEmail.setOnMouseEntered(mouseEvent -> {
+            changeEmail.setStyle("-fx-background-color: #ff0000;");
+            changeEmail.setText(UserDatabase.getCurrentUser().getEmail());
         });
-        textField.textProperty().addListener((observableValue, s, t1) -> {
-            if (t1.isEmpty()) {
-                emailErrorLabel.setVisible(true);
-            } else if (UserDatabase.isEmailExists(t1.toUpperCase())) {
-                emailErrorLabel.setText("Email already exists");
-            } else if (!RegisterMenuController.isEmailFormatCorrect(t1)) {
-                emailErrorLabel.setText("Email is not correct");
-            } else {
-                emailErrorLabel.setVisible(false);
-            }
+        changeEmail.setOnMouseExited(mouseEvent -> {
+            changeEmail.setStyle("");
+            changeEmail.setText("Change Email");
         });
-        submit.setOnMouseClicked(actionEvent -> {
-            if (emailErrorLabel.isVisible()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Email is not correct");
-                alert.showAndWait();
-            } else {
-                UserDatabase.getCurrentUser().setEmail(textField.getText());
-                emailField.setText(textField.getText());
-
-                email.getChildren().removeAll(textField, submit);
-                vBox.getChildren().remove(emailErrorLabel);
-                email.getChildren().add(emailField);
-                change.setSelected(false);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Email changed successfully");
-                alert.showAndWait();
-            }
+        changeEmail.setPrefSize(200, 50);
+        changeEmail.setOnAction(actionEvent -> {
+            fieldToChange.setPromptText("email");
+            fieldToChange.setText(UserDatabase.getCurrentUser().getEmail());
+            fieldToChange.textProperty().addListener((observableValue, s, t1) -> {
+                String output = controller.changeEmail(t1);
+                if (output.equals("true")) {
+                    emailErrorLabel.setText("");
+                } else {
+                    emailErrorLabel.setText(output);
+                    emailErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+                }
+            });
+            Button submit = new Button("submit");
+            submit.setLayoutX(width / 2 - 100);
+            submit.setLayoutY(height / 2 - 50);
+            Button back = new Button("back");
+            submit.setOnAction(actionEvent1 -> {
+                String output = controller.changeEmail(fieldToChange.getText());
+                if (output.equals("true")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("email changed successfully");
+                    alert.showAndWait();
+                    pane.getChildren().removeAll(fieldToChange, submit, back, emailErrorLabel);
+                    pane.getChildren().add(vBox);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText(output);
+                    alert.show();
+                }
+            });
+            back.setOnAction(actionEvent1 -> {
+                pane.getChildren().removeAll(fieldToChange, back, emailErrorLabel, submit);
+                pane.getChildren().add(vBox);
+            });
+            pane.getChildren().remove(vBox);
+            pane.getChildren().addAll(fieldToChange, emailErrorLabel, back, submit);
         });
-        email.getChildren().addAll(change, emailText, emailField);
-        return email;
+        return changeEmail;
     }
 
-    private static HBox getUsername(VBox vBox) {
-        HBox username = new HBox();
-        Text usernameText = new Text("Username : ");
-        Text usernameField = new Text(UserDatabase.getCurrentUser().getUsername());
-        Button submit = new Button("Submit");
-        TextField textField = new TextField();
-        textField.setPromptText("Enter new username");
-        CheckBox change = new CheckBox();
-        change.setOnMouseClicked(actionEvent -> {//todo : placing and styling
-            if (change.isSelected()) {
-                username.getChildren().remove(usernameField);
-                username.getChildren().addAll(textField, submit);
-                vBox.getChildren().add(usernameErrorLabel);
-            } else if (!usernameErrorLabel.isVisible()) {
-                vBox.getChildren().remove(usernameErrorLabel);
-                username.getChildren().removeAll(textField, submit);
-                username.getChildren().add(usernameField);
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Username is not correct");
-                alert.showAndWait();
-                change.setSelected(true);
-            }
+    private static Button getChangeUsername(double width, double height, Pane pane, VBox vBox) {
+        Button changeUsername = new Button("Change Username");
+        changeUsername.setOnMouseEntered(mouseEvent -> {
+            changeUsername.setStyle("-fx-background-color: #ff0000;");
+            changeUsername.setText(UserDatabase.getCurrentUser().getUsername());
         });
-        textField.textProperty().addListener((observableValue, s, t1) -> {
-            if (t1.isEmpty())
-                usernameErrorLabel.setVisible(true);
-            else if (RegisterMenuController.isUsernameUsed(t1)) {
-                usernameErrorLabel.setText("Username already exists");
-            } else if (!RegisterMenuController.isCorrectUsername(t1)) {
-                usernameErrorLabel.setText("Username format is not correct");
-            } else {
-                usernameErrorLabel.setVisible(false);
-            }
+        changeUsername.setOnMouseExited(mouseEvent -> {
+            changeUsername.setStyle("");
+            changeUsername.setText("Change Username");
         });
-        submit.setOnMouseClicked(actionEvent -> {
-            if (usernameErrorLabel.isVisible()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Username is not correct");
-                alert.showAndWait();
-            } else {
-                UserDatabase.getCurrentUser().setUsername(textField.getText());
-                usernameField.setText(textField.getText());
-                username.getChildren().removeAll(textField, submit);
-                vBox.getChildren().remove(usernameErrorLabel);
-                username.getChildren().add(usernameField);
-                change.setSelected(false);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Username changed successfully");
-                alert.showAndWait();
-            }
+        changeUsername.setPrefSize(200, 50);
+        changeUsername.setOnAction(actionEvent -> {
+            fieldToChange.setPromptText("username");
+            fieldToChange.setText(UserDatabase.getCurrentUser().getUsername());
+            fieldToChange.textProperty().addListener((observableValue, s, t1) -> {
+                String output = controller.changeUsername(t1);
+                if (!output.equals("true")) {
+                    usernameErrorLabel.setText(output);
+                    usernameErrorLabel.setTextFill(javafx.scene.paint.Color.RED);
+                } else if (t1.length() > 0) {
+                    usernameErrorLabel.setText("");
+                }
+            });
+            Button submit = new Button("submit");
+            submit.setLayoutX(width / 2 - 100);
+            submit.setLayoutY(height / 2 - 50);
+            Button back = new Button("back");
+            submit.setOnAction(actionEvent1 -> {
+                String output = controller.changeUsername(fieldToChange.getText());
+                if (output.equals("true")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("username changed successfully");
+                    alert.showAndWait();
+                    pane.getChildren().removeAll(fieldToChange, submit, back, usernameErrorLabel);
+                    pane.getChildren().add(vBox);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText(output);
+                    alert.show();
+                }
+            });
+            back.setOnAction(actionEvent1 -> {
+                pane.getChildren().removeAll(fieldToChange, back, usernameErrorLabel, submit);
+                pane.getChildren().add(vBox);
+            });
+            pane.getChildren().remove(vBox);
+            pane.getChildren().addAll(fieldToChange, usernameErrorLabel, back, submit);
         });
-        username.getChildren().addAll(change, usernameText, usernameField);
-        return username;
+        return changeUsername;
     }
 
-    private static Circle avatarPlace(Pane pane) {
+    private static Button getChangeNickname(double width, double height, Pane pane, VBox vBox) {
+        Button changeNickname = new Button("Change Nickname");
+        changeNickname.setOnMouseEntered(mouseEvent -> {
+            changeNickname.setStyle("-fx-background-color: #ff0000;");
+            changeNickname.setText(UserDatabase.getCurrentUser().getNickname());
+        });
+        changeNickname.setOnMouseExited(mouseEvent -> {
+            changeNickname.setStyle("");
+            changeNickname.setText("Change Nickname");
+        });
+        changeNickname.setPrefSize(200, 50);
+        changeNickname.setOnAction(actionEvent -> {
+            fieldToChange.setPromptText("nickname");
+            fieldToChange.setText(UserDatabase.getCurrentUser().getNickname());
+            fieldToChange.textProperty().addListener((observableValue, s, t1) -> {
+                if (t1.length() > 0) {
+                    nicknameErrorLabel.setText("");
+                }
+
+            });
+            Button submit = new Button("submit");
+            submit.setLayoutX(width / 2 - 100);
+            submit.setLayoutY(height / 2 - 50);
+            Button back = new Button("back");
+            submit.setOnAction(actionEvent1 -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                String output = controller.changeNickname(fieldToChange.getText());
+                alert.setContentText(output);
+                alert.showAndWait();
+                pane.getChildren().removeAll(fieldToChange, submit, back, nicknameErrorLabel);
+                pane.getChildren().add(vBox);
+            });
+            back.setOnAction(actionEvent1 -> {
+                pane.getChildren().removeAll(fieldToChange, back, nicknameErrorLabel, submit);
+                pane.getChildren().add(vBox);
+            });
+            pane.getChildren().remove(vBox);
+            pane.getChildren().addAll(fieldToChange, nicknameErrorLabel, back, submit);
+        });
+        return changeNickname;
+    }
+
+    private static Circle avatarPlace(Pane pane,Stage stage) {
         Circle circle = new Circle();
         circle.setRadius(50);
         Image image = new Image(UserDatabase.getCurrentUser().getAvatar());
@@ -292,7 +393,7 @@ public class ProfileMenu extends Application {//todo : check dialog instead of l
         circle.setCenterY(60);
         circle.setOnMouseClicked(mouseEvent -> {
             try {
-                new AvatarMenu().start(EnterMenu.getStage());
+                new AvatarMenu().start(stage);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

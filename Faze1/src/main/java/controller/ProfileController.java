@@ -21,7 +21,7 @@ public class ProfileController {
             if (UserDatabase.getUserByUsername(username) == null) {
                 String oldUsername = currentUser.getUsername();
                 currentUser.setUsername(username);
-                return "Your username from <" + oldUsername + "> changed to <" + username + ">";
+                return "true";
             }
             return "Player with username <" + username + "> already exists";
         }
@@ -47,7 +47,7 @@ public class ProfileController {
             if (RegisterMenuController.isPasswordWeak(newPassword).equals("true")) {
                 if (!UserDatabase.hashPassword(newPassword, currentUser.getSalt()).equals(oldPassword)) {
                     currentUser.setPassword(UserDatabase.hashPassword(newPassword,currentUser.getSalt()));
-                    return "Your password <" + oldPasswordToShow + "> changed to <" + newPassword + "> successfully";
+                    return "true";
                 }
                 return "You should choose a new password";
             }
@@ -64,7 +64,7 @@ public class ProfileController {
             if (!UserDatabase.existsEmail(email)) {
                 String oldEmail = currentUser.getEmail();
                 currentUser.setEmail(email);
-                return "Your email <" + oldEmail + "> changed to <" + email + "> successfully";
+                return "true";
             }
             return "This email is already used";
         }
@@ -75,12 +75,8 @@ public class ProfileController {
         if (slogan.isEmpty()) {
             return "Slogan can't be empty";
         }
-        if (slogan.equals("random")) {
-            slogan = RegisterMenuController.generateRandomSlogan();
-        }
-        String oldSlogan = currentUser.getSlogan();
         currentUser.setSlogan(slogan);
-        return "Your slogan <" + oldSlogan + "> changed to <" + slogan + "> successfully";
+        return "true";
     }
 
     public String removeSlogan() {
