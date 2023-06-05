@@ -13,6 +13,7 @@ public class Cell {
     private TextureType TextureType = model.map.TextureType.EARTH;
     private final boolean isPassable;
     private Tree tree = null;
+    private boolean isSick = false;
 
     private Building building = null;
     private int height = 0;
@@ -97,4 +98,13 @@ public class Cell {
     public int getyCoordinate() {
         return yCoordinate;
     }
+
+    public boolean isSick() {
+        return isSick;
+    }
+
+    public void setSick(boolean sick) {
+        isSick = sick;
+    }
+
 }

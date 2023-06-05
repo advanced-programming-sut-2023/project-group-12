@@ -5,12 +5,15 @@ import model.Building.*;
 import model.map.Cell;
 import model.map.Map;
 import model.people.Unit;
+import model.people.UnitType;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Game {
 
 
+    private final ArrayList<Kingdom> kingdoms = new ArrayList<>();
     public ArrayList<Kingdom> getKingdoms() {
         return kingdoms;
     }
@@ -119,6 +122,10 @@ public class Game {
             unitCreation.run();
         }
         if (currentKingdomNumber == (players.size() - 1)) {
+            checkBuildingsOnFire();
+            healSickCells();
+            checkSickCells();
+            makeSickCells();
             roundsPassed++;
             currentKingdom = players.get(0);
         } else {
@@ -396,7 +403,7 @@ public class Game {
         this.currentKingdom = currentKingdom;
     }
 
-    private final ArrayList<Kingdom> kingdoms = new ArrayList<>();
+
 
     public String showBuildings() {
         String output = "";
@@ -430,6 +437,67 @@ public class Game {
 
     public static Game getYetGame() {
         return yetGame;
+    }
+    private void makeSickCells(){
+        for (Cell[] cells : currentMap.getMap()) {
+            for (Cell cell: cells) {
+                if(getCellOwner(cell) != null) {
+                    Random random = new Random();
+                    int sickProbably = random.nextInt(11);
+                    if (sickProbably == 1) {
+                        cell.setSick(true);
+                    }
+                }
+            }
+        }
+    }
+    private void checkSickCells(){
+        for (Cell[] cells : currentMap.getMap()) {
+            for (Cell cell: cells) {
+                if (cell.isSick() && getCellOwner(cell) != null){
+//                    System.out.println(cell.getxCoordinate() + " " + cell.getyCoordinate());
+                    getCellOwner(cell).addPopularity(-5);
+                }
+            }
+        }
+    }
+
+    public Kingdom getCellOwner(Cell cell){
+        for (Kingdom kingdom : kingdoms) {
+            int xPath = Math.abs(kingdom.getHeadSquare().getxCoordinate() - cell.getxCoordinate());
+            int yPath = Math.abs(kingdom.getHeadSquare().getyCoordinate() - cell.getyCoordinate());
+            if((xPath + yPath) < 40){
+                return kingdom;
+            }
+        }
+        return null;
+    }
+
+    private void healSickCells(){
+        for (Cell[] cells : currentMap.getMap()) {
+            for (Cell cell: cells) {
+                if (cell.isSick() && getCellOwner(cell) != null){
+                    for (Unit unit : cell.getUnits()) {
+                        if(unit.getUnitType() == UnitType.DOCTOR && unit.getHomeland() == getCellOwner(cell)){
+                            cell.setSick(false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private void checkBuildingsOnFire(){
+        for (Cell[] cells : currentMap.getMap()) {
+            for (Cell cell: cells) {
+                if(cell.getBuilding() != null && cell.getBuilding().isOnFire()){
+                    cell.getBuilding().setHitPoint(cell.getBuilding().getHitPoint() - 5);
+                    cell.getBuilding().setInFireTurn(cell.getBuilding().getInFireTurn()-1);
+                    if(cell.getBuilding().getInFireTurn() == 0){
+                        cell.getBuilding().setOnFire(false);
+                    }
+                }
+            }
+        }
     }
 }
 
