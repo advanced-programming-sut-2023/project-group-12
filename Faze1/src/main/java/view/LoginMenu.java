@@ -3,10 +3,10 @@ package view;
 import controller.RegisterMenuController;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import model.UserDatabase;
 
 import java.awt.*;
-import java.security.NoSuchAlgorithmException;
 
 public class LoginMenu extends Application {
     private Label usernameError = new Label();
@@ -47,7 +46,7 @@ public class LoginMenu extends Application {
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
         pane.setPrefSize(width, height);
-        EnterMenu.getBackToMe(stage,pane);
+        EnterMenu.getBackToMe(stage, pane);
         TextField username = new TextField();
         username.setPromptText("Username");
         PasswordField password = new PasswordField();
@@ -60,34 +59,19 @@ public class LoginMenu extends Application {
         vBox1.setLayoutY(height / 2 - 200);
         vBox1.setSpacing(20);
         VBox vBox2 = new VBox(questionError);
-        vBox2.setLayoutX(width / 2 -100);
+        vBox2.setLayoutX(width / 2 - 100);
         vBox2.setLayoutY(height / 2 - 200);
         pane.getChildren().add(vBox2);
+        Button enter = getEnter(username, password);
+        Button forgotPassword = getForgotPassword(vBox, username, vBox2);
+        vBox.getChildren().addAll(forgotPassword, enter);
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private Button getForgotPassword(VBox vBox, TextField username, VBox vBox2) {
         Button forgotPassword = new Button("Forgot Password");
-        Button enter = new Button("Enter");
-        enter.setOnMouseClicked(event->{
-            if (username.getText().equals("")) {
-                usernameError.setText("Username can't be empty");
-            }
-            else if (password.getText().equals("")) {
-                passwordError.setText("Password can't be empty");
-            }
-            else {
-                try {
-                    String hashedPass = UserDatabase.hashPassword(password.getText(),UserDatabase.getUserByUsername(username.getText()).getSalt());
-                    if (hashedPass.equals(UserDatabase.getUserByUsername(username.getText()).getPassword())) {
-                        CaptchaMenu captchaMenu = new CaptchaMenu();
-                        captchaMenu.setLogginInUsername(username.getText());
-                        captchaMenu.start(EnterMenu.getStage());
-                    } else {
-                        passwordError.setText("Wrong password");
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        vBox.getChildren().addAll(forgotPassword,enter);
         forgotPassword.setOnMouseClicked(event -> {
             usernameError.setText("");
             passwordError.setText("");
@@ -101,44 +85,93 @@ public class LoginMenu extends Application {
                 Text text = new Text("answer the question\n" + UserDatabase.getUserByUsername(username.getText()).getQuestion());
                 text.setFill(Color.YELLOW);
                 TextField answer = new TextField();
-                Button submit = new Button("Submit");
-                submit.setOnMouseClicked(event1 -> {
-                    if (answer.getText().equals("")) {
-                        questionError.setText("Answer can't be empty");
-                    } else if (!UserDatabase.getUserByUsername(username.getText()).getAnswer().equals(answer.getText())) {
-                        questionError.setText("Wrong answer");
-                    } else {
-                        questionError.setText("");
-                        String newPassword = RegisterMenuController.generateRandomPassword();
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("New Password");
-                        alert.setHeaderText("Your new password is:");
-                        alert.setContentText(newPassword);
-                        alert.showAndWait();
-                        TextField confirm = new TextField();
-                        confirm.setPromptText("Confirm");
-                        Button enter1 = new Button("Enter");
-                        enter1.setOnMouseClicked(event2 -> {
-                            if (confirm.getText().equals("")) {
-                                passwordError.setText("Password can't be empty");
-                            } else if (!confirm.getText().equals(newPassword)) {
-                                passwordError.setText("Passwords don't match");
-                            } else {
-                                passwordError.setText("");
-                                UserDatabase.getUserByUsername(username.getText()).setPassword(confirm.getText());
-                                vBox2.getChildren().clear();
-                            }
-                        });
-                        vBox2.getChildren().clear();
-                        vBox2.getChildren().addAll(enter1,passwordError,confirm);
-                    }
-                });
+                Button submit = getSubmit(username, vBox2, answer);
                 vBox2.getChildren().addAll(text, answer, submit);
             }
         });
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
+        return forgotPassword;
+    }
+
+    private Button getSubmit(TextField username, VBox vBox2, TextField answer) {
+        Button submit = new Button("Submit");
+        submit.setOnMouseClicked(event1 -> {
+            if (answer.getText().equals("")) {
+                questionError.setText("Answer can't be empty");
+            } else if (!UserDatabase.getUserByUsername(username.getText()).getAnswer().equals(answer.getText())) {
+                questionError.setText("Wrong answer");
+            } else {
+                questionError.setText("");
+                String newPassword = RegisterMenuController.generateRandomPassword();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("New Password");
+                alert.setHeaderText("Your new password is:");
+                alert.setContentText(newPassword);
+                alert.showAndWait();
+                PasswordField confirm = new PasswordField();
+                confirm.setPromptText("Confirm");
+                Button enter1 = getEnter1(username, vBox2, newPassword, confirm);
+                vBox2.getChildren().clear();
+                vBox2.getChildren().addAll(enter1, passwordError, confirm);
+            }
+        });
+        return submit;
+    }
+
+    private Button getEnter1(TextField username, VBox vBox2, String newPassword, PasswordField confirm) {
+        Button enter1 = new Button("Enter");
+        enter1.setOnMouseClicked(event2 -> {
+            if (confirm.getText().equals("")) {
+                passwordError.setText("Password can't be empty");
+            } else if (!confirm.getText().equals(newPassword)) {
+                passwordError.setText("Passwords don't match");
+            } else {
+                passwordError.setText("");
+                UserDatabase.getUserByUsername(username.getText()).setPassword(confirm.getText());
+                vBox2.getChildren().clear();
+                UserDatabase.setCurrentUser(UserDatabase.getUserByUsername(username.getText()));
+                Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                alert1.setTitle("Password Changed");
+                alert1.setHeaderText("Your password has been changed successfully");
+                alert1.showAndWait();
+                try {
+                    new EnterMenu().start(EnterMenu.getStage());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return enter1;
+    }
+
+    private Button getEnter(TextField username, PasswordField password) {
+        Button enter = new Button("Enter");
+        enter.setOnMouseClicked(event -> {
+            if (username.getText().equals("")) {
+                passwordError.setText("");
+                usernameError.setText("Username can't be empty");
+            } else if (password.getText().equals("")) {
+                usernameError.setText("");
+                passwordError.setText("Password can't be empty");
+            } else if (UserDatabase.getUserByUsername(username.getText()) == null) {
+                passwordError.setText("");
+                usernameError.setText("Username doesn't exist");
+            } else {
+                try {
+                    String hashedPass = UserDatabase.hashPassword(password.getText(), UserDatabase.getUserByUsername(username.getText()).getSalt());
+                    if (hashedPass.equals(UserDatabase.getUserByUsername(username.getText()).getPassword())) {
+                        CaptchaMenu captchaMenu = new CaptchaMenu();
+                        captchaMenu.setLogginInUsername(username.getText());
+                        captchaMenu.start(EnterMenu.getStage());
+                    } else {
+                        usernameError.setText("");
+                        passwordError.setText("Wrong password");
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return enter;
     }
 }
 //    private int numberOfWrongPasswords = 0;

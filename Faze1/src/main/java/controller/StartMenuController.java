@@ -27,8 +27,8 @@ public class StartMenuController {
                 return "Player is already added";
             }
         }
-        if (UserDatabase.getPlayers().size() > UserDatabase.getCurrentMap().getHeadSquares().size() - 1)
-            return "The map is filled!";
+//        if (UserDatabase.getPlayers().size() > UserDatabase.getCurrentMap().getHeadSquares().size() - 1)
+//            return "The map is filled!";
         UserDatabase.getPlayers().add(UserDatabase.getUserByUsername(username));
         return "Player successfully added";
     }

@@ -77,7 +77,7 @@ public class AvatarMenu extends Application {
         avatarByDragging.setLayoutX(width / 2 - 100);
         avatarByDragging.setLayoutY(height / 2 + 150);
         avatarByDragging.setOnMouseClicked(event -> {
-            
+
         });
         addAvatar.setLayoutX(width / 2 - 100);
         addAvatar.setLayoutY(height / 2 + 100);

@@ -44,9 +44,13 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
         pane.setPrefSize(width, height);
-        EnterMenu.getBackToMe(stage,pane);
+        setErrorLabels(width, height);
+        EnterMenu.getBackToMe(stage, pane);
         TextField username = usernameField(width, height);
         PasswordField password = passwordField(width, height, pane);
+        TextField visiblePassword = passwordFieldAsTextField(width, height, pane);
+        CheckBox showPassword = getShowPassword(pane, width, height, password, visiblePassword);
+        Hyperlink randomPassword = getRandomPassword(width, height, password, visiblePassword);
         TextField email = emailField(width, height);
         setRegisterEmail(width, height, email);
         TextField nickname = nicknameField(width, height);
@@ -56,10 +60,78 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         Button submit = submitButton(pane);
         Label label = getSloganLabel(pane, width, height, wantSlogan, reset, submit);
         setBackGround(pane);
-        pane.getChildren().addAll(username, usernameErrorLabel, password, passwordErrorLabel, email, nickname, label, wantSlogan, emailErrorLabel, nicknameErrorLabel);
+        pane.getChildren().add(username);
+        pane.getChildren().add(password);
+        pane.getChildren().addAll(usernameErrorLabel, randomPassword, passwordErrorLabel, email, nickname, label, wantSlogan, emailErrorLabel, nicknameErrorLabel, showPassword);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void setErrorLabels(double width, double height) {
+        passwordErrorLabel.setTextFill(Color.RED);
+        passwordErrorLabel.setLayoutX(width / 2 - 250);
+        passwordErrorLabel.setLayoutY(height / 2 - 50);
+        passwordErrorLabel.setPrefSize(300, 30);
+
+        usernameErrorLabel.setTextFill(Color.RED);
+        usernameErrorLabel.setLayoutX(width / 2 - 250);
+        usernameErrorLabel.setLayoutY(height / 2 - 100);
+        usernameErrorLabel.setPrefSize(300, 30);
+
+        emailErrorLabel.setLayoutX(width / 2 + 70);
+        emailErrorLabel.setLayoutY(height / 2 + 40);
+        emailErrorLabel.setTextFill(Color.RED);
+
+        nicknameErrorLabel.setLayoutX(width / 2 + 70);
+        nicknameErrorLabel.setLayoutY(height / 2 + 40);
+        nicknameErrorLabel.setTextFill(Color.RED);
+
+        sloganErrorLabel.setText(Errors.SLOGAN_EMPTY.getErrorText());
+        sloganErrorLabel.setTextFill(Color.RED);
+        sloganErrorLabel.setLayoutX(width / 2 - 250);
+        sloganErrorLabel.setLayoutY(height / 2 + 110);
+        sloganErrorLabel.setPrefSize(300, 30);
+    }
+
+    private Hyperlink getRandomPassword(double width, double height, PasswordField password, TextField visiblePassword) {
+        Hyperlink randomPassword = new Hyperlink("random password");
+        randomPassword.setLayoutX(width / 2 - 80);
+        randomPassword.setLayoutY(height / 2 - 28);
+        randomPassword.setPrefSize(150, 30);
+        randomPassword.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Random Password");
+            alert.setHeaderText("Do you want to use this password?");
+            String randomPasswordText = RegisterMenuController.generateRandomPassword();
+            alert.setContentText(randomPasswordText);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+                registerPassword = randomPasswordText;
+                password.setText(randomPasswordText);
+                visiblePassword.setText(randomPasswordText);
+            }
+        });
+        return randomPassword;
+    }
+
+    private CheckBox getShowPassword(Pane pane, double width, double height, PasswordField password, TextField visiblePassword) {
+        CheckBox showPassword = new CheckBox("Show Password");
+        showPassword.setLayoutX(width / 2 + 70);
+        showPassword.setLayoutY(height / 2 - 40);
+        showPassword.setPrefSize(20, 20);
+        showPassword.setOnMouseClicked(mouseEvent -> {
+            if (showPassword.isSelected()) {
+                visiblePassword.setText(password.getText());
+                pane.getChildren().remove(password);
+                pane.getChildren().add(visiblePassword);
+            } else {
+                password.setText(visiblePassword.getText());
+                pane.getChildren().remove(visiblePassword);
+                pane.getChildren().add(password);
+            }
+        });
+        return showPassword;
     }
 
     public static void setBackGround(Pane pane) {
@@ -82,9 +154,6 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
     }
 
     private void setRegisterNickname(double width, double height, TextField nickname) {
-        nicknameErrorLabel.setLayoutX(width / 2 + 70);
-        nicknameErrorLabel.setLayoutY(height / 2 + 40);
-        nicknameErrorLabel.setTextFill(Color.RED);
         nickname.setOnMouseClicked(event -> {
             nicknameErrorLabel.setText("");
             nicknameErrorLabel.setLayoutX(width / 2 + 70);
@@ -97,9 +166,6 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
     }
 
     private void setRegisterEmail(double width, double height, TextField email) {
-        emailErrorLabel.setLayoutX(width / 2 + 70);
-        emailErrorLabel.setLayoutY(height / 2 + 40);
-        emailErrorLabel.setTextFill(Color.RED);
         email.setOnMouseClicked(event -> {
             emailErrorLabel.setText("");
             emailErrorLabel.setLayoutX(width / 2 + 70);
@@ -169,7 +235,8 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
             password.setText("");
             email.setText("");
             nickname.setText("");
-            sloganField.setText("");
+            if (sloganField != null)
+                sloganField.setText("");
         });
         pane.getChildren().add(reset);
         return reset;
@@ -207,11 +274,6 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         slogan.setLayoutX(width / 2 - 100);
         slogan.setLayoutY(height / 2 + 110);
         slogan.setPrefSize(200, 30);
-        sloganErrorLabel.setText(Errors.SLOGAN_EMPTY.getErrorText());
-        sloganErrorLabel.setTextFill(Color.RED);
-        sloganErrorLabel.setLayoutX(width / 2 - 250);
-        sloganErrorLabel.setLayoutY(height / 2 + 110);
-        sloganErrorLabel.setPrefSize(300, 30);
         slogan.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("")) {
                 registerSlogan = null;
@@ -293,10 +355,6 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
         username.setPromptText("Username");
         username.setLayoutX(width / 2 - 100);
         username.setLayoutY(height / 2 - 100);
-        usernameErrorLabel.setTextFill(Color.RED);
-        usernameErrorLabel.setLayoutX(width / 2 - 250);
-        usernameErrorLabel.setLayoutY(height / 2 - 100);
-        usernameErrorLabel.setPrefSize(300, 30);
         username.textProperty().addListener((observable, oldValue, newValue) -> {
             usernameValidate(newValue);
         });
@@ -304,31 +362,21 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
     }
 
     private PasswordField passwordField(double width, double height, Pane pane) {
-        Hyperlink randomPassword = new Hyperlink("Random Password");//todo: is it ok?
         PasswordField password = new PasswordField();
         password.setPromptText("Password");
         password.setLayoutX(width / 2 - 100);
         password.setLayoutY(height / 2 - 50);
-        randomPassword.setLayoutX(width / 2 - 80);
-        randomPassword.setLayoutY(height / 2 - 28);
-        randomPassword.setPrefSize(150, 30);
-        randomPassword.setOnMouseClicked(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Random Password");
-            alert.setHeaderText("Do you want to use this password?");
-            String randomPasswordText = RegisterMenuController.generateRandomPassword();
-            alert.setContentText(randomPasswordText);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.OK) {
-                registerEmail = randomPasswordText;
-                password.setText(RegisterMenuController.generateRandomPassword());
-            }
+        password.textProperty().addListener((observable, oldValue, newValue) -> {
+            passwordValidate(newValue);
         });
-        pane.getChildren().add(randomPassword);
-        passwordErrorLabel.setTextFill(Color.RED);
-        passwordErrorLabel.setLayoutX(width / 2 - 250);
-        passwordErrorLabel.setLayoutY(height / 2 - 50);
-        passwordErrorLabel.setPrefSize(300, 30);
+        return password;
+    }
+
+    private TextField passwordFieldAsTextField(double width, double height, Pane pane) {
+        TextField password = new TextField();
+        password.setPromptText("Password");
+        password.setLayoutX(width / 2 - 100);
+        password.setLayoutY(height / 2 - 50);
         password.textProperty().addListener((observable, oldValue, newValue) -> {
             passwordValidate(newValue);
         });
