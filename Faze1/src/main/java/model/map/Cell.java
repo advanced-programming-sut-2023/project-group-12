@@ -1,6 +1,9 @@
 package model.map;
 
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import model.Building.Building;
 import model.people.Unit;
 
@@ -8,6 +11,7 @@ import java.util.ArrayList;
 
 public class Cell {
 
+    private Pane pane;
     private final int xCoordinate;
     private final int yCoordinate;
     private TextureType TextureType = model.map.TextureType.EARTH;
@@ -24,6 +28,23 @@ public class Cell {
     public Cell(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
+        pane = new Pane();
+        if(xCoordinate % 2 == 0 && yCoordinate % 2 == 0) {
+            Image image = new Image(getClass().getResource("/MapImages/Plain1.jpg").toExternalForm());
+            ImageView img = new ImageView(image);
+            img.setFitWidth(20);
+            img.setFitHeight(20);
+            pane.getChildren().add(img);
+        }
+        else{
+            Image image = new Image(getClass().getResource("/MapImages/Sea1.jpg").toExternalForm());
+            ImageView img = new ImageView(image);
+            img.setFitWidth(20);
+            img.setFitHeight(20);
+            pane.getChildren().add(img);
+        }
+
+
         isPassable = getTextureType().isPassable();
     }
 
@@ -97,6 +118,9 @@ public class Cell {
 
     public int getyCoordinate() {
         return yCoordinate;
+    }
+    public Pane getPane() {
+        return pane;
     }
 
     public boolean isSick() {
