@@ -126,6 +126,11 @@
             <artifactId>javafx</artifactId>
             <version>3.1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>overlayscrollbars</artifactId>
+            <version>1.13.1</version>
+        </dependency>
     </dependencies>
 
     <properties>

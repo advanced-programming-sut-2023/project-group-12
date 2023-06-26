@@ -154,7 +154,7 @@ public class UserDatabase {
         return enteredHash.equals(storedHash);
     }
 
-    private static ArrayList<User> rankPlayers() {
+    public static ArrayList<User> rankPlayers() {
         ArrayList<User> sortedUsers = new ArrayList<>(users);
         for (int i = 0; i < sortedUsers.size(); i++) {
             for (int j = 0; j < sortedUsers.size() - 1; j++) {

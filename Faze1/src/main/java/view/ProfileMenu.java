@@ -2,6 +2,7 @@ package view;
 
 import controller.ProfileController;
 import controller.RegisterMenuController;
+import controller.StartMenuController;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,26 +42,26 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         controller = new ProfileController(UserDatabase.getCurrentUser());
 
         Pane pane = new Pane();
-        Circle circle = avatarPlace(pane,stage);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
 
-        VBox vBox = getvBox(width, height, pane);
+        Circle circle = avatarPlace(pane, stage);
+        VBox vBox = getvBox(width, height, pane,stage);
 
         pane.getChildren().add(vBox);
 
         pane.getChildren().add(circle);
         circle.toFront();
         initializePosition(width, height);
-        getBack(stage,vBox);
+        getBack(stage, vBox);
         pane.setPrefSize(width, height);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
     }
 
-    private static void getBack(Stage stage,VBox vBox) {
+    private static void getBack(Stage stage, VBox vBox) {
         Button back = new Button("back");
         back.setOnAction(actionEvent -> {
             try {
@@ -95,7 +96,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         fieldToChange.setLayoutY(height / 2 - 100);
     }
 
-    private static VBox getvBox(double width, double height, Pane pane) {
+    private static VBox getvBox(double width, double height, Pane pane,Stage stage) {
         VBox vBox = new VBox();
         vBox.setSpacing(10);
         vBox.setAlignment(Pos.CENTER);
@@ -106,8 +107,23 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         Button changeEmail = getChangeEmail(width, height, pane, vBox);
         Button changePassword = getChangePassword(width, height, pane, vBox);
         Button changeSlogan = getChangeSlogan(width, height, pane, vBox);
-        vBox.getChildren().addAll(changeUsername, changeNickname, changeEmail, changePassword, changeSlogan);
+        Button ScoreBoard = getScoreBoard(stage);
+        vBox.getChildren().addAll(changeUsername, changeNickname, changeEmail, changePassword, changeSlogan, ScoreBoard);
         return vBox;
+    }
+    private static Button getScoreBoard(Stage stage) {
+        Button ScoreBoard = new Button("ScoreBoard");
+        ScoreBoard.setPrefSize(200, 50);
+        ScoreBoard.setOnAction(actionEvent -> {
+            try {
+                ScoreBoardMenu scoreBoardMenu = new ScoreBoardMenu();
+                scoreBoardMenu.setFromProfile(true);
+                scoreBoardMenu.start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return ScoreBoard;
     }
 
     private static Button getChangeSlogan(double width, double height, Pane pane, VBox vBox) {
@@ -116,8 +132,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
             changeSlogan.setStyle("-fx-background-color: #ff0000; ");
             if (UserDatabase.getCurrentUser().getSlogan().equals("")) {
                 changeSlogan.setText("slogan is empty");
-            }
-            else {
+            } else {
                 changeSlogan.setText("UserDatabase.getCurrentUser().getSlogan()");
             }
         });
@@ -148,8 +163,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("you don't have any slogan");
                     alert.show();
-                }
-                else {
+                } else {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setContentText("are you sure you want to remove your slogan?");
                     Optional<ButtonType> result = alert.showAndWait();
@@ -384,7 +398,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         return changeNickname;
     }
 
-    private static Circle avatarPlace(Pane pane,Stage stage) {
+    private static Circle avatarPlace(Pane pane, Stage stage) {
         Circle circle = new Circle();
         circle.setRadius(50);
         Image image = new Image(UserDatabase.getCurrentUser().getAvatar());

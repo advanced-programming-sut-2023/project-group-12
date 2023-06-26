@@ -2,17 +2,15 @@ package view;
 
 import controller.StartMenuController;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.User;
 import model.UserDatabase;
 
 import java.awt.*;
@@ -20,6 +18,8 @@ import java.awt.*;
 public class StartMenu extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        UserDatabase.loadUsers();
+        UserDatabase.setCurrentUser(UserDatabase.getUserByUsername("matin"));
         StartMenuController controller = new StartMenuController();
         HBox setPlayers = new HBox();
         VBox setMap = new VBox();
@@ -31,17 +31,61 @@ public class StartMenu extends Application {
         pane.setPrefSize(width, height);
         Button back = getBack(stage);
         TextField addPlayer = new TextField();
+        Button addPlayerButton = getAddPlayerButton(controller, setPlayers, width, addPlayer);
+        Button removePlayer = new Button("removePlayer");
+        removePlayer.setOnMouseClicked(event -> {
+            String output = controller.removePlayer(addPlayer.getText());
+            Alert alert;
+            if (output.equals("Player removed successfully")) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText(output);
+                addPlayer.setText("");
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(output);
+            }
+            alert.show();
+        });
+        removePlayer.setLayoutX(width / 2 - 100);
+        removePlayer.setLayoutY(100);
+        Button removeAllPlayers = new Button("removeAllPlayers");
+        removeAllPlayers.setOnMouseClicked(event -> {
+            Alert alert;
+            String output = controller.removeAllPlayers();
+            if (output.equals("All Players removed successfully")) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText(output);
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(output);
+            }
+            alert.show();
+        });
+        Button startGame = new Button("startGame");
+        startGame.setOnMouseClicked(Event::consume);//todo);
+        setPlayers.getChildren().addAll(addPlayer, addPlayerButton, removePlayer, removeAllPlayers);
+        pane.getChildren().addAll(back, setPlayers, setMap);
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private static Button getAddPlayerButton(StartMenuController controller, HBox setPlayers, double width, TextField addPlayer) {
         Button addPlayerButton = new Button("Add Player");
         addPlayer.setPromptText("Username");
         addPlayerButton.setOnMouseClicked(event -> {
-            String output = controller.addPlayer(addPlayer.getText());
             Alert alert;
+            if (addPlayer.getText().isEmpty()) {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Username can't be empty");
+                alert.show();
+            }
+            String output = controller.addPlayer(addPlayer.getText());
             if (output.equals("Player successfully added")) {
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText(output);
                 addPlayer.setText("");
-            }
-            else {
+            } else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText(output);
             }
@@ -49,11 +93,7 @@ public class StartMenu extends Application {
         });
         setPlayers.setLayoutX(width / 2 - 100);
         setPlayers.setLayoutY(50);
-        setPlayers.getChildren().addAll(addPlayer, addPlayerButton);
-        pane.getChildren().addAll(back, setPlayers, setMap);
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
+        return addPlayerButton;
     }
 
     private static Button getBack(Stage stage) {

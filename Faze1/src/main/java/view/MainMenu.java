@@ -27,7 +27,7 @@ public class MainMenu extends Application {
         Button goToProfileMenu = getProfileMenu();
         Button goToMapMenu = new Button("Go to map menu");//todo
         Button goToStartMenu = getStartMenu();
-        Button userLogout = getLogout();
+        Button userLogout = getLogout(stage);
         Button exit = getExit();
         vBox.getChildren().addAll(goToStartMenu, goToMapMenu, goToProfileMenu, userLogout, exit);
         vBox.setAlignment(Pos.CENTER);
@@ -53,13 +53,13 @@ public class MainMenu extends Application {
     }
 
     
-    private static Button getLogout() {
+    private static Button getLogout(Stage stage) {
         Button userLogout = new Button("User logout");
         userLogout.setOnMouseClicked(event -> {
             EnterMenu enterMenu = new EnterMenu();
             try {
                 UserDatabase.setCurrentUser(null);
-                enterMenu.start(EnterMenu.getStage());
+                enterMenu.start(stage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
