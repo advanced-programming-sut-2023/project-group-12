@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -23,6 +24,7 @@ public class MapView extends Application {
 
     public double stageWidth;
     public double stageHeight;
+    public ArrayList<Pane> selectedPain = new ArrayList<>();
     public Stage stage ;
     public Map currentMap = new Map(100 , 5);
 
@@ -71,10 +73,8 @@ public class MapView extends Application {
     private void selectCellsHandler() {
         AtomicReference<Double> firstX = new AtomicReference<>((double) 0);
         AtomicReference<Double> firstY = new AtomicReference<>((double) 0);
-
-        ArrayList<Pane> selectedPain = new ArrayList<Pane>();
-        ArrayList<Cell> selectedCells = new ArrayList<Cell>();
         showMap.setOnMousePressed(mouseEvent -> {
+            resetSelected();
             firstX.set(mouseEvent.getX());
             firstY.set(mouseEvent.getY());
 //            System.out.println(x + " " + y);
@@ -88,33 +88,50 @@ public class MapView extends Application {
 //            }
         });
 
-        showMap.setOnMouseDragged(mouseEvent -> {
-            for (Pane pane : selectedPain) {
-                Cell cell = getCellByPane(pane);
-                if(cell != null){
-                    selectedCells.add(cell);
-                }
-            }
-        });
+//        showMap.setOnMouseDragged(mouseEvent -> {
+//            for (Pane pane : selectedPain) {
+//                Cell cell = getCellByPane(pane);
+//                if(cell != null){
+//                    selectedCells.add(cell);
+//                }
+//            }
+//        });
 
         showMap.setOnMouseReleased(mouseEvent -> {
-            System.out.println("salam");
-            double dblX = mouseEvent.getX();
-            double dblY = mouseEvent.getY();
-            Rectangle rect = new Rectangle(firstX.get(), firstY.get(), Math.abs( dblX -firstX.get()), Math.abs( dblY - firstY.get()));
+            double x = mouseEvent.getX();
+            double y = mouseEvent.getY();
+            Rectangle rect = new Rectangle(Math.min(firstX.get(), x), Math.min(firstY.get(), y), Math.abs( x - firstX.get()), Math.abs( y - firstY.get()));
             rect.setFill(Color.TRANSPARENT);
-//            pane.getChildren().add(rect);
             for (Node child : showMap.getChildren()) {
                 if(child instanceof Pane){
                     Bounds bounds = child.getBoundsInParent();
                     if(bounds.intersects(rect.getBoundsInParent())){
+                        Pane pane = (Pane) child;
                         selectedPain.add((Pane) child);
-                        ((Pane)child).setStyle("-fx-border-color: red;");
+                        getCellByPane(pane).getImageView().setOpacity(0.5);
+//                        BorderStroke borderStroke = new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2));
+//                        Rectangle clip = new Rectangle();
+//                        clip.setWidth(pane.getWidth());
+//                        clip.setHeight(pane.getHeight());
+//                        clip.setLayoutX(pane.getLayoutX());
+//                        clip.setLayoutY(pane.getLayoutY());
+//                        clip.setFill(Color.TRANSPARENT);
+//                        pane.setClip(clip);
+//                        pane.setBorder(new Border(borderStroke));
+//                        System.out.println("salam1");
+//                        getCellByPane((Pane)child).getImageView().setStyle("-fx-border-color: blue;");
                     }
                 }
             }
 
         });
+    }
+
+    private void resetSelected() {
+        for (Pane pane1 : selectedPain) {
+            getCellByPane(pane1).getImageView().setOpacity(1);
+        }
+        selectedPain.clear();
     }
 
     private void zoomHandler() {
