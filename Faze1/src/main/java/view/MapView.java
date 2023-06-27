@@ -1,20 +1,22 @@
 package view;
 
-import Enums.Images;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.map.Cell;
 import model.map.Map;
 
-import java.awt.*;
+
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapView extends Application {
@@ -58,11 +60,61 @@ public class MapView extends Application {
         createCell();
         createBottomMenu();
 //        zoomHandler();
+        selectCellsHandler();
 
         scrollPane.setContent(showMap);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void selectCellsHandler() {
+        AtomicReference<Double> firstX = new AtomicReference<>((double) 0);
+        AtomicReference<Double> firstY = new AtomicReference<>((double) 0);
+
+        ArrayList<Pane> selectedPain = new ArrayList<Pane>();
+        ArrayList<Cell> selectedCells = new ArrayList<Cell>();
+        showMap.setOnMousePressed(mouseEvent -> {
+            firstX.set(mouseEvent.getX());
+            firstY.set(mouseEvent.getY());
+//            System.out.println(x + " " + y);
+//            for (Node child : showMap.getChildren()) {
+//                if(child instanceof Pane){
+//                    Bounds bounds = child.getBoundsInParent();
+//                    if(bounds.intersects(mouseEvent.getX(), mouseEvent.getY(), 0, 0)){
+//                        selectedPain.add((Pane) child);
+//                    }
+//                }
+//            }
+        });
+
+        showMap.setOnMouseDragged(mouseEvent -> {
+            for (Pane pane : selectedPain) {
+                Cell cell = getCellByPane(pane);
+                if(cell != null){
+                    selectedCells.add(cell);
+                }
+            }
+        });
+
+        showMap.setOnMouseReleased(mouseEvent -> {
+            System.out.println("salam");
+            double dblX = mouseEvent.getX();
+            double dblY = mouseEvent.getY();
+            Rectangle rect = new Rectangle(firstX.get(), firstY.get(), Math.abs( dblX -firstX.get()), Math.abs( dblY - firstY.get()));
+            rect.setFill(Color.TRANSPARENT);
+//            pane.getChildren().add(rect);
+            for (Node child : showMap.getChildren()) {
+                if(child instanceof Pane){
+                    Bounds bounds = child.getBoundsInParent();
+                    if(bounds.intersects(rect.getBoundsInParent())){
+                        selectedPain.add((Pane) child);
+                        ((Pane)child).setStyle("-fx-border-color: red;");
+                    }
+                }
+            }
+
+        });
     }
 
     private void zoomHandler() {
@@ -136,5 +188,15 @@ public class MapView extends Application {
                 BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
         return backgroundImage;
+    }
+    public Cell getCellByPane(Pane pane) {
+        for (Cell[] cells : currentMap.getMap()) {
+            for (Cell cell : cells) {
+                if(cell.getPane() == pane){
+                    return cell;
+                }
+            }
+        }
+        return null;
     }
 }
