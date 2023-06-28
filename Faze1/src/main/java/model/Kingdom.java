@@ -474,7 +474,7 @@ public class Kingdom {
         }
     }
 
-    public Property getPropertyByName(String name) {
+    public static Property getPropertyByName(String name) {
         for (FoodType foodType : FoodType.values()) {
             if (foodType.name().toLowerCase().equals(name))
                 return new Food(foodType, 0);

@@ -2,6 +2,8 @@ package model;
 
 import view.ProfileMenu;
 
+import java.util.ArrayList;
+
 public class User {
     private String username;
     private String password;
@@ -94,7 +96,14 @@ public class User {
     }
 
     public int getRank() {
-        return rank;
+        ArrayList<User> users = UserDatabase.rankPlayers();
+        for (User user:users) {
+            if (user == this) {
+                this.rank = users.indexOf(user) + 1;
+                return users.indexOf(user) + 1;
+            }
+        }
+        return 0;
     }
 
     public String getSlogan() {

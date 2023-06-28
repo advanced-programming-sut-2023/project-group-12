@@ -12,8 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -45,14 +48,10 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
-
         Circle circle = avatarPlace(pane, stage);
         VBox vBox = getvBox(width, height, pane,stage);
-
         pane.getChildren().add(vBox);
-
         pane.getChildren().add(circle);
-        circle.toFront();
         initializePosition(width, height);
         getBack(stage, vBox);
         pane.setPrefSize(width, height);

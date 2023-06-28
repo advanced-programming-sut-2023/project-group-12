@@ -4,6 +4,7 @@ import Commands.GameMenuCommands;
 import controller.GameController.GameMenuController;
 import model.Game;
 import model.UserDatabase;
+import view.trade.TradeMenu;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -137,11 +138,11 @@ public class GameMenu {
                         output = controller.disbandUnit();
                         System.out.println(output);
                     } else if (goToShopMenu.find()) {
-                        ShopMenu menu = new ShopMenu();
-                        menu.run(scanner, controller.getNewGame());
-                        System.out.println("Now you are in the game menu");
+//                        ShopMenu menu = new ShopMenu();
+//                        menu.run(scanner, controller.getNewGame());
+//                        System.out.println("Now you are in the game menu");
                     } else if (goToTradeMenu.find()) {
-                        tradeMenu(scanner, controller);
+//                        tradeMenu(scanner, controller);
                     } else if (goToMapMenu.find()) {
                         mapMenu(scanner, game);
                     } else if (input.equalsIgnoreCase("next")) {
@@ -193,9 +194,9 @@ public class GameMenu {
         System.out.println("Now you are in the game menu");
     }
 
-    private static void tradeMenu(Scanner scanner, GameMenuController controller) {
-        TradeMenu menu = new TradeMenu();
-        menu.run(scanner, controller.getNewGame());
-        System.out.println("Now you are in the game menu");
-    }
+//    private static void tradeMenu(Scanner scanner, GameMenuController controller) {
+//        TradeMenu menu = new TradeMenu();
+//        menu.run(scanner, controller.getNewGame());
+//        System.out.println("Now you are in the game menu");
+//    }
 }

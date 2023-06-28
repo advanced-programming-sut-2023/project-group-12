@@ -3,10 +3,10 @@ package model.Property;
 public enum WeaponType {
     BOW(ResourceType.WOOD, 2, 20),
     CROSS_BOW(ResourceType.WOOD, 3, 20),
-    SPEAR(ResourceType.WOOD, 1, 20),
-    PIKE(ResourceType.WOOD, 2, 20),
-    MACE(ResourceType.IRON, 1, 30),
-    SWORD(ResourceType.IRON, 1, 30),
+    SPEAR(ResourceType.WOOD, 1, 17),
+    PIKE(ResourceType.WOOD, 2, 13),
+    MACE(ResourceType.IRON, 1, 33),
+    SWORD(ResourceType.IRON, 1, 28),
     PETROLEUM(null, 0, 10);
 
 
@@ -32,7 +32,12 @@ public enum WeaponType {
     public int getBuyPrice() {
         return buyPrice;
     }
-
+    public static int getBuyPrice (WeaponType type) {
+        return type.buyPrice;
+    }
+    public static int getSellPrice (WeaponType type) {
+        return type.buyPrice * 8 / 10;
+    }
     public int getSellPrice() {
         return buyPrice * 8 / 10;
     }
