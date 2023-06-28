@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class Cell {
 
     private Pane pane;
+    private ImageView imageView;
     private final int xCoordinate;
     private final int yCoordinate;
     private TextureType TextureType = model.map.TextureType.EARTH;
@@ -29,20 +30,16 @@ public class Cell {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         pane = new Pane();
+        imageView = new ImageView();
+        Image image ;
         if(xCoordinate % 2 == 0 && yCoordinate % 2 == 0) {
-            Image image = new Image(getClass().getResource("/MapImages/Plain1.jpg").toExternalForm());
-            ImageView img = new ImageView(image);
-            img.setFitWidth(20);
-            img.setFitHeight(20);
-            pane.getChildren().add(img);
+            image = new Image(getClass().getResource("/MapImages/Plain1.jpg").toExternalForm());
         }
         else{
-            Image image = new Image(getClass().getResource("/MapImages/Sea1.jpg").toExternalForm());
-            ImageView img = new ImageView(image);
-            img.setFitWidth(20);
-            img.setFitHeight(20);
-            pane.getChildren().add(img);
+            image = new Image(getClass().getResource("/MapImages/Sea1.jpg").toExternalForm());
         }
+        imageView.setImage(image);
+        pane.getChildren().add(imageView);
 
 
         isPassable = getTextureType().isPassable();
@@ -131,4 +128,11 @@ public class Cell {
         isSick = sick;
     }
 
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
 }
