@@ -1,9 +1,9 @@
 package model.Property;
 
 public enum DefenseType {
-    LEATHER_ARMOR(null, 0, 5),
+    LEATHER_ARMOR(null, 0, 8),
 
-    METAL_ARMOR(ResourceType.IRON, 1, 10);
+    METAL_ARMOR(ResourceType.IRON, 1, 14);
 
     private final ResourceType resourceType;
     private final int count;
@@ -30,5 +30,11 @@ public enum DefenseType {
 
     public int getSellPrice() {
         return buyPrice * 8 / 10;
+    }
+    public static int getBuyPrice (DefenseType defenseType) {
+        return defenseType.getBuyPrice();
+    }
+    public static int getSellPrice (DefenseType defenseType) {
+        return defenseType.getSellPrice();
     }
 }

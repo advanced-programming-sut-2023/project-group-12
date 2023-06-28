@@ -81,12 +81,19 @@ public class LoginMenu extends Application {
             } else if (!RegisterMenuController.isUsernameUsed(username.getText())) {
                 usernameError.setText("Username doesn't exist");
             } else {
+                usernameError.setText("");
                 vBox.getChildren().clear();
                 Text text = new Text("answer the question\n" + UserDatabase.getUserByUsername(username.getText()).getQuestion());
                 text.setFill(Color.YELLOW);
                 TextField answer = new TextField();
                 Button submit = getSubmit(username, vBox2, answer);
                 vBox2.getChildren().addAll(text, answer, submit);
+            }
+            if (!usernameError.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText(usernameError.getText());
+                alert.showAndWait();
             }
         });
         return forgotPassword;

@@ -39,5 +39,11 @@ public enum ResourceType {
         return null;
     }
 
+    public static int getBuyPrice(ResourceType resourceType) {
+        return resourceType.buyPrice;
+    }
 
+    public static int getSellPrice(ResourceType resourceType) {
+        return resourceType.sellPrice;
+    }
 }
