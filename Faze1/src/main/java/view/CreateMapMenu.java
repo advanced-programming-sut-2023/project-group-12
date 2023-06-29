@@ -17,18 +17,25 @@ import javafx.stage.Stage;
 import model.UserDatabase;
 import model.map.Map;
 import model.map.TextureType;
+import model.map.Tree;
 
 import java.util.Objects;
 
 
 public class CreateMapMenu extends Application {
 
-    private final Map currentMap = new Map(30, 5);
+    private Map currentMap = new Map(200, 5);
     private GridPane map;
     private HBox barMenu;
+    private Stage stage;
+
+    public CreateMapMenu(int dimension, int kingdomNumber) {
+        currentMap = new Map(dimension, kingdomNumber);
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
+        this.stage = stage;
         stage.setFullScreen(true);
         Screen screen = Screen.getPrimary();
         double stageWidth = screen.getBounds().getWidth();
@@ -65,23 +72,48 @@ public class CreateMapMenu extends Application {
     private void createBarMenu() {
         Button saveButton = new Button("save");
         Button backButton = new Button("back");
+        ScrollPane treeScrollPane = new ScrollPane();
         ScrollPane textureScrollPane = new ScrollPane();
         HBox textureSection = new HBox();
+        HBox treeSection = new HBox();
+        treeScrollPane.setContent(treeSection);
         textureScrollPane.setContent(textureSection);
-        textureScrollPane.setMaxWidth(1300);
+        textureScrollPane.setMaxWidth(700);
         textureSection.setSpacing(10);
-        addTextureToTextureSection(textureSection);
+        treeScrollPane.setMaxWidth(700);
+        treeSection.setSpacing(10);
+        addTextureToTextureSection(treeSection);
+        addTreeToMap(textureSection);
         barMenu.setSpacing(10);
         barMenu.getChildren().add(textureScrollPane);
+        barMenu.getChildren().add(treeScrollPane);
         barMenu.getChildren().add(saveButton);
         barMenu.getChildren().add(backButton);
+
 
         saveButton.setOnMouseClicked(mouseEvent -> {
             UserDatabase.setCurrentMap(currentMap);
         });
         backButton.setOnMouseClicked(mouseEvent -> {
-            //TODO : back to where?
+            try {
+                (new MainMenu()).start(stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
+    }
+
+    private void addTreeToMap(HBox treeSection) {
+        for (Tree tree : Tree.values()) {
+            ImageView imageView = new ImageView(tree.getImage());
+            imageView.setFitHeight(80);
+            imageView.setFitWidth(80);
+            treeSection.getChildren().add(imageView);
+            imageView.setOnDragDetected(this::handleDragTexture);
+
+            Tooltip tooltip = new Tooltip(tree.name());
+            Tooltip.install(imageView, tooltip);
+        }
     }
 
     private void addTextureToTextureSection(HBox textureSection) {
@@ -149,8 +181,18 @@ public class CreateMapMenu extends Application {
             dragEvent.setDropCompleted(true);
             if (getTextureByName(dragboard.getString()) != null) {
                 currentMap.getMap()[i][j].setTextureType(Objects.requireNonNull(getTextureByName(dragboard.getString())));
+            } else if (getTreeByName(dragboard.getString()) != null) {
+                currentMap.getMap()[i][j].setTree(getTreeByName(dragboard.getString()));
             }
         });
+    }
+
+    private Tree getTreeByName(String string) {
+        for (Tree tree : Tree.values()) {
+            if (tree.getImage().getUrl().equals(string))
+                return tree;
+        }
+        return null;
     }
 
     private TextureType getTextureByName(String string) {

@@ -1,10 +1,14 @@
 package view;
 
+import Commands.MainMenuCommands;
+import controller.MainMenuController;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -25,11 +29,17 @@ public class MainMenu extends Application {
         vBox.setLayoutX(width / 2 - 100);
         vBox.setLayoutY(height / 2 - 100);
         Button goToProfileMenu = getProfileMenu();
-        Button goToMapMenu = new Button("Go to map menu");//todo
+        HBox mapMenuHBox = new HBox();
+        mapMenuHBox.setSpacing(10);
+        javafx.scene.control.TextField dimensionTextField = new javafx.scene.control.TextField();
+        javafx.scene.control.TextField numberOfKingdoms = new TextField();
+        Button goToMapMenu = new Button("Go to map menu");
+        mapMenuHBox.getChildren().addAll(goToMapMenu, dimensionTextField, numberOfKingdoms);
+        handleMapMenu(dimensionTextField, numberOfKingdoms, goToMapMenu, stage);
         Button goToStartMenu = getStartMenu();
         Button userLogout = getLogout(stage);
         Button exit = getExit();
-        vBox.getChildren().addAll(goToStartMenu, goToMapMenu, goToProfileMenu, userLogout, exit);
+        vBox.getChildren().addAll(goToStartMenu, mapMenuHBox, goToProfileMenu, userLogout, exit);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(30);
         pane.getChildren().add(vBox);
@@ -37,7 +47,21 @@ public class MainMenu extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    
+
+    private void handleMapMenu(TextField dimensionTextField, TextField numberOfKingdoms, Button goToMapMenu, Stage stage) {
+        dimensionTextField.setPromptText("dimension");
+        numberOfKingdoms.setPromptText("kingdoms");
+        goToMapMenu.setOnMouseClicked(mouseEvent -> {
+            try {
+                String dimension = dimensionTextField.getText();
+                String kingdomNumber = numberOfKingdoms.getText();
+                (new MainMenuController()).goToMapMenu(Integer.parseInt(dimension), Integer.parseInt(kingdomNumber), stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     private static Button getExit() {
         Button exit = new Button("Exit");
         exit.setOnMouseClicked(event -> {

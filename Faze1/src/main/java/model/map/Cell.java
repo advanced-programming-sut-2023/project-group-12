@@ -55,6 +55,7 @@ public class Cell {
         ImageView imageView = new ImageView(textureType.getImage());
         imageView.setFitWidth(30);
         imageView.setFitHeight(30);
+        pane.getChildren().clear();
         pane.getChildren().add(imageView);
     }
 
@@ -64,6 +65,11 @@ public class Cell {
 
     public void setTree(Tree tree) {
         this.tree = tree;
+        ImageView imageView = new ImageView(tree.getImage());
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(30);
+        setTextureType(this.getTextureType());
+        pane.getChildren().add(imageView);
     }
 
     public Building getBuilding() {
