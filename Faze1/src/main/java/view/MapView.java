@@ -342,10 +342,6 @@ public class MapView extends Application {
         ImageView source = (ImageView) mouseEvent.getSource();
         Dragboard dragboard = source.startDragAndDrop(TransferMode.COPY);
 
-        if (dragboard.hasString()) {
-            String url = dragboard.getString();
-            System.out.println(dragboard.getDragViewOffsetX());
-        }
 
         ClipboardContent content = new ClipboardContent();
         content.putString(source.getImage().getUrl());
@@ -363,22 +359,6 @@ public class MapView extends Application {
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
-            imageView.setOnDragEntered(dragEvent -> {
-                System.out.println(dragEvent.getX());
-                System.out.println(dragEvent.getY());
-                System.out.println(dragEvent.getScreenX());
-                System.out.println(dragEvent.getScreenY());
-                System.out.println(LocalTime.now());
-                System.out.println("11111111111111111");
-            });
-            imageView.setOnDragExited(dragEvent -> {
-                System.out.println(dragEvent.getX());
-                System.out.println(dragEvent.getY());
-                System.out.println(dragEvent.getScreenX());
-                System.out.println(dragEvent.getScreenY());
-                System.out.println(LocalTime.now());
-                System.out.println("22222222222222222");
-            });
             Tooltip tooltip = new Tooltip(BuildingImages.getMilitaryBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             building.getChildren().add(imageView);
@@ -488,7 +468,6 @@ public class MapView extends Application {
         pane.setOnDragDropped(dragEvent -> {
             Dragboard dragboard = dragEvent.getDragboard();
             dragEvent.setDropCompleted(true);
-            System.out.println(dragboard.getString());
             //TODO : DROP BUILDING ON MAP
         });
     }

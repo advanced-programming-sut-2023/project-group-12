@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class Cell {
 
     private Pane pane;
-    private Image image;
     private final int xCoordinate;
     private final int yCoordinate;
     private TextureType TextureType = model.map.TextureType.EARTH;
@@ -31,7 +30,6 @@ public class Cell {
         this.yCoordinate = yCoordinate;
         pane = new Pane();
         Image image = getTextureType().getImage();
-        this.image = TextureType.getImage();
         pane.getChildren().add(new ImageView(image));
         isPassable = getTextureType().isPassable();
     }
@@ -54,6 +52,10 @@ public class Cell {
 
     public void setTextureType(model.map.TextureType textureType) {
         TextureType = textureType;
+        ImageView imageView = new ImageView(textureType.getImage());
+        imageView.setFitWidth(30);
+        imageView.setFitHeight(30);
+        pane.getChildren().add(imageView);
     }
 
     public Tree getTree() {
@@ -120,10 +122,16 @@ public class Cell {
     }
 
     public ImageView getImage() {
-        return new ImageView(image);
+        return new ImageView(getTextureType().getImage());
     }
 
     public Image getTheImage() {
-        return image;
+        return getTextureType().getImage();
     }
+
+    public void setPane() {
+        pane.getChildren().add(new ImageView(getTextureType().getImage()));
+    }
+
+
 }
