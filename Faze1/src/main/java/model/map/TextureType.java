@@ -47,4 +47,8 @@ public enum TextureType {
     public boolean isPassable() {
         return passable;
     }
+
+    public Image getImage() {
+        return image;
+    }
 }

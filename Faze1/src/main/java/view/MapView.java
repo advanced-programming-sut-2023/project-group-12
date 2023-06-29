@@ -4,7 +4,6 @@ import Enums.BuildingImages;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -186,7 +185,7 @@ public class MapView extends Application {
                     if (bounds.intersects(rect.getBoundsInParent())) {
                         Pane pane = (Pane) child;
                         selectedPain.add((Pane) child);
-                        getCellByPane(pane).getImageView().setOpacity(0.5);
+                        getCellByPane(pane).getImage().setOpacity(0.5);
 //                        BorderStroke borderStroke = new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2));
 //                        Rectangle clip = new Rectangle();
 //                        clip.setWidth(pane.getWidth());
@@ -207,7 +206,7 @@ public class MapView extends Application {
 
     private void resetSelected() {
         for (Pane pane1 : selectedPain) {
-            getCellByPane(pane1).getImageView().setOpacity(1);
+            getCellByPane(pane1).getImage().setOpacity(1);
         }
         selectedPain.clear();
     }
@@ -226,12 +225,12 @@ public class MapView extends Application {
                     for (int j = 0; j < currentMap.getDimension(); j++) {
                         int finalJ = j;
                         int finalI = i;
-                        translateX.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getWidth() / 20));
-                        translateY.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getHeight() / 20));
-                        currentMap.getMap()[i][j].getImageView().setScaleX(scale.get());
-                        currentMap.getMap()[i][j].getImageView().setScaleY(scale.get());
-                        currentMap.getMap()[i][j].getImageView().setTranslateX(translateX.get());
-                        currentMap.getMap()[i][j].getImageView().setTranslateY(translateY.get());
+                        translateX.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 20));
+                        translateY.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 20));
+                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
+                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
                     }
                 }
 
@@ -242,12 +241,12 @@ public class MapView extends Application {
                     for (int j = 0; j < currentMap.getDimension(); j++) {
                         int finalI = i;
                         int finalJ = j;
-                        translateX.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getWidth() / 22));
-                        translateY.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getHeight() / 22));
-                        currentMap.getMap()[i][j].getImageView().setScaleX(scale.get());
-                        currentMap.getMap()[i][j].getImageView().setScaleY(scale.get());
-                        currentMap.getMap()[i][j].getImageView().setTranslateX(translateX.get());
-                        currentMap.getMap()[i][j].getImageView().setTranslateY(translateY.get());
+                        translateX.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 22));
+                        translateY.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 22));
+                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
+                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
                     }
                 }
 
@@ -284,9 +283,10 @@ public class MapView extends Application {
     private void createMiniMap() {
         for (int i = 0; i < currentMap.getDimension(); i++) {
             for (int j = 0; j < currentMap.getDimension(); j++) {
-                Pane pane1 = currentMap.getMap()[i][j].getPane();
-//                pane1.setMaxSize(1, 1);
-                miniMap.add(pane1, i, j);
+                ImageView imageView = new ImageView(currentMap.getMap()[i][j].getTheImage());
+                imageView.setFitWidth(1);
+                imageView.setFitHeight(1);
+                miniMap.add(imageView, i, j);
             }
         }
     }
