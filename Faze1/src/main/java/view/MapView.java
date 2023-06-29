@@ -1,18 +1,17 @@
 package view;
 
 import Enums.BuildingImages;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -28,6 +27,7 @@ import model.map.Cell;
 import model.map.Map;
 
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -41,6 +41,7 @@ public class MapView extends Application {
 
 
     public HBox barMenu;
+    public GridPane miniMap;
     Background barMenuBackground = new Background(setBackGround());
     public HBox buildingSelection;
     public Circle church;
@@ -50,14 +51,15 @@ public class MapView extends Application {
     public Circle buildBuilding;
 
     public ArrayList<Pane> selectedPain = new ArrayList<>();
-    public Stage stage ;
-    public Map currentMap = new Map(100 , 5);
+    public Stage stage;
+    public Map currentMap = new Map(100, 5);
 
     public ScrollPane scrollPane;
     public Pane pane;
     public Pane bottomMenu;
 
     public GridPane showMap;
+
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
@@ -76,8 +78,8 @@ public class MapView extends Application {
 
         barMenu.setPrefSize(stageWidth, stageHeight / 5);
         pane.setPrefSize(stageWidth, stageHeight);
-        showMap.setPrefSize(30*currentMap.getDimension(), 30*currentMap.getDimension());
-        scrollPane.setPrefSize(stageWidth, stageHeight*4/5);
+        showMap.setPrefSize(30 * currentMap.getDimension(), 30 * currentMap.getDimension());
+        scrollPane.setPrefSize(stageWidth, stageHeight * 4 / 5);
 
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -124,7 +126,7 @@ public class MapView extends Application {
         vBox.getChildren().add(militaryBuilding);
         barMenu.getChildren().add(buildMenu);
         barMenu.getChildren().add(vBox);
-
+        barMenu.getChildren().add(miniMap);
 
 
         scrollPane.setContent(showMap);
@@ -176,12 +178,12 @@ public class MapView extends Application {
         showMap.setOnMouseReleased(mouseEvent -> {
             double x = mouseEvent.getX();
             double y = mouseEvent.getY();
-            Rectangle rect = new Rectangle(Math.min(firstX.get(), x), Math.min(firstY.get(), y), Math.abs( x - firstX.get()), Math.abs( y - firstY.get()));
+            Rectangle rect = new Rectangle(Math.min(firstX.get(), x), Math.min(firstY.get(), y), Math.abs(x - firstX.get()), Math.abs(y - firstY.get()));
             rect.setFill(Color.TRANSPARENT);
             for (Node child : showMap.getChildren()) {
-                if(child instanceof Pane){
+                if (child instanceof Pane) {
                     Bounds bounds = child.getBoundsInParent();
-                    if(bounds.intersects(rect.getBoundsInParent())){
+                    if (bounds.intersects(rect.getBoundsInParent())) {
                         Pane pane = (Pane) child;
                         selectedPain.add((Pane) child);
                         getCellByPane(pane).getImageView().setOpacity(0.5);
@@ -220,7 +222,7 @@ public class MapView extends Application {
             if (delta > 0) {
                 // Zoom in
                 scale.updateAndGet(v -> (double) (v * 1.1));
-                for(int i = 0; i < currentMap.getDimension(); i++) {
+                for (int i = 0; i < currentMap.getDimension(); i++) {
                     for (int j = 0; j < currentMap.getDimension(); j++) {
                         int finalJ = j;
                         int finalI = i;
@@ -236,7 +238,7 @@ public class MapView extends Application {
             } else if (delta < 0) {
                 // Zoom out
                 scale.updateAndGet(v -> (double) (v / 1.1));
-                for(int i = 0; i < currentMap.getDimension(); i++) {
+                for (int i = 0; i < currentMap.getDimension(); i++) {
                     for (int j = 0; j < currentMap.getDimension(); j++) {
                         int finalI = i;
                         int finalJ = j;
@@ -256,6 +258,8 @@ public class MapView extends Application {
 
     private void createBarMenu() {
         barMenu.setBackground(barMenuBackground);
+        miniMap = new GridPane();
+        createMiniMap();
         VBox vBox = new VBox();
         vBox.getChildren().add(scrollPane);
         vBox.getChildren().add(barMenu);
@@ -264,17 +268,31 @@ public class MapView extends Application {
     }
 
 
-
-
     private void createCell() {
-        for(int i = 0; i < currentMap.getDimension(); i++) {
+        for (int i = 0; i < currentMap.getDimension(); i++) {
             for (int j = 0; j < currentMap.getDimension(); j++) {
                 showMap.add(currentMap.getMap()[i][j].getPane(), i, j);
+                dragAndDrop(currentMap.getMap()[i][j].getPane());
+                dragEntered(currentMap.getMap()[i][j].getPane());
+                dragExited(currentMap.getMap()[i][j].getPane());
+                dragOver(currentMap.getMap()[i][j].getPane());
+
             }
         }
     }
+
+    private void createMiniMap() {
+        for (int i = 0; i < currentMap.getDimension(); i++) {
+            for (int j = 0; j < currentMap.getDimension(); j++) {
+                Pane pane1 = currentMap.getMap()[i][j].getPane();
+//                pane1.setMaxSize(1, 1);
+                miniMap.add(pane1, i, j);
+            }
+        }
+    }
+
     private BackgroundImage setBackGround() {
-        Image image = new Image(getClass().getResource("/Menus/menu.png").toExternalForm(), stageWidth ,stageHeight/5, false, false);
+        Image image = new Image(getClass().getResource("/Menus/menu.png").toExternalForm(), stageWidth, stageHeight / 5, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
@@ -282,10 +300,11 @@ public class MapView extends Application {
                 BackgroundSize.DEFAULT);
         return backgroundImage;
     }
+
     public Cell getCellByPane(Pane pane) {
         for (Cell[] cells : currentMap.getMap()) {
             for (Cell cell : cells) {
-                if(cell.getPane() == pane){
+                if (cell.getPane() == pane) {
                     return cell;
                 }
             }
@@ -319,6 +338,12 @@ public class MapView extends Application {
     private void handleDragBuilding(MouseEvent mouseEvent) {
         ImageView source = (ImageView) mouseEvent.getSource();
         Dragboard dragboard = source.startDragAndDrop(TransferMode.COPY);
+
+        if (dragboard.hasString()) {
+            String url = dragboard.getString();
+            System.out.println(dragboard.getDragViewOffsetX());
+        }
+
         ClipboardContent content = new ClipboardContent();
         content.putString(source.getImage().getUrl());
         dragboard.setContent(content);
@@ -326,6 +351,7 @@ public class MapView extends Application {
         draggedContent.setFitWidth(source.getFitWidth());
         draggedContent.setFitHeight(source.getFitWidth());
         dragboard.setDragView(draggedContent.snapshot(null, null));
+
         mouseEvent.consume();
     }
 
@@ -334,7 +360,22 @@ public class MapView extends Application {
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
-            imageView.setOnDragDetected(this::handleDragBuilding);
+            imageView.setOnDragEntered(dragEvent -> {
+                System.out.println(dragEvent.getX());
+                System.out.println(dragEvent.getY());
+                System.out.println(dragEvent.getScreenX());
+                System.out.println(dragEvent.getScreenY());
+                System.out.println(LocalTime.now());
+                System.out.println("11111111111111111");
+            });
+            imageView.setOnDragExited(dragEvent -> {
+                System.out.println(dragEvent.getX());
+                System.out.println(dragEvent.getY());
+                System.out.println(dragEvent.getScreenX());
+                System.out.println(dragEvent.getScreenY());
+                System.out.println(LocalTime.now());
+                System.out.println("22222222222222222");
+            });
             Tooltip tooltip = new Tooltip(BuildingImages.getMilitaryBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             building.getChildren().add(imageView);
@@ -405,5 +446,47 @@ public class MapView extends Application {
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
         }
+    }
+
+    private void dragEntered(Pane pane) {
+        pane.setOnDragEntered(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (dragEvent.getDragboard().hasString()) {
+                    pane.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+                }
+            }
+        });
+    }
+
+    private void dragExited(Pane pane) {
+        pane.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (dragEvent.getDragboard().hasString())
+                    pane.setStyle("");
+            }
+        });
+    }
+
+    private void dragOver(Pane pane) {
+        pane.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (dragEvent.getDragboard().hasString())
+                    dragEvent.acceptTransferModes(TransferMode.COPY);
+
+            }
+        });
+    }
+
+
+    private void dragAndDrop(Pane pane) {
+        pane.setOnDragDropped(dragEvent -> {
+            Dragboard dragboard = dragEvent.getDragboard();
+            dragEvent.setDropCompleted(true);
+            System.out.println(dragboard.getString());
+            //TODO : DROP BUILDING ON MAP
+        });
     }
 }
