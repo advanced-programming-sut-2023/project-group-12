@@ -258,7 +258,6 @@ public class MapView extends Application {
     private void createBarMenu() {
         barMenu.setBackground(barMenuBackground);
         miniMap = new GridPane();
-        createMiniMap();
         VBox vBox = new VBox();
         vBox.getChildren().add(scrollPane);
         vBox.getChildren().add(barMenu);
@@ -270,12 +269,15 @@ public class MapView extends Application {
     private void createCell() {
         for (int i = 0; i < currentMap.getDimension(); i++) {
             for (int j = 0; j < currentMap.getDimension(); j++) {
-                showMap.add(currentMap.getMap()[i][j].getPane(), i, j);
-                dragAndDrop(currentMap.getMap()[i][j].getPane());
-                dragEntered(currentMap.getMap()[i][j].getPane());
-                dragExited(currentMap.getMap()[i][j].getPane());
-                dragOver(currentMap.getMap()[i][j].getPane());
-
+                Pane cell = currentMap.getMap()[i][j].getPane();
+                showMap.add(cell, i, j);
+                dragAndDrop(cell);
+                dragEntered(cell);
+                dragExited(cell);
+                dragOver(cell);
+                //TODO: connect info to map
+                Tooltip cellTooltip = new Tooltip("this will be cell info");
+                Tooltip.install(cell, cellTooltip);
             }
         }
     }
@@ -315,6 +317,7 @@ public class MapView extends Application {
     private void setMapBar() {
         setPopulationText();
         setCoinText();
+        createMiniMap();
         barMenu.getChildren().add(populationText);
         barMenu.getChildren().add(coinText);
     }
