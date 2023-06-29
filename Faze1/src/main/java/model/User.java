@@ -64,7 +64,7 @@ public class User {
         this.nickname = nickname;
         this.email = email;
         this.slogan = slogan;
-        this.avatar = ProfileMenu.class.getResource("/Avatars/avatar1.png").toExternalForm();
+        this.avatar = ProfileMenu.class.getResource("/Avatars/no_avatar.png").toExternalForm();
     }
 
     public String getUsername() {
