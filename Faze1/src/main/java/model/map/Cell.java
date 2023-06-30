@@ -1,6 +1,7 @@
 package model.map;
 
 
+import Enums.BuildingImages;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -52,11 +53,7 @@ public class Cell {
 
     public void setTextureType(model.map.TextureType textureType) {
         TextureType = textureType;
-        ImageView imageView = new ImageView(textureType.getImage());
-        imageView.setFitWidth(30);
-        imageView.setFitHeight(30);
-        pane.getChildren().clear();
-        pane.getChildren().add(imageView);
+        setPane();
     }
 
     public Tree getTree() {
@@ -65,11 +62,7 @@ public class Cell {
 
     public void setTree(Tree tree) {
         this.tree = tree;
-        ImageView imageView = new ImageView(tree.getImage());
-        imageView.setFitHeight(30);
-        imageView.setFitWidth(30);
-        setTextureType(this.getTextureType());
-        pane.getChildren().add(imageView);
+        setPane();
     }
 
     public Building getBuilding() {
@@ -78,6 +71,7 @@ public class Cell {
 
     public void setBuilding(Building building) {
         this.building = building;
+        setPane();
     }
 
     public ArrayList<Unit> getUnits() {
@@ -136,7 +130,20 @@ public class Cell {
     }
 
     public void setPane() {
+        pane.getChildren().clear();
         pane.getChildren().add(new ImageView(getTextureType().getImage()));
+        if (tree != null) {
+            ImageView treeView = new ImageView(tree.getImage());
+            pane.getChildren().add(treeView);
+            treeView.setFitWidth(30);
+            treeView.setFitHeight(30);
+        }
+        if (building != null) {
+            ImageView buildingView = new ImageView(BuildingImages.getBuildingImageByBuildingType(building.getBuildingType()));
+            buildingView.setFitHeight(30);
+            buildingView.setFitWidth(30);
+            pane.getChildren().add(buildingView);
+        }
     }
 
 

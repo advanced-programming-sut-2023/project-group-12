@@ -17,8 +17,10 @@ import model.UserDatabase;
 import java.awt.*;
 
 public class MainMenu extends Application {
+    private static Stage stage;
     @Override
     public void start(Stage stage) throws Exception {
+        MainMenu.stage = stage;
         Pane pane = new Pane();
         RegisterMenu.setBackGround(pane);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -99,7 +101,7 @@ public class MainMenu extends Application {
         goToStartMenu.setOnMouseClicked(event -> {
             StartMenu startMenu = new StartMenu();
             try {
-                startMenu.start(EnterMenu.getStage());
+                startMenu.start(MainMenu.stage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

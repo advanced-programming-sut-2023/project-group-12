@@ -1,6 +1,7 @@
 package view;
 
 import Enums.BuildingImages;
+import controller.mapmenu.MapMenuController;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -22,12 +23,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Building.Building;
+import model.Building.BuildingType;
+import model.Game;
+import model.UserDatabase;
 import model.map.Cell;
 import model.map.Map;
 
 
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapView extends Application {
@@ -41,7 +46,6 @@ public class MapView extends Application {
 
     public HBox barMenu;
     public GridPane miniMap;
-    Background barMenuBackground = new Background(setBackGround());
     public HBox buildingSelection;
     public Circle church;
     public Circle resourceBuilding;
@@ -52,12 +56,18 @@ public class MapView extends Application {
     public ArrayList<Pane> selectedPain = new ArrayList<>();
     public Stage stage;
     public Map currentMap = new Map(100, 5);
+    private final Game game;
 
     public ScrollPane scrollPane;
     public Pane pane;
     public Pane bottomMenu;
 
     public GridPane showMap;
+    private BuildingType selectedBuilding;
+
+    public MapView(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -256,7 +266,6 @@ public class MapView extends Application {
     }
 
     private void createBarMenu() {
-        barMenu.setBackground(barMenuBackground);
         miniMap = new GridPane();
         VBox vBox = new VBox();
         vBox.getChildren().add(scrollPane);
@@ -275,8 +284,16 @@ public class MapView extends Application {
                 dragEntered(cell);
                 dragExited(cell);
                 dragOver(cell);
-                //TODO: connect info to map
-                Tooltip cellTooltip = new Tooltip("this will be cell info");
+                int finalJ = j;
+                int finalI = i;
+                pane.setOnMouseClicked(mouseEvent -> {
+                    if (selectedBuilding != null) {
+                        game.dropBuilding(finalI, finalJ, selectedBuilding);
+                    }
+                    selectedBuilding = null;
+                });
+                MapMenuController controller = new MapMenuController(game.getCurrentMap());
+                Tooltip cellTooltip = new Tooltip(controller.showDetail(String.valueOf(i), String.valueOf(j)));
                 Tooltip.install(cell, cellTooltip);
             }
         }
@@ -291,16 +308,6 @@ public class MapView extends Application {
                 miniMap.add(imageView, i, j);
             }
         }
-    }
-
-    private BackgroundImage setBackGround() {
-        Image image = new Image(getClass().getResource("/Menus/menu.png").toExternalForm(), stageWidth, stageHeight / 5, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-        return backgroundImage;
     }
 
     public Cell getCellByPane(Pane pane) {
@@ -362,6 +369,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getMilitaryBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             building.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -464,11 +475,13 @@ public class MapView extends Application {
     }
 
 
-    private void dragAndDrop(Pane pane) {
-        pane.setOnDragDropped(dragEvent -> {
+    private void dragAndDrop(Pane thisPane) {
+        thisPane.setOnDragDropped(dragEvent -> {
             Dragboard dragboard = dragEvent.getDragboard();
             dragEvent.setDropCompleted(true);
-            //TODO : DROP BUILDING ON MAP
+            Cell cell = getCellByPane(thisPane);
+            game.dropBuilding(cell.getxCoordinate(), cell.getyCoordinate(),
+                    Objects.requireNonNull(BuildingImages.getBuildingTypeByName(dragboard.getUrl())));
         });
     }
 }
