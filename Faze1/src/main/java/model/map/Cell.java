@@ -1,6 +1,7 @@
 package model.map;
 
 
+import Enums.BuildingImages;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -29,22 +30,8 @@ public class Cell {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         pane = new Pane();
-        if(xCoordinate % 2 == 0 && yCoordinate % 2 == 0) {
-            Image image = new Image(getClass().getResource("/MapImages/Plain1.jpg").toExternalForm());
-            ImageView img = new ImageView(image);
-            img.setFitWidth(20);
-            img.setFitHeight(20);
-            pane.getChildren().add(img);
-        }
-        else{
-            Image image = new Image(getClass().getResource("/MapImages/Sea1.jpg").toExternalForm());
-            ImageView img = new ImageView(image);
-            img.setFitWidth(20);
-            img.setFitHeight(20);
-            pane.getChildren().add(img);
-        }
-
-
+        Image image = getTextureType().getImage();
+        pane.getChildren().add(new ImageView(image));
         isPassable = getTextureType().isPassable();
     }
 
@@ -66,6 +53,7 @@ public class Cell {
 
     public void setTextureType(model.map.TextureType textureType) {
         TextureType = textureType;
+        setPane();
     }
 
     public Tree getTree() {
@@ -74,6 +62,7 @@ public class Cell {
 
     public void setTree(Tree tree) {
         this.tree = tree;
+        setPane();
     }
 
     public Building getBuilding() {
@@ -82,6 +71,7 @@ public class Cell {
 
     public void setBuilding(Building building) {
         this.building = building;
+        setPane();
     }
 
     public ArrayList<Unit> getUnits() {
@@ -130,5 +120,31 @@ public class Cell {
     public void setSick(boolean sick) {
         isSick = sick;
     }
+    public ImageView getImage() {
+        return new ImageView(getTextureType().getImage());
+    }
 
+    public Image getTheImage() {
+        return getTextureType().getImage();
+    }
+
+    public void setPane() {
+        pane.getChildren().clear();
+        ImageView textureImage = new ImageView(getTextureType().getImage());
+        textureImage.setFitWidth(30);
+        textureImage.setFitHeight(30);
+        pane.getChildren().add(textureImage);
+        if (tree != null) {
+            ImageView treeView = new ImageView(tree.getImage());
+            pane.getChildren().add(treeView);
+            treeView.setFitWidth(30);
+            treeView.setFitHeight(30);
+        }
+        if (building != null) {
+            ImageView buildingView = new ImageView(BuildingImages.getBuildingImageByBuildingType(building.getBuildingType()));
+            buildingView.setFitHeight(30);
+            buildingView.setFitWidth(30);
+            pane.getChildren().add(buildingView);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.stage.Stage;
 import model.Building.BuildingType;
 import model.Building.Storage;
 import model.Game;
@@ -7,6 +8,7 @@ import model.Kingdom;
 import model.User;
 import model.UserDatabase;
 import view.GameMenu;
+import view.MapView;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -85,5 +87,19 @@ public class StartMenuController {
             UserDatabase.getCurrentMap().getMap()[kingdom.getHeadSquare().getxCoordinate() - 1][kingdom.getHeadSquare().getyCoordinate()].setBuilding(kingdom.getStockPiles().get(0));
         }
         menu.run(scanner, new Game(UserDatabase.getCurrentMap(), players));
+    }
+
+    public void playGame(Stage stage) throws Exception {
+        ArrayList<Kingdom> players = new ArrayList<>();
+        for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
+            Kingdom kingdom = new Kingdom(UserDatabase.getPlayers().get(i), UserDatabase.getCurrentMap().getHeadSquares().get(i));
+            players.add(kingdom);
+            kingdom.addToStockPiles(new Storage(BuildingType.STOCKPILE, kingdom,
+                    kingdom.getHeadSquare().getxCoordinate() - 1,
+                    kingdom.getHeadSquare().getyCoordinate()));
+            UserDatabase.getCurrentMap().getMap()[kingdom.getHeadSquare().getxCoordinate() - 1][kingdom.getHeadSquare().getyCoordinate()].setBuilding(kingdom.getStockPiles().get(0));
+        }
+        MapView mapView = new MapView(new Game(UserDatabase.getCurrentMap(), players));
+        mapView.start(stage);
     }
 }
