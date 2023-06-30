@@ -7,6 +7,7 @@ import model.Game;
 import model.Kingdom;
 import model.User;
 import model.UserDatabase;
+import model.map.Map;
 import view.GameMenu;
 import view.MapView;
 
@@ -91,6 +92,8 @@ public class StartMenuController {
 
     public void playGame(Stage stage) throws Exception {
         ArrayList<Kingdom> players = new ArrayList<>();
+        if(UserDatabase.getCurrentMap() == null)
+            UserDatabase.setCurrentMap(new Map(30, 3));
         for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
             Kingdom kingdom = new Kingdom(UserDatabase.getPlayers().get(i), UserDatabase.getCurrentMap().getHeadSquares().get(i));
             players.add(kingdom);

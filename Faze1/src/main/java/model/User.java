@@ -11,6 +11,38 @@ public class User {
     private String email;
     private String question;
     private String avatar;
+    private boolean isOnline = false;
+    private ArrayList<User> friends = new ArrayList<>();
+
+    public ArrayList<User> getFriends() {
+        return friends;
+    }
+    public boolean isFriendListFull () {
+        if (friends.size() <= 100)
+            return false;
+        return true;
+    }
+
+    private ArrayList<User> waitingForThemToAccept = new ArrayList<>();
+
+    public ArrayList<User> getWaitingForThemToAccept() {
+
+        return waitingForThemToAccept;
+    }
+
+    private ArrayList<User> waitingForYouToAccept = new ArrayList<>();
+
+    public ArrayList<User> getWaitingForYouToAccept() {
+        return waitingForYouToAccept;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
 
     public String getAvatar() {
         return avatar;
@@ -97,7 +129,7 @@ public class User {
 
     public int getRank() {
         ArrayList<User> users = UserDatabase.rankPlayers();
-        for (User user:users) {
+        for (User user : users) {
             if (user == this) {
                 this.rank = users.indexOf(user) + 1;
                 return users.indexOf(user) + 1;

@@ -174,7 +174,8 @@ public class ChatMenu extends Application {
         MenuItem heart = new MenuItem("❤");
         MenuItem heartEyes = new MenuItem("😍");
         MenuItem laugh = new MenuItem("😂");
-        contextMenu.getItems().addAll(edit, deleteForMe, deleteForAll, like, dislike, heart, heartEyes, laugh);
+        MenuItem addFriend = new MenuItem("Add Friend");
+        contextMenu.getItems().addAll(edit, deleteForMe, deleteForAll, like, dislike, heart, heartEyes, laugh,addFriend);
         text.setOnContextMenuRequested(contextMenuEvent -> {
             contextMenu.show(text, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
         });
@@ -192,6 +193,21 @@ public class ChatMenu extends Application {
         heartReact(message, pane, heart);
         heartEyeReact(message, pane, heartEyes);
         laughReact(message, pane, laugh);
+        addFriend.setOnAction(actionEvent -> {
+            //todo
+            if (message.getSender() == currentUser) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("You can't add yourself!");
+                alert.show();
+            } else {
+                message.getSender().getWaitingForYouToAccept().add(currentUser);
+                currentUser.getWaitingForThemToAccept().add(message.getSender());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("Friend added successfully!");
+                alert.show();
+                //todo send a message to the receiver
+            }
+        });
     }
 
     private void editHandler(Message message, Text text, Pane pane, MenuItem edit) {

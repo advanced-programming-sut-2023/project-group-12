@@ -268,6 +268,7 @@ public class MapView extends Application {
     }
 
     private void createBarMenu() {
+        barMenu = new HBox();
         miniMap = new GridPane();
         VBox vBox = new VBox();
         vBox.getChildren().add(scrollPane);
