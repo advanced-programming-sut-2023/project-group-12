@@ -66,6 +66,7 @@ public class MapView extends Application {
 
     public GridPane showMap;
     private BuildingType selectedBuilding = null;
+    private Scene scene;
 
     public MapView(Game game) {
         this.game = game;
@@ -139,7 +140,8 @@ public class MapView extends Application {
 
 
         scrollPane.setContent(showMap);
-        Scene scene = new Scene(pane);
+        scene = new Scene(pane);
+        zoomHandler();
         stage.setScene(scene);
         stage.show();
     }
@@ -228,42 +230,56 @@ public class MapView extends Application {
         AtomicReference<Double> translateX = new AtomicReference<>(0.0);
         AtomicReference<Double> translateY = new AtomicReference<>(0.0);
 
-        showMap.setOnScroll(event -> {
-            double delta = event.getDeltaY();
-            if (delta > 0) {
-                // Zoom in
-                scale.updateAndGet(v -> (double) (v * 1.1));
-                for (int i = 0; i < currentMap.getDimension(); i++) {
-                    for (int j = 0; j < currentMap.getDimension(); j++) {
-                        int finalJ = j;
-                        int finalI = i;
-                        translateX.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 20));
-                        translateY.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 20));
-                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
-                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
-                    }
-                }
+        // Zoom in
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode().getName().equals("Up") && keyEvent.isShiftDown() && scale.get() < 1.5) {
+                    scale.updateAndGet(v -> (double) (v * 1.1));
+                    translateX.updateAndGet(v -> (double) (v + showMap.getBoundsInParent().getWidth() / 20 / scale.get()));
+                    translateY.updateAndGet(v -> (double) (v + showMap.getBoundsInParent().getHeight() / 20 / scale.get()));
+                    showMap.setScaleX(scale.get());
+                    showMap.setScaleY(scale.get());
+                    showMap.setTranslateX(translateX.get());
+                    showMap.setTranslateY(translateY.get());
 
-            } else if (delta < 0) {
-                // Zoom out
-                scale.updateAndGet(v -> (double) (v / 1.1));
-                for (int i = 0; i < currentMap.getDimension(); i++) {
-                    for (int j = 0; j < currentMap.getDimension(); j++) {
-                        int finalI = i;
-                        int finalJ = j;
-                        translateX.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 22));
-                        translateY.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 22));
-                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
-                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
-                    }
-                }
+                    // Get the current viewport of the scroll pane
+                    Bounds viewportBounds = scrollPane.getViewportBounds();
+                    double contentWidth = showMap.getBoundsInParent().getWidth();
+                    double contentHeight = showMap.getBoundsInParent().getHeight();
 
+                    // Calculate the new scroll position based on the current zoom level
+                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get()) ;
+                    double vValue = (translateY.get() + viewportBounds.getHeight() / 2) / (contentHeight * scale.get());
+
+                    // Set the new scroll position and content
+                    scrollPane.setHvalue(hValue);
+                    scrollPane.setVvalue(vValue);
+                    scrollPane.setContent(showMap);
+                } else if (keyEvent.getCode().getName().equals("Down") && keyEvent.isShiftDown() && scale.get() > 0.7) {
+                    scale.updateAndGet(v -> (double) (v / 1.1));
+                    translateX.updateAndGet(v -> (double) (v - showMap.getBoundsInParent().getWidth() / 20 / scale.get()));
+                    translateY.updateAndGet(v -> (double) (v - showMap.getBoundsInParent().getHeight() / 20 / scale.get()));
+                    showMap.setScaleX(scale.get());
+                    showMap.setScaleY(scale.get());
+                    showMap.setTranslateX(translateX.get());
+                    showMap.setTranslateY(translateY.get());
+
+                    // Get the current viewport of the scroll pane
+                    Bounds viewportBounds = scrollPane.getViewportBounds();
+                    double contentWidth = showMap.getBoundsInParent().getWidth();
+                    double contentHeight = showMap.getBoundsInParent().getHeight();
+
+                    // Calculate the new scroll position based on the current zoom level
+                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get()) ;
+                    double vValue = (translateY.get() + viewportBounds.getHeight() / 2) / (contentHeight * scale.get());
+
+                    // Set the new scroll position and content
+                    scrollPane.setHvalue(hValue);
+                    scrollPane.setVvalue(vValue);
+                    scrollPane.setContent(showMap);
+                }
             }
-
         });
     }
 
