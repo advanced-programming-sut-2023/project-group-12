@@ -2,25 +2,26 @@ package view;
 
 import controller.ProfileController;
 import controller.RegisterMenuController;
-import controller.StartMenuController;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.User;
 import model.UserDatabase;
 
 import java.awt.*;
@@ -40,8 +41,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
     public void start(Stage stage) throws Exception {
         // JUST FOR AVOIDING ERROR
         UserDatabase.loadUsers();
-        UserDatabase.setCurrentUser(UserDatabase.getUsers().get(UserDatabase.getUsers().size() - 1));
-
+        UserDatabase.setCurrentUser(UserDatabase.getUsers().get(0));
         controller = new ProfileController(UserDatabase.getCurrentUser());
 
         Pane pane = new Pane();
@@ -49,15 +49,86 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
         Circle circle = avatarPlace(pane, stage);
-        VBox vBox = getvBox(width, height, pane,stage);
+        VBox vBox = getvBox(width, height, pane, stage);
         pane.getChildren().add(vBox);
         pane.getChildren().add(circle);
         initializePosition(width, height);
         getBack(stage, vBox);
+        VBox friendsList = getFriendsList(width, height);
+        VBox waitingList = getWaitingList(width, height);
         pane.setPrefSize(width, height);
+        pane.getChildren().addAll(friendsList, waitingList);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private VBox getWaitingList(double width, double height) {
+        VBox vBox = new VBox();
+        int cnt = 1;
+        for (User user : UserDatabase.getCurrentUser().getWaitingForYouToAccept()) {
+            Text text = new Text(cnt + ". " + user.getUsername());
+            ImageView plus = getPlus(user);
+            ImageView minus = getMinus(user);
+            HBox hBox = new HBox(text, plus, minus);
+            vBox.getChildren().add(hBox);
+            cnt++;
+        }
+        ScrollPane scrollPane = new ScrollPane(vBox);
+        VBox wrapper = new VBox(scrollPane);
+        wrapper.setLayoutX(0);
+        wrapper.setLayoutY(height / 2);
+        wrapper.setPrefSize(width / 2 - 100, height / 2);
+        return wrapper;
+    }
+
+    private ImageView getMinus(User user) {
+        ImageView minus = new ImageView(new Image(getClass().getResourceAsStream("/Avatars/minus.png")));
+        minus.setOnMouseClicked(mouseEvent -> {
+            UserDatabase.getCurrentUser().getWaitingForYouToAccept().remove(user);
+            user.getWaitingForThemToAccept().remove(UserDatabase.getCurrentUser());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Friend Request");
+            alert.setHeaderText("Friend Request");
+            alert.setContentText("You rejected " + user.getUsername() + "'s friend request!");
+            alert.showAndWait();
+            //todo send a message to user
+        });
+        return minus;
+    }
+
+    private ImageView getPlus(User user) {
+        ImageView plus = new ImageView(new Image(getClass().getResourceAsStream("/Avatars/plus.png")));
+        plus.setOnMouseClicked(mouseEvent -> {
+            UserDatabase.getCurrentUser().getFriends().add(user);
+            UserDatabase.getCurrentUser().getWaitingForYouToAccept().remove(user);
+            user.getWaitingForThemToAccept().remove(UserDatabase.getCurrentUser());
+            user.getFriends().add(UserDatabase.getCurrentUser());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Friend Request");
+            alert.setHeaderText("Friend Request");
+            alert.setContentText("You and " + user.getUsername() + " are now friends!");
+            alert.showAndWait();
+            //todo send a message to the user
+        });
+        return plus;
+    }
+
+    private VBox getFriendsList(double width, double height) {
+        VBox vBox = new VBox();
+        int cnt = 1;
+        for (User user : UserDatabase.getCurrentUser().getFriends()) {
+            Text text = new Text(cnt + ". " + user.getUsername());
+            HBox hBox = new HBox(text);
+            vBox.getChildren().add(hBox);
+            cnt++;
+        }
+        ScrollPane scrollPane = new ScrollPane(vBox);
+        VBox wrapper = new VBox(scrollPane);
+        wrapper.setLayoutX(width / 2 + 100);
+        wrapper.setLayoutY(height / 2);
+        wrapper.setPrefSize(width / 2 - 100, height / 2);
+        return wrapper;
     }
 
     private static void getBack(Stage stage, VBox vBox) {
@@ -95,7 +166,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         fieldToChange.setLayoutY(height / 2 - 100);
     }
 
-    private static VBox getvBox(double width, double height, Pane pane,Stage stage) {
+    private static VBox getvBox(double width, double height, Pane pane, Stage stage) {
         VBox vBox = new VBox();
         vBox.setSpacing(10);
         vBox.setAlignment(Pos.CENTER);
@@ -110,6 +181,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         vBox.getChildren().addAll(changeUsername, changeNickname, changeEmail, changePassword, changeSlogan, ScoreBoard);
         return vBox;
     }
+
     private static Button getScoreBoard(Stage stage) {
         Button ScoreBoard = new Button("ScoreBoard");
         ScoreBoard.setPrefSize(200, 50);
@@ -400,7 +472,13 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
     private static Circle avatarPlace(Pane pane, Stage stage) {
         Circle circle = new Circle();
         circle.setRadius(50);
-        Image image = new Image(UserDatabase.getCurrentUser().getAvatar());
+        Image image;
+        if (UserDatabase.getCurrentUser().getAvatar() == null) {
+            image = new Image(ProfileMenu.class.getResource("/Avatars/no_avatar.png").toExternalForm());
+        }
+        else {
+            image = new Image(UserDatabase.getCurrentUser().getAvatar());
+        }
         circle.setFill(new ImagePattern(image));
         circle.setCenterX(60);
         circle.setCenterY(60);

@@ -20,6 +20,7 @@ public class MainMenu extends Application {
     private static Stage stage;
     @Override
     public void start(Stage stage) throws Exception {
+        UserDatabase.setOnline(UserDatabase.getCurrentUser());
         MainMenu.stage = stage;
         Pane pane = new Pane();
         RegisterMenu.setBackGround(pane);
