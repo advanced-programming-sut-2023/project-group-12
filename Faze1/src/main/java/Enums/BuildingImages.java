@@ -230,7 +230,6 @@ public class BuildingImages {
     }
 
     public static String getNameOfBuildingByImage(String url) {
-        System.out.println(url);
         for (Image image1 : militaryBuilding.keySet()) {
             if (image1.getUrl().equals(url))
                 return militaryBuilding.get(image1);

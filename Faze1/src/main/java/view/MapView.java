@@ -25,10 +25,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.Building.Building;
 import model.Building.BuildingType;
 import model.Game;
-import model.UserDatabase;
 import model.map.Cell;
 import model.map.Map;
 
@@ -64,7 +62,7 @@ public class MapView extends Application {
     public Pane pane;
 
     public GridPane showMap;
-    private BuildingType selectedBuilding;
+    private BuildingType selectedBuilding = null;
 
     public MapView(Game game) {
         this.game = game;
@@ -286,19 +284,31 @@ public class MapView extends Application {
                 dragEntered(cell);
                 dragExited(cell);
                 dragOver(cell);
-                int finalJ = j;
-                int finalI = i;
-                pane.setOnMouseClicked(mouseEvent -> {
-                    if (selectedBuilding != null) {
-                        (new Alert(Alert.AlertType.INFORMATION, (new GameMenuController(game)).dropBuilding(String.valueOf(finalI), String.valueOf(finalJ), selectedBuilding.getBuildingName()))).show();
-                    }
-                    selectedBuilding = null;
-                });
+                selectEvent(cell, i, j);
                 MapMenuController controller = new MapMenuController(game.getCurrentMap());
                 Tooltip cellTooltip = new Tooltip(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
+                setTooltipOnHover(cellTooltip, cell, controller, i, j);
                 Tooltip.install(cell, cellTooltip);
             }
         }
+    }
+
+    private void setTooltipOnHover(Tooltip cellTooltip, Pane cell, MapMenuController controller, int i, int j) {
+        cell.setOnMouseEntered(mouseEvent -> {
+            cellTooltip.setText(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
+        });
+    }
+
+    private void selectEvent(Pane cell, int i, int j) {
+        cell.setOnMouseClicked(mouseEvent -> {
+            if (selectedBuilding != null) {
+                (new Alert(Alert.AlertType.INFORMATION,
+                        (new GameMenuController(game)).dropBuilding(String.valueOf(i),
+                                String.valueOf(j), selectedBuilding.getBuildingName()))).show();
+                mouseEvent.consume();
+            }
+            selectedBuilding = null;
+        });
     }
 
     private void createMiniMap() {
@@ -389,6 +399,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getMilitaryBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -402,6 +416,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getBuildBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -415,6 +433,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getFoodBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -428,6 +450,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getSourceBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -441,6 +467,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getChurches().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -481,9 +511,17 @@ public class MapView extends Application {
         thisPane.setOnDragDropped(dragEvent -> {
             Dragboard dragboard = dragEvent.getDragboard();
             dragEvent.setDropCompleted(true);
-            Cell cell = getCellByPane(thisPane);
-            game.dropBuilding(cell.getxCoordinate(), cell.getyCoordinate(),
-                    Objects.requireNonNull(BuildingImages.getBuildingTypeByName(dragboard.getUrl())));
+            if (dragboard.hasString()) {
+                Cell cell = getCellByPane(thisPane);
+                String buildingName = BuildingImages.getBuildingTypeByName(
+                        BuildingImages.getNameOfBuildingByImage(dragboard.getString())).getBuildingName();
+
+                (new Alert(Alert.AlertType.INFORMATION,
+                        (new GameMenuController(game)).dropBuilding(String.valueOf(cell.getxCoordinate()),
+                                String.valueOf(cell.getyCoordinate()),
+                                buildingName))).show();
+            }
+
         });
     }
 }
