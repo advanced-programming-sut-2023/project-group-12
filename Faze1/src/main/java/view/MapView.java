@@ -1,8 +1,12 @@
 package view;
 
 import Enums.BuildingImages;
+import controller.GameController.GameMenuController;
+import controller.mapmenu.MapMenuController;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,10 +14,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -25,6 +26,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Building.BuildingType;
+import model.Game;
 import model.Game;
 import model.Kingdom;
 import model.User;
@@ -33,6 +36,7 @@ import model.map.Map;
 
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapView extends Application {
@@ -43,9 +47,8 @@ public class MapView extends Application {
     public double stageWidth;
     public double stageHeight;
 
-
-    public HBox barMenu = new HBox();
-    Background barMenuBackground = new Background(setBackGround());
+    public HBox barMenu;
+    public GridPane miniMap;
     public HBox buildingSelection;
     public Circle church;
     public Circle resourceBuilding;
@@ -60,9 +63,15 @@ public class MapView extends Application {
 
     public ScrollPane scrollPane;
     public Pane pane;
-    public Pane bottomMenu;
 
     public GridPane showMap;
+    private BuildingType selectedBuilding = null;
+
+    public MapView(Game game) {
+        this.game = game;
+        this.currentMap = game.getCurrentMap();
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
@@ -77,12 +86,9 @@ public class MapView extends Application {
         pane = new Pane();
         showMap = new GridPane();
         scrollPane = new ScrollPane();
-        bottomMenu = new Pane();
-
-        bottomMenu.setPrefSize(stageWidth, stageHeight/5);
         pane.setPrefSize(stageWidth, stageHeight);
-        showMap.setPrefSize(30*currentMap.getDimension(), 30*currentMap.getDimension());
-        scrollPane.setPrefSize(stageWidth, stageHeight*4/5);
+        showMap.setPrefSize(30 * currentMap.getDimension(), 30 * currentMap.getDimension());
+        scrollPane.setPrefSize(stageWidth, stageHeight * 4 / 5);
 
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -129,7 +135,7 @@ public class MapView extends Application {
         vBox.getChildren().add(militaryBuilding);
         barMenu.getChildren().add(buildMenu);
         barMenu.getChildren().add(vBox);
-
+        barMenu.getChildren().add(miniMap);
 
 
         scrollPane.setContent(showMap);
@@ -183,15 +189,15 @@ public class MapView extends Application {
         showMap.setOnMouseReleased(mouseEvent -> {
             double x = mouseEvent.getX();
             double y = mouseEvent.getY();
-            Rectangle rect = new Rectangle(Math.min(firstX.get(), x), Math.min(firstY.get(), y), Math.abs( x - firstX.get()), Math.abs( y - firstY.get()));
+            Rectangle rect = new Rectangle(Math.min(firstX.get(), x), Math.min(firstY.get(), y), Math.abs(x - firstX.get()), Math.abs(y - firstY.get()));
             rect.setFill(Color.TRANSPARENT);
             for (Node child : showMap.getChildren()) {
-                if(child instanceof Pane){
+                if (child instanceof Pane) {
                     Bounds bounds = child.getBoundsInParent();
-                    if(bounds.intersects(rect.getBoundsInParent())){
+                    if (bounds.intersects(rect.getBoundsInParent())) {
                         Pane pane = (Pane) child;
                         selectedPain.add((Pane) child);
-//                        getCellByPane(pane).getImageView().setOpacity(0.5);
+                        getCellByPane(pane).getImage().setOpacity(0.5);
 //                        BorderStroke borderStroke = new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2));
 //                        Rectangle clip = new Rectangle();
 //                        clip.setWidth(pane.getWidth());
@@ -212,7 +218,7 @@ public class MapView extends Application {
 
     private void resetSelected() {
         for (Pane pane1 : selectedPain) {
-//            getCellByPane(pane1).getImageView().setOpacity(1);
+            getCellByPane(pane1).getImage().setOpacity(1);
         }
         selectedPain.clear();
     }
@@ -227,32 +233,32 @@ public class MapView extends Application {
             if (delta > 0) {
                 // Zoom in
                 scale.updateAndGet(v -> (double) (v * 1.1));
-                for(int i = 0; i < currentMap.getDimension(); i++) {
+                for (int i = 0; i < currentMap.getDimension(); i++) {
                     for (int j = 0; j < currentMap.getDimension(); j++) {
                         int finalJ = j;
                         int finalI = i;
-//                        translateX.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getWidth() / 20));
-//                        translateY.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getHeight() / 20));
-//                        currentMap.getMap()[i][j].getImageView().setScaleX(scale.get());
-//                        currentMap.getMap()[i][j].getImageView().setScaleY(scale.get());
-//                        currentMap.getMap()[i][j].getImageView().setTranslateX(translateX.get());
-//                        currentMap.getMap()[i][j].getImageView().setTranslateY(translateY.get());
+                        translateX.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 20));
+                        translateY.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 20));
+                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
+                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
                     }
                 }
 
             } else if (delta < 0) {
                 // Zoom out
                 scale.updateAndGet(v -> (double) (v / 1.1));
-                for(int i = 0; i < currentMap.getDimension(); i++) {
+                for (int i = 0; i < currentMap.getDimension(); i++) {
                     for (int j = 0; j < currentMap.getDimension(); j++) {
                         int finalI = i;
                         int finalJ = j;
-//                        translateX.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getWidth() / 22));
-//                        translateY.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImageView().getBoundsInParent().getHeight() / 22));
-//                        currentMap.getMap()[i][j].getImageView().setScaleX(scale.get());
-//                        currentMap.getMap()[i][j].getImageView().setScaleY(scale.get());
-//                        currentMap.getMap()[i][j].getImageView().setTranslateX(translateX.get());
-//                        currentMap.getMap()[i][j].getImageView().setTranslateY(translateY.get());
+                        translateX.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 22));
+                        translateY.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 22));
+                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
+                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
+                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
                     }
                 }
 
@@ -262,7 +268,7 @@ public class MapView extends Application {
     }
 
     private void createBarMenu() {
-        barMenu.setBackground(barMenuBackground);
+        miniMap = new GridPane();
         VBox vBox = new VBox();
         vBox.getChildren().add(scrollPane);
         vBox.getChildren().add(barMenu);
@@ -271,28 +277,57 @@ public class MapView extends Application {
     }
 
 
-
-
     private void createCell() {
-        for(int i = 0; i < currentMap.getDimension(); i++) {
+        for (int i = 0; i < currentMap.getDimension(); i++) {
             for (int j = 0; j < currentMap.getDimension(); j++) {
-                showMap.add(currentMap.getMap()[i][j].getPane(), i, j);
+                Pane cell = currentMap.getMap()[i][j].getPane();
+                showMap.add(cell, i, j);
+                dragAndDrop(cell);
+                dragEntered(cell);
+                dragExited(cell);
+                dragOver(cell);
+                selectEvent(cell, i, j);
+                MapMenuController controller = new MapMenuController(game.getCurrentMap());
+                Tooltip cellTooltip = new Tooltip(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
+                setTooltipOnHover(cellTooltip, cell, controller, i, j);
+                Tooltip.install(cell, cellTooltip);
             }
         }
     }
-    private BackgroundImage setBackGround() {
-        Image image = new Image(getClass().getResource("/Menus/menu.png").toExternalForm(), stageWidth ,stageHeight/5, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-        return backgroundImage;
+
+    private void setTooltipOnHover(Tooltip cellTooltip, Pane cell, MapMenuController controller, int i, int j) {
+        cell.setOnMouseEntered(mouseEvent -> {
+            cellTooltip.setText(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
+        });
     }
+
+    private void selectEvent(Pane cell, int i, int j) {
+        cell.setOnMouseClicked(mouseEvent -> {
+            if (selectedBuilding != null) {
+                (new Alert(Alert.AlertType.INFORMATION,
+                        (new GameMenuController(game)).dropBuilding(String.valueOf(i),
+                                String.valueOf(j), selectedBuilding.getBuildingName()))).show();
+                mouseEvent.consume();
+            }
+            selectedBuilding = null;
+        });
+    }
+
+    private void createMiniMap() {
+        for (int i = 0; i < currentMap.getDimension(); i++) {
+            for (int j = 0; j < currentMap.getDimension(); j++) {
+                ImageView imageView = new ImageView(currentMap.getMap()[i][j].getTheImage());
+                imageView.setFitWidth(1);
+                imageView.setFitHeight(1);
+                miniMap.add(imageView, i, j);
+            }
+        }
+    }
+
     public Cell getCellByPane(Pane pane) {
         for (Cell[] cells : currentMap.getMap()) {
             for (Cell cell : cells) {
-                if(cell.getPane() == pane){
+                if (cell.getPane() == pane) {
                     return cell;
                 }
             }
@@ -303,6 +338,7 @@ public class MapView extends Application {
     private void setMapBar() {
         setPopulationText();
         setCoinText();
+        createMiniMap();
         barMenu.getChildren().add(populationText);
         barMenu.getChildren().add(coinText);
     }
@@ -326,6 +362,8 @@ public class MapView extends Application {
     private void handleDragBuilding(MouseEvent mouseEvent) {
         ImageView source = (ImageView) mouseEvent.getSource();
         Dragboard dragboard = source.startDragAndDrop(TransferMode.COPY);
+
+
         ClipboardContent content = new ClipboardContent();
         content.putString(source.getImage().getUrl());
         dragboard.setContent(content);
@@ -333,6 +371,7 @@ public class MapView extends Application {
         draggedContent.setFitWidth(source.getFitWidth());
         draggedContent.setFitHeight(source.getFitWidth());
         dragboard.setDragView(draggedContent.snapshot(null, null));
+
         mouseEvent.consume();
     }
 
@@ -341,10 +380,13 @@ public class MapView extends Application {
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(80);
             imageView.setFitHeight(80);
-            imageView.setOnDragDetected(this::handleDragBuilding);
             Tooltip tooltip = new Tooltip(BuildingImages.getMilitaryBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             building.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -359,6 +401,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getMilitaryBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -372,6 +418,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getBuildBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -385,6 +435,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getFoodBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -398,6 +452,10 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getSourceBuilding().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
 
@@ -411,9 +469,62 @@ public class MapView extends Application {
             Tooltip tooltip = new Tooltip(BuildingImages.getChurches().get(image));
             Tooltip.install(imageView, tooltip);
             buildingSelection.getChildren().add(imageView);
+            imageView.setOnMouseClicked(mouseEvent1 -> {
+                String buildingName = BuildingImages.getNameOfBuildingByImage(image.getUrl());
+                this.selectedBuilding = BuildingImages.getBuildingTypeByName(buildingName);
+            });
         }
     }
+    private void dragEntered(Pane pane) {
+        pane.setOnDragEntered(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (dragEvent.getDragboard().hasString()) {
+                    pane.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+                }
+            }
+        });
+    }
 
+    private void dragExited(Pane pane) {
+        pane.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (dragEvent.getDragboard().hasString())
+                    pane.setStyle("");
+            }
+        });
+    }
+
+    private void dragOver(Pane pane) {
+        pane.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent dragEvent) {
+                if (dragEvent.getDragboard().hasString())
+                    dragEvent.acceptTransferModes(TransferMode.COPY);
+
+            }
+        });
+    }
+
+
+    private void dragAndDrop(Pane thisPane) {
+        thisPane.setOnDragDropped(dragEvent -> {
+            Dragboard dragboard = dragEvent.getDragboard();
+            dragEvent.setDropCompleted(true);
+            if (dragboard.hasString()) {
+                Cell cell = getCellByPane(thisPane);
+                String buildingName = BuildingImages.getBuildingTypeByName(
+                        BuildingImages.getNameOfBuildingByImage(dragboard.getString())).getBuildingName();
+
+                (new Alert(Alert.AlertType.INFORMATION,
+                        (new GameMenuController(game)).dropBuilding(String.valueOf(cell.getxCoordinate()),
+                                String.valueOf(cell.getyCoordinate()),
+                                buildingName))).show();
+            }
+
+        });
+    }
     public Pane createPopUp(){
         HBox hBox = new HBox();
         hBox.setSpacing(10);

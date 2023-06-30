@@ -1,10 +1,13 @@
 package Enums;
 
 import javafx.scene.image.Image;
+import model.Building.BuildingType;
 
 import java.util.HashMap;
 
 public class BuildingImages {
+    private static final HashMap<String, BuildingType> buildings = new HashMap<>();
+    private static final HashMap<BuildingType, Image> buildingImages = new HashMap<>();
     private static final HashMap<Image, String> militaryBuilding = new HashMap<>();
 
     private static final HashMap<Image, String> buildBuilding = new HashMap<>();
@@ -96,6 +99,101 @@ public class BuildingImages {
         return buildBuilding;
     }
 
+    private static HashMap<String, BuildingType> setBuildings() {
+        if (buildings.size() == 0) {
+            buildings.put("iron mine", BuildingType.IRON_MINE);
+            buildings.put("market", BuildingType.MARKET);
+            buildings.put("oil smelter", BuildingType.OIL_SMELTER);
+            buildings.put("ox tether", BuildingType.OX_TETHER);
+            buildings.put("quarry", BuildingType.QUARRY);
+            buildings.put("stock pile", BuildingType.STOCKPILE);
+            buildings.put("wood cutter", BuildingType.WOODCUTTER);
+            buildings.put("apple garden", BuildingType.APPLE_GARDEN);
+            buildings.put("bakery", BuildingType.BAKERY);
+            buildings.put("brewery", BuildingType.BREWERY);
+            buildings.put("diary product", BuildingType.DAIRY_PRODUCTS);
+            buildings.put("food stock pile", BuildingType.FOOD_STOCKPILE);
+            buildings.put("hop field", BuildingType.HOPS_FARM);
+            buildings.put("mill", BuildingType.MILL);
+            buildings.put("wheat field", BuildingType.WHEAT_FARM);
+            buildings.put("church", BuildingType.CHURCH);
+            buildings.put("cathedral", BuildingType.CATHEDRAL);
+            buildings.put("keep", BuildingType.KEEP);
+            buildings.put("armourer", BuildingType.ARMOURER);
+            buildings.put("caged war dog", BuildingType.CAGED_WAR_DOGES);
+            buildings.put("blacksmith", BuildingType.BLACKSMITH);
+            buildings.put("barrack", BuildingType.BARRACK);
+            buildings.put("killing pit", BuildingType.KILLING_PIT);
+            buildings.put("tent", BuildingType.SIEGE_TENT);
+            buildings.put("pitch ditch", BuildingType.PITCH_DITCH);
+            buildings.put("armoury", BuildingType.ARMOURY);
+            buildings.put("engineer guild", BuildingType.ENGINEER_GUILD);
+            buildings.put("fletcher", BuildingType.FLETCHER);
+            buildings.put("mercenary post", BuildingType.MERCENARY_POST);
+            buildings.put("pole turner", BuildingType.POLE_TURNER);
+            buildings.put("stable", BuildingType.STABLE);
+            buildings.put("small gate house", BuildingType.SMALL_STONE_GATEHOUSE);
+            buildings.put("draw bridge", BuildingType.DRAWBRIDGE);
+            buildings.put("lookout tower", BuildingType.LOOKOUT_TOWER);
+            buildings.put("circular tower", BuildingType.CIRCLE_TOWER);
+            buildings.put("defensive tower", BuildingType.DEFENCE_TURRET);
+            buildings.put("square tower", BuildingType.SQUARE_TOWER);
+            buildings.put("inn", BuildingType.INN);
+            buildings.put("hovel", BuildingType.HOVEL);
+            buildings.put("perimeter tower", BuildingType.PERIMETER_TOWER);
+            buildings.put("wall", BuildingType.WALL);
+        }
+        return buildings;
+    }
+
+    private static HashMap<BuildingType, Image> setBuildingImages() {
+            if (buildingImages.size() == 0) {
+                buildingImages.put(BuildingType.IRON_MINE, getImageByName("iron mine"));
+                buildingImages.put(BuildingType.MARKET, getImageByName("market"));
+                buildingImages.put(BuildingType.OIL_SMELTER, getImageByName("oil smelter"));
+                buildingImages.put(BuildingType.OX_TETHER, getImageByName("ox tether"));
+                buildingImages.put(BuildingType.QUARRY, getImageByName("quarry"));
+                buildingImages.put(BuildingType.STOCKPILE, getImageByName("stock pile"));
+                buildingImages.put(BuildingType.WOODCUTTER, getImageByName("wood cutter"));
+                buildingImages.put(BuildingType.APPLE_GARDEN, getImageByName("apple garden"));
+                buildingImages.put(BuildingType.BAKERY, getImageByName("bakery"));
+                buildingImages.put(BuildingType.BREWERY, getImageByName("brewery"));
+                buildingImages.put(BuildingType.DAIRY_PRODUCTS, getImageByName("diary product"));
+                buildingImages.put(BuildingType.FOOD_STOCKPILE, getImageByName("food stock pile"));
+                buildingImages.put(BuildingType.HOPS_FARM, getImageByName("hop field"));
+                buildingImages.put(BuildingType.MILL, getImageByName("mill"));
+                buildingImages.put(BuildingType.WHEAT_FARM, getImageByName("wheat field"));
+                buildingImages.put(BuildingType.CHURCH, getImageByName("church"));
+                buildingImages.put(BuildingType.CATHEDRAL, getImageByName("cathedral"));
+                buildingImages.put(BuildingType.KEEP, getImageByName("keep"));
+                buildingImages.put(BuildingType.ARMOURER, getImageByName("armourer"));
+                buildingImages.put(BuildingType.CAGED_WAR_DOGES, getImageByName("caged war dog"));
+                buildingImages.put(BuildingType.BLACKSMITH, getImageByName("blacksmith"));
+                buildingImages.put(BuildingType.BARRACK, getImageByName("barrack"));
+                buildingImages.put(BuildingType.KILLING_PIT, getImageByName("killing pit"));
+                buildingImages.put(BuildingType.SIEGE_TENT, getImageByName("tent"));
+                buildingImages.put(BuildingType.PITCH_DITCH, getImageByName("pitch ditch"));
+                buildingImages.put(BuildingType.ARMOURY, getImageByName("armoury"));
+                buildingImages.put(BuildingType.ENGINEER_GUILD, getImageByName("engineer guild"));
+                buildingImages.put(BuildingType.FLETCHER, getImageByName("fletcher"));
+                buildingImages.put(BuildingType.MERCENARY_POST, getImageByName("mercenary post"));
+                buildingImages.put(BuildingType.POLE_TURNER, getImageByName("pole turner"));
+                buildingImages.put(BuildingType.STABLE, getImageByName("stable"));
+                buildingImages.put(BuildingType.SMALL_STONE_GATEHOUSE, getImageByName("small gate house"));
+                buildingImages.put(BuildingType.DRAWBRIDGE, getImageByName("draw bridge"));
+                buildingImages.put(BuildingType.LOOKOUT_TOWER, getImageByName("lookout tower"));
+                buildingImages.put(BuildingType.CIRCLE_TOWER, getImageByName("circular tower"));
+                buildingImages.put(BuildingType.DEFENCE_TURRET, getImageByName("defensive tower"));
+                buildingImages.put(BuildingType.SQUARE_TOWER, getImageByName("square tower"));
+                buildingImages.put(BuildingType.INN, getImageByName("inn"));
+                buildingImages.put(BuildingType.HOVEL, getImageByName("hovel"));
+                buildingImages.put(BuildingType.PERIMETER_TOWER, getImageByName("perimeter tower"));
+                buildingImages.put(BuildingType.WALL, getImageByName("wall"));
+            }
+            return buildingImages;
+    }
+
+
     public static HashMap<Image, String> getChurches() {
         if (churches.size() == 0) {
             churches.put(church, "church");
@@ -132,7 +230,6 @@ public class BuildingImages {
     }
 
     public static String getNameOfBuildingByImage(String url) {
-        System.out.println(url);
         for (Image image1 : militaryBuilding.keySet()) {
             if (image1.getUrl().equals(url))
                 return militaryBuilding.get(image1);
@@ -241,5 +338,21 @@ public class BuildingImages {
             buildBuilding.put(perimeterTower, "perimeter tower");
             buildBuilding.put(wall, "wall");
         }
+    }
+
+    public static BuildingType getBuildingTypeByName(String name) {
+        for (String buildingName : setBuildings().keySet()) {
+            if (buildingName.equals(name))
+                return buildings.get(name);
+        }
+        return null;
+    }
+
+    public static Image getBuildingImageByBuildingType(BuildingType type) {
+        for (BuildingType buildingType : setBuildingImages().keySet()) {
+            if (type.equals(buildingType))
+                return setBuildingImages().get(type);
+        }
+        return null;
     }
 }
