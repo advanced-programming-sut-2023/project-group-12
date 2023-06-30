@@ -15,6 +15,7 @@ import java.awt.*;
 public class MainMenu extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        UserDatabase.setOnline(UserDatabase.getCurrentUser());
         Pane pane = new Pane();
         RegisterMenu.setBackGround(pane);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

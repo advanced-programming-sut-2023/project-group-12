@@ -3,6 +3,7 @@ package view;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,14 +46,14 @@ public class ScoreBoardMenu extends Application {
         double height = screenSize.getHeight();
         pane.setPrefSize(width, height);
         ArrayList<User> users = sortPlayers();
-        VBox vBox = getvBox(width, users,height);
+        VBox vBox = getvBox(width, users, height);
         pane.getChildren().add(vBox);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
     }
 
-    private VBox getvBox(double width, ArrayList<User> users,double height) {
+    private VBox getvBox(double width, ArrayList<User> users, double height) {
         VBox vBox = new VBox();
         vBox.setSpacing(15);
         int cnt = 0;
@@ -83,9 +84,18 @@ public class ScoreBoardMenu extends Application {
                     UserDatabase.getCurrentUser().setAvatar(Clipboard.getSystemClipboard().getUrl());
                 });
             }
+            ImageView status;
+            if (!user.isOnline()) {
+                status = new ImageView(new Image(getClass().getResource("/Avatars/offline.png").toExternalForm()));
+            } else {
+                status = new ImageView(new Image(getClass().getResource("/Avatars/online.png").toExternalForm()));
+            }
+            ImageView plus = getPlus(user);
+            status.setFitWidth(20);
+            status.setFitHeight(20);
             avatar.setFitWidth(50);
             avatar.setFitHeight(50);
-            hBox.getChildren().addAll(avatar, text);
+            hBox.getChildren().addAll(avatar, status, text, plus);
             vBox.getChildren().add(hBox);
         }
 
@@ -94,11 +104,27 @@ public class ScoreBoardMenu extends Application {
         scrollPane.setPrefSize(width - 100, 620);
         VBox wrapper = new VBox(scrollPane);
         wrapper.setLayoutX(50);
-        wrapper.setLayoutY(height/2 - 310);
+        wrapper.setLayoutY(height / 2 - 310);
         wrapper.setSpacing(15);
         wrapper.setAlignment(Pos.CENTER);
 
         return wrapper;
+    }
+    private ImageView getPlus(User user) {
+        ImageView plus = new ImageView(new Image(getClass().getResource("/Avatars/plus.png").toExternalForm()));
+        plus.setOnMouseClicked(event -> {
+            user.getWaitingForYouToAccept().add(UserDatabase.getCurrentUser());
+            UserDatabase.getCurrentUser().getWaitingForThemToAccept().add(user);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("FriendShip request Sent");
+            alert.setHeaderText(null);
+            alert.setContentText("FriendShip request Sent to " + user.getUsername());
+            alert.showAndWait();
+        });
+        plus.setFitWidth(20);
+        plus.setFitHeight(20);
+        plus.setStyle("-fx-cursor: hand");
+        return plus;
     }
 
     private Button getBack(Stage stage) {

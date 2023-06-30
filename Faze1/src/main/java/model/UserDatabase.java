@@ -171,5 +171,24 @@ public class UserDatabase {
     public static int playerRank(User user) {
         return rankPlayers().indexOf(user) + 1;
     }
+    public static void setOnline (User user) {
+        user.setOnline(true);
+    }
+    public static void setOffline (User user) {
+        user.setOnline(false);
+    }
+    public static String acceptFriend (User you, User them) {
+        if (you.getFriends().contains(them)) {
+            return "You are already friends with " + them.getUsername();
+        }
+        if (you.getWaitingForYouToAccept().contains(them)) {
+            you.getWaitingForYouToAccept().remove(them);
+            you.getFriends().add(them);
+            them.getFriends().add(you);
+            them.getWaitingForThemToAccept().remove(you);
+            return "You are now friends with " + them.getUsername();
+        }
+        return "You have not received a friend request from " + them.getUsername();
+    }
 }
 

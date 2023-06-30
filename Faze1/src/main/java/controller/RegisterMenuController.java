@@ -16,11 +16,9 @@ public class RegisterMenuController {
 
     public static String getFamousSlogans() {
         ArrayList<String> slogans = new ArrayList<>();
-        for (User user : UserDatabase.getUsers()) {
-            if (!user.getSlogan().equals("")) {
-                slogans.add(user.getSlogan());
-            }
-        }
+        slogans.add("I fight till I die");
+        slogans.add("Never hesitate to kill the wounded bear");
+        slogans.add("I am the best");
         Collections.shuffle(slogans);
         String output = "";
         for (int i = 0; i < 3; i++) {

@@ -72,9 +72,11 @@ public class TradeWithPlayerX extends Application {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("You should choose something");
                 alert.showAndWait();
+            } else {
+                MessagePopup.display("Send a message", "Send");
+                //todo donate to someone
             }
         });
-        donate.setOnMouseClicked(e -> MessagePopup.display("Send a message", "Send"));
         return donate;
     }
 
@@ -86,9 +88,11 @@ public class TradeWithPlayerX extends Application {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("You should choose something");
                 alert.showAndWait();
+            } else {
+                MessagePopup.display("Send a message", "Send");
+                //todo request a trade
             }
         });
-        request.setOnMouseClicked(e -> MessagePopup.display("Send a message", "Send"));
         return request;
     }
 
@@ -136,6 +140,7 @@ public class TradeWithPlayerX extends Application {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("You can't have negative amount of this property");
                     alert.showAndWait();
+                    amount = 0;
                 } else {
                     count.setText(String.valueOf(amount));
                 }
