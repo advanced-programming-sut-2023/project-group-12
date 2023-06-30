@@ -2,7 +2,6 @@ package view;
 
 import controller.StartMenuController;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -62,9 +61,15 @@ public class StartMenu extends Application {
             alert.show();
         });
         Button startGame = new Button("startGame");
-        startGame.setOnMouseClicked(Event::consume);//todo);
+        startGame.setOnMouseClicked(mouseEvent -> {
+            try {
+                (new StartMenuController()).playGame(stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         setPlayers.getChildren().addAll(addPlayer, addPlayerButton, removePlayer, removeAllPlayers);
-        pane.getChildren().addAll(back, setPlayers, setMap);
+        pane.getChildren().addAll(back, setPlayers, setMap, startGame);
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();

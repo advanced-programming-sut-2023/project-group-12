@@ -1,10 +1,12 @@
 package view;
 
 import Enums.BuildingImages;
+import controller.GameController.GameMenuController;
 import controller.mapmenu.MapMenuController;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -60,13 +62,13 @@ public class MapView extends Application {
 
     public ScrollPane scrollPane;
     public Pane pane;
-    public Pane bottomMenu;
 
     public GridPane showMap;
     private BuildingType selectedBuilding;
 
     public MapView(Game game) {
         this.game = game;
+        this.currentMap = game.getCurrentMap();
     }
 
     @Override
@@ -288,12 +290,12 @@ public class MapView extends Application {
                 int finalI = i;
                 pane.setOnMouseClicked(mouseEvent -> {
                     if (selectedBuilding != null) {
-                        game.dropBuilding(finalI, finalJ, selectedBuilding);
+                        (new Alert(Alert.AlertType.INFORMATION, (new GameMenuController(game)).dropBuilding(String.valueOf(finalI), String.valueOf(finalJ), selectedBuilding.getBuildingName()))).show();
                     }
                     selectedBuilding = null;
                 });
                 MapMenuController controller = new MapMenuController(game.getCurrentMap());
-                Tooltip cellTooltip = new Tooltip(controller.showDetail(String.valueOf(i), String.valueOf(j)));
+                Tooltip cellTooltip = new Tooltip(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
                 Tooltip.install(cell, cellTooltip);
             }
         }

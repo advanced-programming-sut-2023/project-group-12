@@ -131,7 +131,10 @@ public class Cell {
 
     public void setPane() {
         pane.getChildren().clear();
-        pane.getChildren().add(new ImageView(getTextureType().getImage()));
+        ImageView textureImage = new ImageView(getTextureType().getImage());
+        textureImage.setFitWidth(30);
+        textureImage.setFitHeight(30);
+        pane.getChildren().add(textureImage);
         if (tree != null) {
             ImageView treeView = new ImageView(tree.getImage());
             pane.getChildren().add(treeView);
