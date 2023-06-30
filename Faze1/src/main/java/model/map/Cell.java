@@ -120,7 +120,6 @@ public class Cell {
     public void setSick(boolean sick) {
         isSick = sick;
     }
-
     public ImageView getImage() {
         return new ImageView(getTextureType().getImage());
     }
@@ -148,6 +147,4 @@ public class Cell {
             pane.getChildren().add(buildingView);
         }
     }
-
-
 }

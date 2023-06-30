@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +28,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Building.BuildingType;
 import model.Game;
+import model.Game;
+import model.Kingdom;
+import model.User;
 import model.map.Cell;
 import model.map.Map;
 
@@ -43,7 +47,6 @@ public class MapView extends Application {
     public double stageWidth;
     public double stageHeight;
 
-
     public HBox barMenu;
     public GridPane miniMap;
     public HBox buildingSelection;
@@ -54,9 +57,9 @@ public class MapView extends Application {
     public Circle buildBuilding;
 
     public ArrayList<Pane> selectedPain = new ArrayList<>();
-    public Stage stage;
-    public Map currentMap = new Map(100, 5);
-    private final Game game;
+    public Stage stage ;
+    public Map currentMap = new Map(100 , 5);
+    public Game game;
 
     public ScrollPane scrollPane;
     public Pane pane;
@@ -83,9 +86,6 @@ public class MapView extends Application {
         pane = new Pane();
         showMap = new GridPane();
         scrollPane = new ScrollPane();
-        barMenu = new HBox();
-
-        barMenu.setPrefSize(stageWidth, stageHeight / 5);
         pane.setPrefSize(stageWidth, stageHeight);
         showMap.setPrefSize(30 * currentMap.getDimension(), 30 * currentMap.getDimension());
         scrollPane.setPrefSize(stageWidth, stageHeight * 4 / 5);
@@ -175,13 +175,15 @@ public class MapView extends Application {
 //            }
         });
 
+//        AtomicReference<Rectangle> rectangle = new AtomicReference<Rectangle>();
 //        showMap.setOnMouseDragged(mouseEvent -> {
-//            for (Pane pane : selectedPain) {
-//                Cell cell = getCellByPane(pane);
-//                if(cell != null){
-//                    selectedCells.add(cell);
-//                }
-//            }
+//            double x = mouseEvent.getX();
+//            double y = mouseEvent.getY();
+//            rectangle.set(new Rectangle(Math.min(firstX.get(), x), Math.min(firstY.get(), y), Math.abs(x - firstX.get()), Math.abs(y - firstY.get())));
+//            rectangle.get().setFill(Color.TRANSPARENT);
+//            rectangle.get().setStroke(Color.WHITE);
+//            rectangle.get().getStrokeDashArray().setAll(5d, 5d);
+//            showMap.getChildren().add(rectangle.get());
 //        });
 
         showMap.setOnMouseReleased(mouseEvent -> {
@@ -473,7 +475,6 @@ public class MapView extends Application {
             });
         }
     }
-
     private void dragEntered(Pane pane) {
         pane.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
@@ -523,5 +524,77 @@ public class MapView extends Application {
             }
 
         });
+    }
+    public Pane createPopUp(){
+        HBox hBox = new HBox();
+        hBox.setSpacing(10);
+//        Kingdom kingdom = game.getCurrentKingdom();
+        Kingdom kingdom = new Kingdom(new User("mmd", "mmd", "mmd", "mmd", "mmd"), new Cell(10, 10));
+        GridPane pane = new GridPane();
+        Text food = new Text();
+        food.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
+        if(kingdom.getFoodRate() > 0){
+            food.setText("food: " + "+" + kingdom.getFoodRate() + " :)");
+            food.setFill(Color.GREEN);
+        }else {
+            food.setText("food: " + kingdom.getFoodRate() + " :(");
+            food.setFill(Color.RED);
+        }
+        hBox.getChildren().add(food);
+        Text tax = new Text();
+        tax.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
+        if(kingdom.getTaxRate() > 0){
+            tax.setText("tax: " + "+" + kingdom.getTaxRate() + " :)");
+            tax.setFill(Color.GREEN);
+        }else {
+            tax.setText("tax: " + kingdom.getTaxRate() + " :(");
+            tax.setFill(Color.RED);
+        }
+        hBox.getChildren().add(tax);
+        Text religion = new Text();
+        religion.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
+
+        if(kingdom.getReligiousPeople() > 0){
+            religion.setText("religion: " + "+" + kingdom.getReligiousPeople() + " :)");
+            religion.setFill(Color.GREEN);
+        }else {
+            religion.setText("religion: " + kingdom.getReligiousPeople() + " :(");
+            religion.setFill(Color.RED);
+        }
+        hBox.getChildren().add(religion);
+        Text population = new Text();
+        population.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
+        if(kingdom.getPopulation() > 0){
+            population.setText("population: " + "+" + kingdom.getPopulation() + " :)");
+            population.setFill(Color.GREEN);
+        }else {
+            population.setText("population: " + kingdom.getPopulation() + " :(");
+            population.setFill(Color.RED);
+        }
+        hBox.getChildren().add(population);
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);
+        vbox.getChildren().add(hBox);
+        HBox hBox1 = new HBox();
+        Text fear = new Text();
+        fear.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
+        if(kingdom.getFearRate() > 0){
+            fear.setText("fear: " + "+" + kingdom.getFearRate() + " :)");
+            fear.setFill(Color.GREEN);
+        }else {
+            fear.setText("fear: " + kingdom.getFearRate() + " :(");
+            fear.setFill(Color.RED);
+        }
+        Slider slider = new Slider();
+        slider.setMin(-5);
+        slider.setMax(5);
+        slider.setValue(0);
+
+        hBox1.getChildren().add(fear);
+        hBox1.getChildren().add(slider);
+        vbox.getChildren().add(hBox1);
+        pane.getChildren().add(vbox);
+
+        return pane;
     }
 }
