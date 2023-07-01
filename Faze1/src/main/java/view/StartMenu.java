@@ -18,6 +18,8 @@ import view.lobby.Lobby;
 
 import java.awt.*;
 
+
+
 public class StartMenu extends Application {
     private static GameRequest gameRequest;
 
