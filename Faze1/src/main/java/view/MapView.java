@@ -149,6 +149,7 @@ public class MapView extends Application {
         barMenu.getChildren().add(buttomVBox);
         barMenu.getChildren().add(textVBox);
         barMenu.getChildren().add(soldierMode);
+        barMenu.getChildren().add(detailText);
 
 
         scrollPane.setContent(showMap);
@@ -359,6 +360,7 @@ public class MapView extends Application {
             resetPopulationText();
             resetCoinText();
             resetSecondPopularityText();
+            resetDetailText();
         });
     }
 
@@ -400,6 +402,7 @@ public class MapView extends Application {
         setPopulationText();
         setCoinText();
         setSecondPopularityText();
+        setDetailText();
         createMiniMap();
         textVBox = new VBox(populationText, coinText, secondPopularityText);
         textVBox.setSpacing(10);
@@ -446,8 +449,24 @@ public class MapView extends Application {
         });
     }
 
+    private void setDetailText() {
+        ArrayList<Cell> cells = new ArrayList<>();
+        for (Pane pane1 : selectedPain)
+            cells.add(getCellByPane(pane1));
+        detailText = new Text((new MapMenuController(currentMap)).showDetails(cells, game.getCurrentKingdom()));
+        detailText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
+        detailText.setFill(Color.GREEN);
+    }
+    private void resetDetailText() {
+        ArrayList<Cell> cells = new ArrayList<>();
+        for (Pane pane1 : selectedPain)
+            cells.add(getCellByPane(pane1));
+        detailText.setText((new MapMenuController(currentMap)).showDetails(cells, game.getCurrentKingdom()));
+    }
+
     private void setPopulationText() {
-        populationText = new Text(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
+        populationText = new Text(String.format("popularity / population = %d/%d",
+                game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
         populationText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         populationText.setFill(Color.GREEN);
     }
@@ -461,7 +480,7 @@ public class MapView extends Application {
     private void setSecondPopularityText() {
         secondPopularityText = new Text(String.format("scribes report = %d", game.getCurrentKingdom().getPopularity()));
         secondPopularityText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
-        secondPopularityText.setFill(Color.RED);
+        secondPopularityText.setFill(Color.GREEN);
     }
 
     private void resetSecondPopularityText() {
