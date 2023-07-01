@@ -209,7 +209,8 @@ public class RegisterMenu extends Application {//todo: why aren't the textFields
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.OK) {
                         try {
-                            //new SecurityQuestionMenu().start(EnterMenu.getStage());
+                            SecurityQuestionMenu.setUser(RegisterMenuController.getUserToRegister());
+                            new SecurityQuestionMenu().start(EnterMenu.getStage());
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }

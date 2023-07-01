@@ -116,7 +116,23 @@ public class LoginMenuController {
         }
         return false;
     }
-
+    public static boolean isEmailUsed (String email) {
+        try {
+            Socket socket = new Socket("localhost", 8001);
+            DataInputStream reader = new DataInputStream(socket.getInputStream());
+            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+            String[] userJson = {"isEmailUsed", email};
+            writer.writeUTF((new Gson()).toJson(userJson));
+            writer.flush();
+            boolean response = reader.readBoolean();
+            socket.close();
+            return response;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static String getQuestion(String username) {
         try {
             Socket socket = new Socket("localhost", 8001);
@@ -151,5 +167,58 @@ public class LoginMenuController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static boolean checkPassword(String username, String password) {
+        try {
+            Socket socket = new Socket("localhost", 8001);
+            DataInputStream reader = new DataInputStream(socket.getInputStream());
+            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+            String[] userJson = {"checkPassword", username, password};
+            writer.writeUTF((new Gson()).toJson(userJson));
+            writer.flush();
+            boolean response = reader.readBoolean();
+            socket.close();
+            return response;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static User getUser(String loggingInUsername) {
+        try {
+         Socket socket = new Socket("localhost", 8001);
+            DataInputStream reader = new DataInputStream(socket.getInputStream());
+            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+            String[] userJson = {"getUser", loggingInUsername};
+            writer.writeUTF((new Gson()).toJson(userJson));
+            writer.flush();
+            User response = new Gson().fromJson(reader.readUTF(), User.class);
+            socket.close();
+            return response;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static int playerRank (User user) {
+        try {
+         Socket socket = new Socket("localhost", 8001);
+            DataInputStream reader = new DataInputStream(socket.getInputStream());
+            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+            String[] userJson = {"playerRank", user.getUsername()};
+            writer.writeUTF((new Gson()).toJson(userJson));
+            writer.flush();
+            int response = reader.readInt();
+            socket.close();
+            return response;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

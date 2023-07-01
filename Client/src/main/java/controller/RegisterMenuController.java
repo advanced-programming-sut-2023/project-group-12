@@ -17,6 +17,22 @@ public class RegisterMenuController {
         return userToRegister;
     }
 
+    public static void addUser(User registeringUser, String userAnswer, int userQuestionNumber) {
+        registeringUser.setAnswer(userAnswer);
+        registeringUser.setQuestionNumber(userQuestionNumber);
+        try {
+         Socket socket = new Socket("localhost", 8000);
+            DataOutputStream writer = new DataOutputStream( socket.getOutputStream() ) ;
+            String[] userJson = {"addUser", new Gson().toJson(registeringUser)};
+            writer.writeUTF(new Gson().toJson(userJson));
+            writer.flush();
+            socket.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String register(String username, String password, String passwordConfirmation, String email, String nickname, String slogan) {
         String emailToUpper = email.toUpperCase();
         if (!isCorrectUsername(username)) {

@@ -21,7 +21,6 @@ public class LoginController {
             if (inputSplit[0].equals("login")) {
                 String username = inputSplit[1];
                 String password = inputSplit[2];
-
                 String output = login(username, password);
                 DataOutputStream dos = new DataOutputStream(client.getOutputStream());
                 dos.writeUTF(output);
@@ -72,7 +71,39 @@ public class LoginController {
                 } else {
                     dos.writeBoolean(false);
                 }
-            } else {
+            }
+            else if (inputSplit[0].equals("checkPassword")) {
+                String username = inputSplit[1];
+                String password = inputSplit[2];
+                DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                if (UserDatabase.getUserByUsername(username).getPassword().equals(password)) {
+                    dos.writeBoolean(true);
+                } else {
+                    dos.writeBoolean(false);
+                }
+            }
+            else if (inputSplit[0].equals("getUser")) {
+                String username = inputSplit[1];
+                DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                dos.writeUTF((new Gson()).toJson(UserDatabase.getUserByUsername(username)));
+            }
+            else if (inputSplit[0].equals("isEmailUsed")) {
+                String email = inputSplit[1];
+                DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                for (User user:UserDatabase.getUsers()) {
+                    if (user.getEmail().toUpperCase().equals(email.toUpperCase())) {
+                        dos.writeBoolean(true);
+                        return;
+                    }
+                }
+                dos.writeBoolean(false);
+            }
+            else if (inputSplit[0].equals("playerRank")) {
+                String username = inputSplit[1];
+                DataOutputStream dos = new DataOutputStream(client.getOutputStream());
+                dos.writeInt(UserDatabase.getUserByUsername(username).getRank());
+            }
+            else {
                 System.out.println("invalid command");
             }
         } catch (IOException e) {

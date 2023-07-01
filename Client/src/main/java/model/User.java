@@ -1,6 +1,8 @@
 package model;
 
 
+import view.SecurityQuestionMenu;
+
 import java.util.ArrayList;
 
 public class User {
@@ -136,17 +138,6 @@ public class User {
         return highScore;
     }
 
-//    public int getRank() {
-//        ArrayList<User> users = UserDatabase.rankPlayers();
-//        for (User user : users) {
-//            if (user == this) {
-//                this.rank = users.indexOf(user) + 1;
-//                return users.indexOf(user) + 1;
-//            }
-//        }
-//        return 0;
-//    }
-
     public String getSlogan() {
         return slogan;
     }
@@ -175,4 +166,11 @@ public class User {
         this.answer = answer;
     }
 
+    public void setQuestionNumber(int userQuestionNumber) {
+        this.question = SecurityQuestionMenu.getQuestions().get(userQuestionNumber - 1);
+    }
+
+    public int getRank() {
+        return this.rank;
+    }
 }

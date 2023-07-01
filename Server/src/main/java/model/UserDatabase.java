@@ -1,7 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
-import model.map.Map;
+//import model.map.Map;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,7 +28,7 @@ public class UserDatabase {
     private static User currentUser;
     private static final ArrayList<String> questions;
 
-    private static Map currentMap;
+//    private static Map currentMap;
 
     public static ArrayList<String> getQuestions() {
         return questions;
@@ -76,13 +76,13 @@ public class UserDatabase {
         return null;
     }
 
-    public static Map getCurrentMap() {
-        return currentMap;
-    }
-
-    public static void setCurrentMap(Map currentMap) {
-        UserDatabase.currentMap = currentMap;
-    }
+//    public static Map getCurrentMap() {
+//        return currentMap;
+//    }
+//
+//    public static void setCurrentMap(Map currentMap) {
+//        UserDatabase.currentMap = currentMap;
+//    }
 
     public static boolean isEmailExists(String email) {
         for (User user : users) {

@@ -34,7 +34,12 @@ public class RegisterController {
                     user.writeUTF(new Gson().toJson(userRegister));
                     UserDatabase.setAreWeLoggingIn(false);
                 }
-            } else {
+            }
+            else if (inputSplit[0].equals("addUser")) {
+                User user = new Gson().fromJson(inputSplit[1], User.class);
+                UserDatabase.addUser(user);
+            }
+            else {
                 System.out.println("invalid command");
             }
         } catch (IOException e) {

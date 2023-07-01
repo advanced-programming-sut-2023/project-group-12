@@ -7,10 +7,10 @@ import java.net.Socket;
 public class LoginThread extends Thread {
     public void run() {
         try {
+            LoginController loginController = new LoginController();
             ServerSocket ss = new ServerSocket(8001);
             while (true) {
                 Socket client = ss.accept();
-                LoginController loginController = new LoginController();
                 loginController.handle(client);
             }
         } catch (IOException e) {
