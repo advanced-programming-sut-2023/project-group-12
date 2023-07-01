@@ -26,8 +26,8 @@ public class test extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Pane pane = createPopUp();
-//        Pane pane = new Pane();
         pane.setPrefSize(800, 800);
+
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.show();
