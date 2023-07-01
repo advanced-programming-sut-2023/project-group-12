@@ -1,6 +1,8 @@
 package controller.mapmenu;
 
+import model.Kingdom;
 import model.UserDatabase;
+import model.map.Cell;
 import model.map.Map;
 import model.map.TextureType;
 import model.people.Unit;
@@ -328,12 +330,42 @@ public class MapMenuController {
             if (!map.getMap()[x - 1][y - 1].getUnits().isEmpty()) {
                 output += "\n";
                 for (Unit unit : map.getMap()[x - 1][y - 1].getUnits()) {
-                    output += "\t" + unit.getUnitType().name().toLowerCase() + ", owner = " + unit.getHomeland().getOwner().getUsername() + "\n";
+                    output += "\t" + unit.getUnitType().name().toLowerCase() + ", owner = " + unit.getHomeland().getOwner().getUsername() +
+                             ", life = " + unit.getHitPoint() + "\n";
                 }
             } else
                 output += "NONE" + "\n";
         } else
             output += "Your coordinate is incorrect";
+        return output;
+    }
+
+    public String showDetails(ArrayList<Cell> cells, Kingdom currentKingdom) {
+        int maxRate = 0;
+        ArrayList<Unit> units = new ArrayList<>();
+        for(Cell cell : cells) {
+            if (cell.getBuilding() != null)
+                maxRate = currentKingdom.getFoodRate();
+            if (!units.isEmpty()) {
+                for (Unit unit : cell.getUnits())
+                    units.add(unit);
+            }
+        }
+        String output = "";
+        output += "maximum rate = " + maxRate + "\n";
+        output += "minimum rate = " + maxRate + "\n";
+        output += "average rate = " + maxRate + "\n";
+
+
+        output += "Soldiers : ";
+        if (!units.isEmpty()) {
+            output += "\n";
+            for (Unit unit : units) {
+                output += "\t" + unit.getUnitType().name().toLowerCase() + ", owner = " + unit.getHomeland().getOwner().getUsername() +
+                        ", life = " + unit.getHitPoint() + "\n";
+            }
+        } else
+            output += "NONE" + "\n";
         return output;
     }
 

@@ -53,9 +53,10 @@ public class Kingdom {
     private final ArrayList<Building> siegeBuildings = new ArrayList<>();
 
     private final Cell HeadSquare;
+    private int numberOfWorkers;
 
     private int taxRate = 0;
-    private int popularity = 100;
+    private int popularity;
     private int religiousPeople = 0;
     private final Unit king;
 
@@ -80,10 +81,11 @@ public class Kingdom {
         gold = 500;
         fearRate = 0;
         taxRate = 0;
-        popularity = 0;
+        popularity = 100;
         foodRate = 0;
         population = 15;
         unEmployed = 15;
+        numberOfWorkers = 0;
         this.HeadSquare = headSquare;
         this.king = new Unit(this, UnitType.KING, this.getHeadSquare().getxCoordinate(), this.getHeadSquare().getyCoordinate());
     }
@@ -564,4 +566,11 @@ public class Kingdom {
         siegeBuildings.remove(siege);
     }
 
+    public int getNumberOfWorkers() {
+        return numberOfWorkers;
+    }
+
+    public void setNumberOfWorkers(int numberOfWorkers) {
+        this.numberOfWorkers = numberOfWorkers;
+    }
 }

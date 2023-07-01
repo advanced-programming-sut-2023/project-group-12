@@ -28,21 +28,30 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Building.BuildingType;
 import model.Game;
-import model.Game;
 import model.Kingdom;
 import model.User;
 import model.map.Cell;
 import model.map.Map;
 
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapView extends Application {
 
+    private Pane soldierMode;
+    private Text detailText;
+
     public Text populationText;
     public Text coinText;
+    private Text secondPopularityText;
+    private VBox textVBox;
+    private VBox buttomVBox;
 
     public double stageWidth;
     public double stageHeight;
@@ -57,8 +66,8 @@ public class MapView extends Application {
     public Circle buildBuilding;
 
     public ArrayList<Pane> selectedPain = new ArrayList<>();
-    public Stage stage ;
-    public Map currentMap = new Map(100 , 5);
+    public Stage stage;
+    public Map currentMap;
     public Game game;
 
     public ScrollPane scrollPane;
@@ -66,6 +75,7 @@ public class MapView extends Application {
 
     public GridPane showMap;
     private BuildingType selectedBuilding = null;
+    private Scene scene;
 
     public MapView(Game game) {
         this.game = game;
@@ -136,12 +146,44 @@ public class MapView extends Application {
         barMenu.getChildren().add(buildMenu);
         barMenu.getChildren().add(vBox);
         barMenu.getChildren().add(miniMap);
+        barMenu.getChildren().add(buttomVBox);
+        barMenu.getChildren().add(textVBox);
+        barMenu.getChildren().add(soldierMode);
+        barMenu.getChildren().add(detailText);
 
 
         scrollPane.setContent(showMap);
-        Scene scene = new Scene(pane);
+        scene = new Scene(pane);
+        zoomHandler();
         stage.setScene(scene);
         stage.show();
+
+
+        scene.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.C) && keyEvent.isControlDown()) {
+                if (selectedPain != null && selectedPain.size() == 1) {
+                    StringSelection stringSelection = new StringSelection(getCellByPane(selectedPain.get(0)).getBuilding().getBuildingType().getBuildingName());
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(stringSelection, null);
+                }
+            } else if (keyEvent.getCode().equals(KeyCode.V) && keyEvent.isControlDown()) {
+                if (selectedPain != null && selectedPain.size() == 1) {
+                    Cell cell = getCellByPane(selectedPain.get(0));
+                    GameMenuController controller = new GameMenuController(game);
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    Transferable transferable = clipboard.getContents(null);
+                    if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                        try {
+                            (new Alert(Alert.AlertType.INFORMATION, controller.dropBuilding(String.valueOf(cell.getxCoordinate()),
+                                    String.valueOf(cell.getyCoordinate()), (String) transferable.getTransferData(DataFlavor.stringFlavor)))).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
 
@@ -228,46 +270,63 @@ public class MapView extends Application {
         AtomicReference<Double> translateX = new AtomicReference<>(0.0);
         AtomicReference<Double> translateY = new AtomicReference<>(0.0);
 
-        showMap.setOnScroll(event -> {
-            double delta = event.getDeltaY();
-            if (delta > 0) {
-                // Zoom in
-                scale.updateAndGet(v -> (double) (v * 1.1));
-                for (int i = 0; i < currentMap.getDimension(); i++) {
-                    for (int j = 0; j < currentMap.getDimension(); j++) {
-                        int finalJ = j;
-                        int finalI = i;
-                        translateX.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 20));
-                        translateY.updateAndGet(v -> (double) (v + currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 20));
-                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
-                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
-                    }
-                }
+        // Zoom in
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode().getName().equals("Up") && keyEvent.isShiftDown() && scale.get() < 1.5) {
+                    scale.updateAndGet(v -> (double) (v * 1.1));
+                    translateX.updateAndGet(v -> (double) (v + showMap.getBoundsInParent().getWidth() / 20 / scale.get()));
+                    translateY.updateAndGet(v -> (double) (v + showMap.getBoundsInParent().getHeight() / 20 / scale.get()));
+                    showMap.setScaleX(scale.get());
+                    showMap.setScaleY(scale.get());
+                    showMap.setTranslateX(translateX.get());
+                    showMap.setTranslateY(translateY.get());
 
-            } else if (delta < 0) {
-                // Zoom out
-                scale.updateAndGet(v -> (double) (v / 1.1));
-                for (int i = 0; i < currentMap.getDimension(); i++) {
-                    for (int j = 0; j < currentMap.getDimension(); j++) {
-                        int finalI = i;
-                        int finalJ = j;
-                        translateX.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getWidth() / 22));
-                        translateY.updateAndGet(v -> (double) (v - currentMap.getMap()[finalI][finalJ].getImage().getBoundsInParent().getHeight() / 22));
-                        currentMap.getMap()[i][j].getImage().setScaleX(scale.get());
-                        currentMap.getMap()[i][j].getImage().setScaleY(scale.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateX(translateX.get());
-                        currentMap.getMap()[i][j].getImage().setTranslateY(translateY.get());
-                    }
-                }
+                    // Get the current viewport of the scroll pane
+                    Bounds viewportBounds = scrollPane.getViewportBounds();
+                    double contentWidth = showMap.getBoundsInParent().getWidth();
+                    double contentHeight = showMap.getBoundsInParent().getHeight();
 
+                    // Calculate the new scroll position based on the current zoom level
+                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get());
+                    double vValue = (translateY.get() + viewportBounds.getHeight() / 2) / (contentHeight * scale.get());
+
+                    // Set the new scroll position and content
+                    scrollPane.setHvalue(hValue);
+                    scrollPane.setVvalue(vValue);
+                    scrollPane.setContent(showMap);
+                } else if (keyEvent.getCode().getName().equals("Down") && keyEvent.isShiftDown() && scale.get() > 0.7) {
+                    scale.updateAndGet(v -> (double) (v / 1.1));
+                    translateX.updateAndGet(v -> (double) (v - showMap.getBoundsInParent().getWidth() / 20 / scale.get()));
+                    translateY.updateAndGet(v -> (double) (v - showMap.getBoundsInParent().getHeight() / 20 / scale.get()));
+                    showMap.setScaleX(scale.get());
+                    showMap.setScaleY(scale.get());
+                    showMap.setTranslateX(translateX.get());
+                    showMap.setTranslateY(translateY.get());
+
+                    // Get the current viewport of the scroll pane
+                    Bounds viewportBounds = scrollPane.getViewportBounds();
+                    double contentWidth = showMap.getBoundsInParent().getWidth();
+                    double contentHeight = showMap.getBoundsInParent().getHeight();
+
+                    // Calculate the new scroll position based on the current zoom level
+                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get());
+                    double vValue = (translateY.get() + viewportBounds.getHeight() / 2) / (contentHeight * scale.get());
+
+                    // Set the new scroll position and content
+                    scrollPane.setHvalue(hValue);
+                    scrollPane.setVvalue(vValue);
+                    scrollPane.setContent(showMap);
+                }
             }
-
         });
     }
 
     private void createBarMenu() {
+        soldierMode = new Pane();
+        barMenu = new HBox();
+        barMenu.setSpacing(20);
         miniMap = new GridPane();
         VBox vBox = new VBox();
         vBox.getChildren().add(scrollPane);
@@ -298,6 +357,10 @@ public class MapView extends Application {
     private void setTooltipOnHover(Tooltip cellTooltip, Pane cell, MapMenuController controller, int i, int j) {
         cell.setOnMouseEntered(mouseEvent -> {
             cellTooltip.setText(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
+            resetPopulationText();
+            resetCoinText();
+            resetSecondPopularityText();
+            resetDetailText();
         });
     }
 
@@ -338,25 +401,98 @@ public class MapView extends Application {
     private void setMapBar() {
         setPopulationText();
         setCoinText();
+        setSecondPopularityText();
+        setDetailText();
         createMiniMap();
-        barMenu.getChildren().add(populationText);
-        barMenu.getChildren().add(coinText);
+        textVBox = new VBox(populationText, coinText, secondPopularityText);
+        textVBox.setSpacing(10);
+        Circle undoButton = new Circle(12);
+        Circle deleteButton = new Circle(12);
+        Circle briefingButton = new Circle(12);
+        Circle optionButton = new Circle(12);
+        undoButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/chatBack.png").toExternalForm())));
+        deleteButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/blackCross.png").toExternalForm())));
+        briefingButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/search.png").toExternalForm())));
+        optionButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/settings.png").toExternalForm())));
+        buttomVBox = new VBox();
+        buttomVBox.setSpacing(10);
+        buttomVBox.getChildren().addAll(undoButton, deleteButton, briefingButton, optionButton);
+
+        deleteButton.setOnMouseClicked(mouseEvent -> {
+            if (selectedPain != null) {
+                for (Pane pane1 : selectedPain) {
+                    getCellByPane(pane1).setBuilding(null);
+                    game.getCurrentKingdom().setNumberOfWorkers(game.getCurrentKingdom().getNumberOfWorkers() - 1);
+                }
+            }
+        });
+
+        briefingButton.setOnMouseClicked(mouseEvent -> {
+            String text = "";
+            for (Kingdom kingdom : game.getPlayers()) {
+                text += "kingdom name = " + kingdom.getOwner().getUsername() + "\n" +
+                        "kingdom gold = " + kingdom.getGold() + "\n";
+            }
+            Tooltip tooltip = new Tooltip(text);
+            Tooltip.install(briefingButton, tooltip);
+        });
+        optionButton.setOnMouseClicked(mouseEvent -> {
+            try {
+                (new PauseMenu(game, stage)).start(stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private void setDetailText() {
+        ArrayList<Cell> cells = new ArrayList<>();
+        for (Pane pane1 : selectedPain)
+            cells.add(getCellByPane(pane1));
+        detailText = new Text((new MapMenuController(currentMap)).showDetails(cells, game.getCurrentKingdom()));
+        detailText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
+        detailText.setFill(Color.GREEN);
+    }
+    private void resetDetailText() {
+        ArrayList<Cell> cells = new ArrayList<>();
+        for (Pane pane1 : selectedPain)
+            cells.add(getCellByPane(pane1));
+        detailText.setText((new MapMenuController(currentMap)).showDetails(cells, game.getCurrentKingdom()));
     }
 
     private void setPopulationText() {
-        populationText = new Text(String.format("%d/%d", 50, 100));
+        populationText = new Text(String.format("popularity / population = %d/%d",
+                game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
         populationText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         populationText.setFill(Color.GREEN);
-        populationText.setTranslateY(120);
-        populationText.setTranslateX(950);
     }
 
     private void setCoinText() {
-        coinText = new Text(String.format("%d", 50));
+        coinText = new Text(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
         coinText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         coinText.setFill(Color.RED);
-        coinText.setTranslateY(160);
-        coinText.setTranslateX(950);
+    }
+
+    private void setSecondPopularityText() {
+        secondPopularityText = new Text(String.format("scribes report = %d", game.getCurrentKingdom().getPopularity()));
+        secondPopularityText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
+        secondPopularityText.setFill(Color.GREEN);
+    }
+
+    private void resetSecondPopularityText() {
+        secondPopularityText.setText(String.format("scribes report = %d", game.getCurrentKingdom().getPopularity()));
+    }
+
+    private void resetPopulationText() {
+        populationText.setText(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
+    }
+
+    private void resetCoinText() {
+        coinText.setText(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
     }
 
     private void handleDragBuilding(MouseEvent mouseEvent) {
@@ -475,6 +611,7 @@ public class MapView extends Application {
             });
         }
     }
+
     private void dragEntered(Pane pane) {
         pane.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
@@ -525,7 +662,8 @@ public class MapView extends Application {
 
         });
     }
-    public Pane createPopUp(){
+
+    public Pane createPopUp() {
         HBox hBox = new HBox();
         hBox.setSpacing(10);
 //        Kingdom kingdom = game.getCurrentKingdom();
@@ -533,20 +671,20 @@ public class MapView extends Application {
         GridPane pane = new GridPane();
         Text food = new Text();
         food.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(kingdom.getFoodRate() > 0){
+        if (kingdom.getFoodRate() > 0) {
             food.setText("food: " + "+" + kingdom.getFoodRate() + " :)");
             food.setFill(Color.GREEN);
-        }else {
+        } else {
             food.setText("food: " + kingdom.getFoodRate() + " :(");
             food.setFill(Color.RED);
         }
         hBox.getChildren().add(food);
         Text tax = new Text();
         tax.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(kingdom.getTaxRate() > 0){
+        if (kingdom.getTaxRate() > 0) {
             tax.setText("tax: " + "+" + kingdom.getTaxRate() + " :)");
             tax.setFill(Color.GREEN);
-        }else {
+        } else {
             tax.setText("tax: " + kingdom.getTaxRate() + " :(");
             tax.setFill(Color.RED);
         }
@@ -554,20 +692,20 @@ public class MapView extends Application {
         Text religion = new Text();
         religion.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
 
-        if(kingdom.getReligiousPeople() > 0){
+        if (kingdom.getReligiousPeople() > 0) {
             religion.setText("religion: " + "+" + kingdom.getReligiousPeople() + " :)");
             religion.setFill(Color.GREEN);
-        }else {
+        } else {
             religion.setText("religion: " + kingdom.getReligiousPeople() + " :(");
             religion.setFill(Color.RED);
         }
         hBox.getChildren().add(religion);
         Text population = new Text();
         population.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(kingdom.getPopulation() > 0){
+        if (kingdom.getPopulation() > 0) {
             population.setText("population: " + "+" + kingdom.getPopulation() + " :)");
             population.setFill(Color.GREEN);
-        }else {
+        } else {
             population.setText("population: " + kingdom.getPopulation() + " :(");
             population.setFill(Color.RED);
         }
@@ -578,10 +716,10 @@ public class MapView extends Application {
         HBox hBox1 = new HBox();
         Text fear = new Text();
         fear.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(kingdom.getFearRate() > 0){
+        if (kingdom.getFearRate() > 0) {
             fear.setText("fear: " + "+" + kingdom.getFearRate() + " :)");
             fear.setFill(Color.GREEN);
-        }else {
+        } else {
             fear.setText("fear: " + kingdom.getFearRate() + " :(");
             fear.setFill(Color.RED);
         }
