@@ -17,10 +17,12 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.User;
+import model.UserDatabase;
 import model.chat.Chat;
 import model.chat.ChatType;
 import model.chat.Message;
 import model.chat.Pair;
+import view.lobby.Lobby;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,11 +35,36 @@ public class ChatMenu extends Application {
     private String username = "";
     private String toAdd = "";
     private User currentUser = new User("matin", "1", "ali", "sfs", "");
-    private User user = new User("ali", "1", "ali", "sfs", "");
+    User user = new User("ali", "1", "ali", "sfs", "");
     private Chat currentChat = null;
     private Pane chatSpace = null;
     Chat chat = new Chat(currentUser, user, "chat");
     private Button button = new Button("Search");
+    private boolean isComingFromLobby = false;
+
+    public boolean isComingFromLobby() {
+        return isComingFromLobby;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public Chat getCurrentChat() {
+        return currentChat;
+    }
+
+    public void setCurrentChat(Chat currentChat) {
+        this.currentChat = currentChat;
+    }
+
+    public void setComingFromLobby(boolean comingFromLobby) {
+        isComingFromLobby = comingFromLobby;
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -175,7 +202,7 @@ public class ChatMenu extends Application {
         MenuItem heartEyes = new MenuItem("😍");
         MenuItem laugh = new MenuItem("😂");
         MenuItem addFriend = new MenuItem("Add Friend");
-        contextMenu.getItems().addAll(edit, deleteForMe, deleteForAll, like, dislike, heart, heartEyes, laugh,addFriend);
+        contextMenu.getItems().addAll(edit, deleteForMe, deleteForAll, like, dislike, heart, heartEyes, laugh, addFriend);
         text.setOnContextMenuRequested(contextMenuEvent -> {
             contextMenu.show(text, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
         });
@@ -215,13 +242,19 @@ public class ChatMenu extends Application {
             //todo
             textArea.setText(message.getContent());
             button1.setOnMouseClicked(mouseEvent -> {
-                message.setContent(textArea.getText());
-                text.setText(textArea.getText());
-                textArea.setText("");
-                button1.setOnMouseClicked(mouseEvent1 -> {
-                    Message message1 = new Message(currentUser, currentChat, textArea.getText());
-                    chatSpaceUpdate(pane);
-                });
+                if (message.getSender() == UserDatabase.getCurrentUser()) {
+                    message.setContent(textArea.getText());
+                    text.setText(textArea.getText());
+                    textArea.setText("");
+                    button1.setOnMouseClicked(mouseEvent1 -> {
+                        Message message1 = new Message(currentUser, currentChat, textArea.getText());
+                        chatSpaceUpdate(pane);
+                    });
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("You can't edit this message!");
+                    alert.show();
+                }
             });
         });
     }
@@ -323,9 +356,7 @@ public class ChatMenu extends Application {
         Button send = new Button("Send");
         send.setOnMouseClicked(mouseEvent -> {
             Message message = new Message(currentUser, currentChat, textArea.getText());
-            pane.getChildren().remove(chatSpace);
-            chatSpace = getChatSpace(width, height, pane);
-            pane.getChildren().add(chatSpace);
+            chatSpaceUpdate(pane);
         });
         return send;
     }
@@ -384,7 +415,10 @@ public class ChatMenu extends Application {
         button.setLayoutY(5);
         button.setOnAction(actionEvent -> {
             try {
-                new MainMenu().start(stage);
+                if (!isComingFromLobby)
+                    new MainMenu().start(stage);
+                else
+                    new StartMenu(UserDatabase.getCurrentUser().getGameRequest()).start(stage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

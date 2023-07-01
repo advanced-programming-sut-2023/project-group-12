@@ -125,7 +125,8 @@ public class CaptchaMenu extends Application {
                 alert.setContentText("loggedIn successfully");
                 alert.showAndWait();
                 try {
-                    new LoginMenu().start(EnterMenu.getStage());
+                    UserDatabase.setCurrentUser(UserDatabase.getUserByUsername(logginInUsername));
+                    new MainMenu().start(EnterMenu.getStage());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

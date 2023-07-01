@@ -80,7 +80,7 @@ public class ProfileController {
     }
 
     public String removeSlogan() {
-        currentUser.setSlogan(null);// null or ""?
+        currentUser.setSlogan("");// null or ""?
         return "Your slogan removed successfully";
     }
 

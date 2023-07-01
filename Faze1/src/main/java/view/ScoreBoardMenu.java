@@ -35,10 +35,6 @@ public class ScoreBoardMenu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // todo remove this
-        UserDatabase.loadUsers();
-        UserDatabase.setCurrentUser(UserDatabase.getUserByUsername("egwasg"));
-        //
         Button back = getBack(stage);
         Pane pane = new Pane(back);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -110,6 +106,7 @@ public class ScoreBoardMenu extends Application {
 
         return wrapper;
     }
+
     private ImageView getPlus(User user) {
         ImageView plus = new ImageView(new Image(getClass().getResource("/Avatars/plus.png").toExternalForm()));
         plus.setOnMouseClicked(event -> {

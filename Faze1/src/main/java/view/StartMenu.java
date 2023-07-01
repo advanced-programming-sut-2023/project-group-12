@@ -3,22 +3,31 @@ package view;
 import controller.StartMenuController;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.GameRequest;
+import model.User;
 import model.UserDatabase;
+import view.lobby.Lobby;
 
 import java.awt.*;
+import java.awt.Label;
 
 public class StartMenu extends Application {
+    private static GameRequest gameRequest;
+
+    public StartMenu(GameRequest gameRequest) {
+        StartMenu.gameRequest = gameRequest;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
-        UserDatabase.loadUsers();
-        UserDatabase.setCurrentUser(UserDatabase.getUserByUsername("matin"));
         StartMenuController controller = new StartMenuController();
         HBox setPlayers = new HBox();
         VBox setMap = new VBox();
@@ -31,6 +40,49 @@ public class StartMenu extends Application {
         Button back = getBack(stage);
         TextField addPlayer = new TextField();
         Button addPlayerButton = getAddPlayerButton(controller, setPlayers, width, addPlayer);
+        Button removePlayer = getRemovePlayer(controller, width, addPlayer);
+        Button removeAllPlayers = getRemoveAllPlayers(controller);
+        Button startGame = getStartGame(stage, width);
+        Button chat = getChat(stage);
+        Text id = getID(stage);
+        setPlayers.getChildren().addAll(addPlayer, addPlayerButton, removePlayer, removeAllPlayers);
+        pane.getChildren().addAll(back, setPlayers, setMap, startGame,chat,id);
+        addPrivacy(pane,stage,width,height);
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+    }
+    private static Text getID (Stage stage) {
+        Text id = new Text("ID: " + gameRequest.getId());
+        id.setLayoutX(50);
+        id.setLayoutY(25);
+        return id;
+    }
+    private static void addPrivacy (Pane pane,Stage stage, double width, double length) {
+        HBox privacy = privacy(stage, width, length);
+        if (gameRequest.getAdmin() == UserDatabase.getCurrentUser()) {
+            pane.getChildren().add(privacy);
+        }
+    }
+    private static HBox privacy (Stage stage, double width, double length) {
+        ToggleButton privacy = new ToggleButton("privacy");
+        Text status = new Text();
+        HBox holder = new HBox(privacy,status);
+        privacy.setOnMouseClicked(event -> {
+            if (privacy.isSelected()) {
+                status.setText("private");
+                gameRequest.setPublic(false);
+            } else {
+                status.setText("public");
+                gameRequest.setPublic(true);
+            }
+        });
+        privacy.setSelected(false);
+        holder.setLayoutY(100);
+        holder.setLayoutX(5);
+        return holder;
+    }
+    private static Button getRemovePlayer(StartMenuController controller, double width, TextField addPlayer) {
         Button removePlayer = new Button("removePlayer");
         removePlayer.setOnMouseClicked(event -> {
             String output = controller.removePlayer(addPlayer.getText());
@@ -47,6 +99,10 @@ public class StartMenu extends Application {
         });
         removePlayer.setLayoutX(width / 2 - 100);
         removePlayer.setLayoutY(100);
+        return removePlayer;
+    }
+
+    private static Button getRemoveAllPlayers(StartMenuController controller) {
         Button removeAllPlayers = new Button("removeAllPlayers");
         removeAllPlayers.setOnMouseClicked(event -> {
             Alert alert;
@@ -60,7 +116,13 @@ public class StartMenu extends Application {
             }
             alert.show();
         });
+        return removeAllPlayers;
+    }
+
+    private static Button getStartGame(Stage stage, double width) {
         Button startGame = new Button("startGame");
+        startGame.setLayoutX(width - 100);
+        startGame.setLayoutY(5);
         startGame.setOnMouseClicked(mouseEvent -> {
             try {
                 (new StartMenuController()).playGame(stage);
@@ -68,11 +130,7 @@ public class StartMenu extends Application {
                 throw new RuntimeException(e);
             }
         });
-        setPlayers.getChildren().addAll(addPlayer, addPlayerButton, removePlayer, removeAllPlayers);
-        pane.getChildren().addAll(back, setPlayers, setMap, startGame);
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
+        return startGame;
     }
 
     private static Button getAddPlayerButton(StartMenuController controller, HBox setPlayers, double width, TextField addPlayer) {
@@ -105,14 +163,46 @@ public class StartMenu extends Application {
         Button back = new Button("Back");
         back.setOnMouseClicked(event -> {
             try {
-                new MainMenu().start(stage);
+                if (gameRequest.getAdmin() == UserDatabase.getCurrentUser()) {
+                    gameRequest.getPlayers().remove(UserDatabase.getCurrentUser());
+                    UserDatabase.getCurrentUser().setGameRequest(null);
+                    if (gameRequest.getPlayers().size() == 0) {
+                        UserDatabase.getGames().remove(gameRequest);
+                        new Lobby().start(stage);
+                    }
+                    else {
+                        gameRequest.setAdmin(gameRequest.getPlayers().get(0));
+                    }
+                }
+                else {
+                    gameRequest.getPlayers().remove(UserDatabase.getCurrentUser());
+                    UserDatabase.getCurrentUser().setGameRequest(null);
+                }
+                new Lobby().start(stage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        back.setLayoutX(0);
-        back.setLayoutY(0);
+        back.setLayoutX(5);
+        back.setLayoutY(5);
         return back;
+    }
+    private static Button getChat (Stage stage) {
+        Button chat = new Button("chat");
+        chat.setLayoutY(50);
+        chat.setLayoutX(5);
+        chat.setOnMouseClicked(mouseEvent -> {
+            ChatMenu menu = new ChatMenu();
+            menu.setComingFromLobby(true);
+            menu.setCurrentChat(gameRequest.getChat());
+            menu.setCurrentUser(UserDatabase.getCurrentUser());
+            try {
+                menu.start(stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return chat;
     }
 }
 //    public void run(Scanner scanner) {

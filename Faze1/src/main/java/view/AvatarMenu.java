@@ -28,9 +28,6 @@ public class AvatarMenu extends Application {//todo debug it
 
     @Override
     public void start(Stage stage) throws Exception {
-        //TEMP
-        User user = new User("admin", "admin", "admin", "admin", "admin");
-        UserDatabase.setCurrentUser(user);
         Pane pane = new Pane();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
@@ -123,7 +120,7 @@ public class AvatarMenu extends Application {//todo debug it
                 if (event1.getDragboard().hasFiles()) {
                     Image image = new Image(event1.getDragboard().getFiles().get(0).toURI().toString());
                     avatarImageView.setImage(image);
-                    UserDatabase.getCurrentUser().setAvatar(event1.getDragboard().getFiles().get(0).toURI().toString());
+                    UserDatabase.getCurrentUser().setAvatar(image.getUrl().toString());
                     pane.getChildren().remove(avatar);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setContentText("Avatar changed successfully");
@@ -156,8 +153,9 @@ public class AvatarMenu extends Application {//todo debug it
         circle.setFill(new ImagePattern(image));
         gridPane.add(circle, i, j);
         circle.setOnMouseClicked(event -> {
-            UserDatabase.getCurrentUser().setAvatar(address);
             avatar.setFill(new ImagePattern(image));
+            UserDatabase.getCurrentUser().setAvatar(address);
+            AvatarMenu.address = address;
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Avatar changed successfully");
             alert.showAndWait();

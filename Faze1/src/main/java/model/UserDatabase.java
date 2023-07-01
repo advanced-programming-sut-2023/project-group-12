@@ -190,5 +190,18 @@ public class UserDatabase {
         }
         return "You have not received a friend request from " + them.getUsername();
     }
+    private static ArrayList<GameRequest> games = new ArrayList<>();
+
+    public static ArrayList<GameRequest> getGames() {
+        return games;
+    }
+    public static GameRequest getGameById (Long id) {
+        for (GameRequest gameRequest:games) {
+            if (gameRequest.getId() == id) {
+                return gameRequest;
+            }
+        }
+        return null;
+    }
 }
 

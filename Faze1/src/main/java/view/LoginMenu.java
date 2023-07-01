@@ -70,7 +70,7 @@ public class LoginMenu extends Application {
         stage.show();
     }
 
-    private Button getForgotPassword(VBox vBox, TextField username, VBox vBox2) {
+    private Button getForgotPassword(VBox vBox, TextField username, VBox vBox2) {//todo check
         Button forgotPassword = new Button("Forgot Password");
         forgotPassword.setOnMouseClicked(event -> {
             usernameError.setText("");
@@ -133,7 +133,7 @@ public class LoginMenu extends Application {
                 passwordError.setText("Passwords don't match");
             } else {
                 passwordError.setText("");
-                UserDatabase.getUserByUsername(username.getText()).setPassword(confirm.getText());
+                UserDatabase.getUserByUsername(username.getText()).setPassword(newPassword);
                 vBox2.getChildren().clear();
                 UserDatabase.setCurrentUser(UserDatabase.getUserByUsername(username.getText()));
                 Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
@@ -141,6 +141,7 @@ public class LoginMenu extends Application {
                 alert1.setHeaderText("Your password has been changed successfully");
                 alert1.showAndWait();
                 try {
+                    UserDatabase.setCurrentUser(UserDatabase.getUserByUsername(username.getText()));
                     new EnterMenu().start(EnterMenu.getStage());
                 } catch (Exception e) {
                     throw new RuntimeException(e);

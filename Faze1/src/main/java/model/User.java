@@ -14,6 +14,16 @@ public class User {
     private boolean isOnline = false;
     private ArrayList<User> friends = new ArrayList<>();
 
+    public void setGameRequest(GameRequest gameRequest) {
+        this.gameRequest = gameRequest;
+    }
+
+    public GameRequest getGameRequest() {
+        return gameRequest;
+    }
+
+    private GameRequest gameRequest = null;
+
     public ArrayList<User> getFriends() {
         return friends;
     }

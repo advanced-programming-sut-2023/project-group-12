@@ -36,12 +36,10 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
     private static Label passwordErrorLabel = new Label("Password is too short");
     private static TextField fieldToChange = new TextField();
     private static ProfileController controller = null;
+    private static String output = "";
 
     @Override
     public void start(Stage stage) throws Exception {
-        // JUST FOR AVOIDING ERROR
-        UserDatabase.loadUsers();
-        UserDatabase.setCurrentUser(UserDatabase.getUsers().get(0));
         controller = new ProfileController(UserDatabase.getCurrentUser());
 
         Pane pane = new Pane();
@@ -66,14 +64,15 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
     private VBox getWaitingList(double width, double height) {
         VBox vBox = new VBox();
         int cnt = 1;
-        for (User user : UserDatabase.getCurrentUser().getWaitingForYouToAccept()) {
-            Text text = new Text(cnt + ". " + user.getUsername());
-            ImageView plus = getPlus(user);
-            ImageView minus = getMinus(user);
-            HBox hBox = new HBox(text, plus, minus);
-            vBox.getChildren().add(hBox);
-            cnt++;
-        }
+        if (UserDatabase.getCurrentUser().getFriends() != null)
+            for (User user : UserDatabase.getCurrentUser().getWaitingForYouToAccept()) {
+                Text text = new Text(cnt + ". " + user.getUsername());
+                ImageView plus = getPlus(user);
+                ImageView minus = getMinus(user);
+                HBox hBox = new HBox(text, plus, minus);
+                vBox.getChildren().add(hBox);
+                cnt++;
+            }
         ScrollPane scrollPane = new ScrollPane(vBox);
         VBox wrapper = new VBox(scrollPane);
         wrapper.setLayoutX(0);
@@ -111,18 +110,21 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
             alert.showAndWait();
             //todo send a message to the user
         });
+        plus.setFitWidth(20);
+        plus.setFitHeight(20);
         return plus;
     }
 
     private VBox getFriendsList(double width, double height) {
         VBox vBox = new VBox();
         int cnt = 1;
-        for (User user : UserDatabase.getCurrentUser().getFriends()) {
-            Text text = new Text(cnt + ". " + user.getUsername());
-            HBox hBox = new HBox(text);
-            vBox.getChildren().add(hBox);
-            cnt++;
-        }
+        if (UserDatabase.getCurrentUser().getFriends() != null)
+            for (User user : UserDatabase.getCurrentUser().getFriends()) {
+                Text text = new Text(cnt + ". " + user.getUsername());
+                HBox hBox = new HBox(text);
+                vBox.getChildren().add(hBox);
+                cnt++;
+            }
         ScrollPane scrollPane = new ScrollPane(vBox);
         VBox wrapper = new VBox(scrollPane);
         wrapper.setLayoutX(width / 2 + 100);
@@ -204,7 +206,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
             if (UserDatabase.getCurrentUser().getSlogan().equals("")) {
                 changeSlogan.setText("slogan is empty");
             } else {
-                changeSlogan.setText("UserDatabase.getCurrentUser().getSlogan()");
+                changeSlogan.setText(UserDatabase.getCurrentUser().getSlogan());
             }
         });
         changeSlogan.setOnMouseExited(mouseEvent -> {
@@ -305,7 +307,6 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         changePassword.setOnAction(actionEvent -> {
             Optional<Void> result = dialog.showAndWait();
             if (result.isPresent()) {
-                String output = null;
                 try {
                     output = controller.changePassword(oldPassword.getText(), newPassword.getText());
                 } catch (NoSuchAlgorithmException e) {
@@ -340,7 +341,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
             fieldToChange.setPromptText("email");
             fieldToChange.setText(UserDatabase.getCurrentUser().getEmail());
             fieldToChange.textProperty().addListener((observableValue, s, t1) -> {
-                String output = controller.changeEmail(t1);
+                output = controller.changeEmail(t1);
                 if (output.equals("true")) {
                     emailErrorLabel.setText("");
                 } else {
@@ -353,7 +354,6 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
             submit.setLayoutY(height / 2 - 50);
             Button back = new Button("back");
             submit.setOnAction(actionEvent1 -> {
-                String output = controller.changeEmail(fieldToChange.getText());
                 if (output.equals("true")) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setContentText("email changed successfully");
@@ -475,8 +475,7 @@ public class ProfileMenu extends Application {//todo: scoreboard, show pass, sty
         Image image;
         if (UserDatabase.getCurrentUser().getAvatar() == null) {
             image = new Image(ProfileMenu.class.getResource("/Avatars/no_avatar.png").toExternalForm());
-        }
-        else {
+        } else {
             image = new Image(UserDatabase.getCurrentUser().getAvatar());
         }
         circle.setFill(new ImagePattern(image));

@@ -1,6 +1,5 @@
 package view;
 
-import Commands.MainMenuCommands;
 import controller.MainMenuController;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -13,13 +12,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.UserDatabase;
+import view.lobby.Lobby;
 
 import java.awt.*;
 
 public class MainMenu extends Application {
     private static Stage stage;
+
     @Override
     public void start(Stage stage) throws Exception {
+        //todo bad smell use of model in view
         UserDatabase.setOnline(UserDatabase.getCurrentUser());
         MainMenu.stage = stage;
         Pane pane = new Pane();
@@ -39,10 +41,11 @@ public class MainMenu extends Application {
         Button goToMapMenu = new Button("Go to map menu");
         mapMenuHBox.getChildren().addAll(goToMapMenu, dimensionTextField, numberOfKingdoms);
         handleMapMenu(dimensionTextField, numberOfKingdoms, goToMapMenu, stage);
-        Button goToStartMenu = getStartMenu();
+        Button goToStartMenu = getLobby();
         Button userLogout = getLogout(stage);
         Button exit = getExit();
-        vBox.getChildren().addAll(goToStartMenu, mapMenuHBox, goToProfileMenu, userLogout, exit);
+        Button chat = getChat();
+        vBox.getChildren().addAll(goToStartMenu, mapMenuHBox, goToProfileMenu,chat, userLogout, exit);
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(30);
         pane.getChildren().add(vBox);
@@ -56,9 +59,15 @@ public class MainMenu extends Application {
         numberOfKingdoms.setPromptText("kingdoms");
         goToMapMenu.setOnMouseClicked(mouseEvent -> {
             try {
-                String dimension = dimensionTextField.getText();
-                String kingdomNumber = numberOfKingdoms.getText();
-                (new MainMenuController()).goToMapMenu(Integer.parseInt(dimension), Integer.parseInt(kingdomNumber), stage);
+                if (dimensionTextField.getText().equals("") || numberOfKingdoms.getText().equals("")) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText("Fields can't be empty");
+                } else {
+                    String dimension = dimensionTextField.getText();
+                    String kingdomNumber = numberOfKingdoms.getText();
+                    (new MainMenuController()).goToMapMenu(Integer.parseInt(dimension), Integer.parseInt(kingdomNumber), stage);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -79,12 +88,13 @@ public class MainMenu extends Application {
         return exit;
     }
 
-    
+
     private static Button getLogout(Stage stage) {
         Button userLogout = new Button("User logout");
         userLogout.setOnMouseClicked(event -> {
             EnterMenu enterMenu = new EnterMenu();
             try {
+                UserDatabase.getCurrentUser().setOnline(false);
                 UserDatabase.setCurrentUser(null);
                 enterMenu.start(stage);
             } catch (Exception e) {
@@ -96,13 +106,12 @@ public class MainMenu extends Application {
         return userLogout;
     }
 
-    
-    private static Button getStartMenu() {
-        Button goToStartMenu = new Button("Go to start menu");
+
+    private static Button getLobby() {//todo
+        Button goToStartMenu = new Button("Go to lobby");
         goToStartMenu.setOnMouseClicked(event -> {
-            StartMenu startMenu = new StartMenu();
             try {
-                startMenu.start(MainMenu.stage);
+                new Lobby().start(stage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -111,8 +120,20 @@ public class MainMenu extends Application {
         goToStartMenu.setPrefSize(200, 30);
         return goToStartMenu;
     }
+    private static Button getChat () {
+        Button goToChat = new Button("Go to chat");
+        goToChat.setOnMouseClicked(event -> {
+            try {
+                new ChatMenu().start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        goToChat.setAlignment(Pos.CENTER);
+        goToChat.setPrefSize(200, 30);
+        return goToChat;
+    }
 
-    
     private static Button getProfileMenu() {
         Button goToProfileMenu = new Button("Go to profile menu");
         goToProfileMenu.setOnMouseClicked(event -> {
