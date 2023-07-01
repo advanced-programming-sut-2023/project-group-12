@@ -328,7 +328,8 @@ public class MapMenuController {
             if (!map.getMap()[x - 1][y - 1].getUnits().isEmpty()) {
                 output += "\n";
                 for (Unit unit : map.getMap()[x - 1][y - 1].getUnits()) {
-                    output += "\t" + unit.getUnitType().name().toLowerCase() + ", owner = " + unit.getHomeland().getOwner().getUsername() + "\n";
+                    output += "\t" + unit.getUnitType().name().toLowerCase() + ", owner = " + unit.getHomeland().getOwner().getUsername() +
+                             ", life = " + unit.getHitPoint() + "\n";
                 }
             } else
                 output += "NONE" + "\n";

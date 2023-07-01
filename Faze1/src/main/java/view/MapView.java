@@ -7,7 +7,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -29,7 +28,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Building.BuildingType;
 import model.Game;
-import model.Game;
 import model.Kingdom;
 import model.User;
 import model.map.Cell;
@@ -42,13 +40,16 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapView extends Application {
 
+    Pane soldierMode;
+
     public Text populationText;
     public Text coinText;
+    private VBox textVBox;
+    private VBox buttomVBox;
 
     public double stageWidth;
     public double stageHeight;
@@ -143,6 +144,9 @@ public class MapView extends Application {
         barMenu.getChildren().add(buildMenu);
         barMenu.getChildren().add(vBox);
         barMenu.getChildren().add(miniMap);
+        barMenu.getChildren().add(buttomVBox);
+        barMenu.getChildren().add(textVBox);
+        barMenu.getChildren().add(soldierMode);
 
 
         scrollPane.setContent(showMap);
@@ -317,7 +321,9 @@ public class MapView extends Application {
     }
 
     private void createBarMenu() {
+        soldierMode = new Pane();
         barMenu = new HBox();
+        barMenu.setSpacing(20);
         miniMap = new GridPane();
         VBox vBox = new VBox();
         vBox.getChildren().add(scrollPane);
@@ -348,7 +354,13 @@ public class MapView extends Application {
     private void setTooltipOnHover(Tooltip cellTooltip, Pane cell, MapMenuController controller, int i, int j) {
         cell.setOnMouseEntered(mouseEvent -> {
             cellTooltip.setText(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
+            resetPopulationText();
+            resetCoinText();
         });
+    }
+
+    private void resetCoinText() {
+        coinText.setText(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
     }
 
     private void selectEvent(Pane cell, int i, int j) {
@@ -389,39 +401,39 @@ public class MapView extends Application {
         setPopulationText();
         setCoinText();
         createMiniMap();
-        VBox vBox1 = new VBox(populationText, coinText);
-        barMenu.getChildren().add(vBox1);
-        Button undoButton = new Button();
-        Button deleteButton = new Button();
-        Button briefingButton = new Button();
-        Button optionButton = new Button();
-        undoButton.setBackground(new Background(new BackgroundImage(
-                new Image(Cell.class.getResource("/images/chatBack.png").toExternalForm()),
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
-        deleteButton.setBackground(new Background(new BackgroundImage(
-                new Image(Cell.class.getResource("/images/blackCross.png").toExternalForm()),
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
-        briefingButton.setBackground(new Background(new BackgroundImage(
-                new Image(Cell.class.getResource("/images/search.png").toExternalForm()),
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
-        optionButton.setBackground(new Background(new BackgroundImage(
-                new Image(Cell.class.getResource("/images/settings.png").toExternalForm()),
-                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(undoButton, deleteButton, briefingButton, optionButton);
-        barMenu.getChildren().add(vBox);
+        textVBox = new VBox(populationText, coinText);
+        textVBox.setSpacing(10);
+        Circle undoButton = new Circle(12);
+        Circle deleteButton = new Circle(12);
+        Circle briefingButton = new Circle(12);
+        Circle optionButton = new Circle(12);
+        undoButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/chatBack.png").toExternalForm())));
+        deleteButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/blackCross.png").toExternalForm())));
+        briefingButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/search.png").toExternalForm())));
+        optionButton.setFill(new ImagePattern(
+                new Image(Cell.class.getResource("/images/settings.png").toExternalForm())));
+        buttomVBox = new VBox();
+        buttomVBox.setSpacing(10);
+        buttomVBox.getChildren().addAll(undoButton, deleteButton, briefingButton, optionButton);
     }
 
     private void setPopulationText() {
-        populationText = new Text(String.format("%d/%d", 50, 100));
+        populationText = new Text(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getPopularity(), game.getCurrentKingdom().getPopulation()));
         populationText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         populationText.setFill(Color.GREEN);
     }
 
     private void setCoinText() {
-        coinText = new Text(String.format("%d", 50));
+        coinText = new Text(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
         coinText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         coinText.setFill(Color.RED);
+    }
+
+    private void resetPopulationText() {
+        populationText.setText(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getPopularity(), game.getCurrentKingdom().getPopulation()));
     }
 
     private void handleDragBuilding(MouseEvent mouseEvent) {
