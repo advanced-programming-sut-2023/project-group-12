@@ -1,6 +1,7 @@
 package view;
 
 import Enums.BuildingImages;
+import controller.GameController.BuildingController;
 import controller.GameController.GameMenuController;
 import controller.mapmenu.MapMenuController;
 import javafx.event.EventHandler;
@@ -26,6 +27,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Building.Building;
 import model.Building.BuildingType;
 import model.Game;
 import model.Kingdom;
@@ -76,10 +78,12 @@ public class MapView extends Application {
     public GridPane showMap;
     private BuildingType selectedBuilding = null;
     private Scene scene;
+    private BuildingController buildingController;
 
     public MapView(Game game) {
         this.game = game;
         this.currentMap = game.getCurrentMap();
+        buildingController = new BuildingController(game);
     }
 
     @Override
@@ -734,5 +738,21 @@ public class MapView extends Application {
         pane.getChildren().add(vbox);
 
         return pane;
+    }
+    public void repairBuilding(){
+        String respond = buildingController.repair();
+        Alert alert;
+        if (respond.equals("this building is repaired!")) {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("this building is repaired!");
+            alert.show();
+        }else{
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(respond);
+            alert.show();
+        }
+    }
+    public void createUnit(){
+
     }
 }
