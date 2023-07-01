@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -12,12 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.GameRequest;
-import model.User;
 import model.UserDatabase;
 import view.lobby.Lobby;
 
 import java.awt.*;
-import java.awt.Label;
 
 public class StartMenu extends Application {
     private static GameRequest gameRequest;
@@ -45,6 +44,7 @@ public class StartMenu extends Application {
         Button startGame = getStartGame(stage, width);
         Button chat = getChat(stage);
         Text id = getID(stage);
+
         setPlayers.getChildren().addAll(addPlayer, addPlayerButton, removePlayer, removeAllPlayers);
         pane.getChildren().addAll(back, setPlayers, setMap, startGame,chat,id);
         addPrivacy(pane,stage,width,height);
@@ -138,6 +138,7 @@ public class StartMenu extends Application {
         addPlayer.setPromptText("Username");
         addPlayerButton.setOnMouseClicked(event -> {
             Alert alert;
+
             if (addPlayer.getText().isEmpty()) {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Username can't be empty");

@@ -212,7 +212,7 @@ public class GameMenuController {
     }
 
     public String repair() {
-        return buildingController.repair(newGame.getSelectedBuilding());
+        return buildingController.repair();
     }
 
     public String showFoodRate() {

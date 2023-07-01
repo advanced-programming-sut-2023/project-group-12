@@ -20,7 +20,7 @@ public class BuildingController {
         this.newGame = newGame;
     }
 
-    public String repair(Building building) {
+    public String repair() {
         if (newGame.getSelectedBuilding() == null) {
             return "No building has been selected";
         }
