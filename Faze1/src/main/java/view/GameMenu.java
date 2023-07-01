@@ -19,7 +19,6 @@ public class GameMenu {
                 dropUnit, repair, selectUnit, moveUnit, patrolUnit, stopPatrolling, setMode,
                 groundAttack, airAttack, pourOil, digTunnel, buildEquipment, disbandUnit,
                 goToShopMenu, goToTradeMenu, goToMapMenu;
-        controller.buildKingdoms();
         while (controller.getNumberOfRemainingPlayers() > 1) {
             for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
                 controller.setCurrentKingdom(UserDatabase.getPlayers().get(i));
@@ -149,7 +148,7 @@ public class GameMenu {
                         nextTurn(controller, i);
                         break;
                     } else if (input.equalsIgnoreCase("pause")) {
-                        PauseMenu menu = new PauseMenu();
+                        PauseMenu menu = new PauseMenu(null, null);
                         output = menu.run(scanner);
                         if (output.equalsIgnoreCase("exit")) {
                             System.out.println("game over!");

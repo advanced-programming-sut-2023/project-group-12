@@ -1,8 +1,26 @@
 package view;
 
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import model.Game;
+
+
 import java.util.Scanner;
 
-public class PauseMenu {
+public class PauseMenu extends Application {
+
+    private Game game;
+    private Stage stage;
+
+    public PauseMenu(Game game, Stage stage) {
+        this.game = game;
+        this.stage = stage;
+    }
+
     public String run(Scanner scanner) {
         System.out.println("Welcome to pause menu!");
         String input;
@@ -22,5 +40,25 @@ public class PauseMenu {
                 System.out.println("Invalid command!");
             }
         }
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Button resumeButton = new Button("resume");
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().add(resumeButton);
+        Scene scene = new Scene(vBox);
+        stage.setScene(scene);
+        stage.show();
+
+        resumeButton.setOnMouseClicked(mouseEvent -> {
+            try {
+                (new MapView(game)).start(stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 }

@@ -66,6 +66,7 @@ public class Game {
 
     public void dropBuilding(int x, int y, BuildingType buildingType) {
         currentKingdom.addGold(-buildingType.getGoldPrice());
+        currentKingdom.setNumberOfWorkers(currentKingdom.getNumberOfWorkers() + 1);
 
         Building building = BuildingType.getBuildingByBuildingType(buildingType, currentKingdom, x, y);
         currentMap.getMap()[x][y].setBuilding(building);
@@ -463,7 +464,7 @@ public class Game {
     }
 
     public Kingdom getCellOwner(Cell cell){
-        for (Kingdom kingdom : kingdoms) {
+        for (Kingdom kingdom : players) {
             int xPath = Math.abs(kingdom.getHeadSquare().getxCoordinate() - cell.getxCoordinate());
             int yPath = Math.abs(kingdom.getHeadSquare().getyCoordinate() - cell.getyCoordinate());
             if((xPath + yPath) < 40){

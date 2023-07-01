@@ -22,16 +22,8 @@ public class GameMenuController {
 
     private Game newGame;
 
-    public void buildKingdoms() {
-        for (int i = 0; i < UserDatabase.getPlayers().size(); i++) {
-            User user = UserDatabase.getPlayers().get(i);
-            Kingdom kingdom = new Kingdom(user, newGame.getCurrentMap().getHeadSquares().get(i));
-            newGame.getKingdoms().add(kingdom);
-        }
-    }
-
     public void setCurrentKingdom(User user) {
-        for (Kingdom kingdom : newGame.getKingdoms()) {
+        for (Kingdom kingdom : newGame.getPlayers()) {
             if (kingdom.getOwner().equals(user)) {
                 newGame.setCurrentKingdom(kingdom);
                 return;
@@ -730,7 +722,7 @@ public class GameMenuController {
 
     public int getNumberOfRemainingPlayers() {
         int n = 0;
-        for (Kingdom kingdom : newGame.getKingdoms()) {
+        for (Kingdom kingdom : newGame.getPlayers()) {
             if (!isDefeated(kingdom)) {
                 n++;
             }
@@ -739,7 +731,7 @@ public class GameMenuController {
     }
 
     public User getWinner() {
-        for (Kingdom kingdom : newGame.getKingdoms()) {
+        for (Kingdom kingdom : newGame.getPlayers()) {
             if (!isDefeated(kingdom)) {
                 return kingdom.getOwner();
             }

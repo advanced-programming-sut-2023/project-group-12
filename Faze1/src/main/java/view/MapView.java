@@ -44,10 +44,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MapView extends Application {
 
-    Pane soldierMode;
+    private Pane soldierMode;
+    private Text detailText;
 
     public Text populationText;
     public Text coinText;
+    private Text secondPopularityText;
     private VBox textVBox;
     private VBox buttomVBox;
 
@@ -356,11 +358,8 @@ public class MapView extends Application {
             cellTooltip.setText(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
             resetPopulationText();
             resetCoinText();
+            resetSecondPopularityText();
         });
-    }
-
-    private void resetCoinText() {
-        coinText.setText(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
     }
 
     private void selectEvent(Pane cell, int i, int j) {
@@ -400,8 +399,9 @@ public class MapView extends Application {
     private void setMapBar() {
         setPopulationText();
         setCoinText();
+        setSecondPopularityText();
         createMiniMap();
-        textVBox = new VBox(populationText, coinText);
+        textVBox = new VBox(populationText, coinText, secondPopularityText);
         textVBox.setSpacing(10);
         Circle undoButton = new Circle(12);
         Circle deleteButton = new Circle(12);
@@ -418,10 +418,36 @@ public class MapView extends Application {
         buttomVBox = new VBox();
         buttomVBox.setSpacing(10);
         buttomVBox.getChildren().addAll(undoButton, deleteButton, briefingButton, optionButton);
+
+        deleteButton.setOnMouseClicked(mouseEvent -> {
+            if (selectedPain != null) {
+                for (Pane pane1 : selectedPain) {
+                    getCellByPane(pane1).setBuilding(null);
+                    game.getCurrentKingdom().setNumberOfWorkers(game.getCurrentKingdom().getNumberOfWorkers() - 1);
+                }
+            }
+        });
+
+        briefingButton.setOnMouseClicked(mouseEvent -> {
+            String text = "";
+            for (Kingdom kingdom : game.getPlayers()) {
+                text += "kingdom name = " + kingdom.getOwner().getUsername() + "\n" +
+                        "kingdom gold = " + kingdom.getGold() + "\n";
+            }
+            Tooltip tooltip = new Tooltip(text);
+            Tooltip.install(briefingButton, tooltip);
+        });
+        optionButton.setOnMouseClicked(mouseEvent -> {
+            try {
+                (new PauseMenu(game, stage)).start(stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void setPopulationText() {
-        populationText = new Text(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getPopularity(), game.getCurrentKingdom().getPopulation()));
+        populationText = new Text(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
         populationText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         populationText.setFill(Color.GREEN);
     }
@@ -432,8 +458,22 @@ public class MapView extends Application {
         coinText.setFill(Color.RED);
     }
 
+    private void setSecondPopularityText() {
+        secondPopularityText = new Text(String.format("scribes report = %d", game.getCurrentKingdom().getPopularity()));
+        secondPopularityText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
+        secondPopularityText.setFill(Color.RED);
+    }
+
+    private void resetSecondPopularityText() {
+        secondPopularityText.setText(String.format("scribes report = %d", game.getCurrentKingdom().getPopularity()));
+    }
+
     private void resetPopulationText() {
-        populationText.setText(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getPopularity(), game.getCurrentKingdom().getPopulation()));
+        populationText.setText(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
+    }
+
+    private void resetCoinText() {
+        coinText.setText(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
     }
 
     private void handleDragBuilding(MouseEvent mouseEvent) {
