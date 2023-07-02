@@ -4,7 +4,7 @@ import model.Kingdom;
 import model.UserDatabase;
 import model.map.Cell;
 import model.map.Map;
-import model.map.TextureType;
+import Enums.TextureType;
 import model.people.Unit;
 
 import java.util.ArrayList;

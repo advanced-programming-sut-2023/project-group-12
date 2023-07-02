@@ -1,5 +1,7 @@
 package view;
 
+import Enums.TextureType;
+import Enums.Tree;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -14,23 +16,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.UserDatabase;
-import model.map.Map;
-import model.map.TextureType;
-import model.map.Tree;
 
 import java.util.Objects;
 
 
 public class CreateMapMenu extends Application {
-
-    private Map currentMap = new Map(200, 5);
     private GridPane map;
     private HBox barMenu;
     private Stage stage;
+    CreateMapMenuController menuController;
 
-    public CreateMapMenu(int dimension, int kingdomNumber) {
-        currentMap = new Map(dimension, kingdomNumber);
+    public CreateMapMenu(CreateMapMenuController menuController) {
+        this.menuController = menuController;
     }
 
     @Override
@@ -53,7 +50,7 @@ public class CreateMapMenu extends Application {
 
         barMenu.setPrefSize(stageWidth, stageHeight / 10);
         rootPane.setPrefSize(stageWidth, stageHeight);
-        map.setPrefSize(30 * currentMap.getDimension(), 30 * currentMap.getDimension());
+        map.setPrefSize(30 * menuController.getMapDimension(), 30 * menuController.getMapDimension());
         scrollPane.setPrefSize(stageWidth, stageHeight * 9 / 10);
 
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -92,7 +89,7 @@ public class CreateMapMenu extends Application {
 
 
         saveButton.setOnMouseClicked(mouseEvent -> {
-            UserDatabase.setCurrentMap(currentMap);
+            menuController.setCurrentMap();
         });
         backButton.setOnMouseClicked(mouseEvent -> {
             try {
@@ -130,9 +127,9 @@ public class CreateMapMenu extends Application {
     }
 
     private void createCell() {
-        for (int i = 0; i < currentMap.getDimension(); i++) {
-            for (int j = 0; j < currentMap.getDimension(); j++) {
-                Pane cell = currentMap.getMap()[i][j].getPane();
+        for (int i = 0; i < menuController.getMapDimension(); i++) {
+            for (int j = 0; j < menuController.getMapDimension(); j++) {
+                Pane cell = menuController.getCellPane(i, j);
                 map.add(cell, i, j);
                 dragAndDrop(cell, i, j);
                 dragEntered(cell);
@@ -179,28 +176,12 @@ public class CreateMapMenu extends Application {
         pane.setOnDragDropped(dragEvent -> {
             Dragboard dragboard = dragEvent.getDragboard();
             dragEvent.setDropCompleted(true);
-            if (getTextureByName(dragboard.getString()) != null) {
-                currentMap.getMap()[i][j].setTextureType(Objects.requireNonNull(getTextureByName(dragboard.getString())));
-            } else if (getTreeByName(dragboard.getString()) != null) {
-                currentMap.getMap()[i][j].setTree(getTreeByName(dragboard.getString()));
+            if (menuController.getTextureByName(dragboard.getString()) != null) {
+                menuController.setTexture(dragboard.getString(), i, j);
+            } else if (menuController.getTreeByName(dragboard.getString()) != null) {
+                menuController.setTree(dragboard.getString(), i, j);
             }
         });
-    }
-
-    private Tree getTreeByName(String string) {
-        for (Tree tree : Tree.values()) {
-            if (tree.getImage().getUrl().equals(string))
-                return tree;
-        }
-        return null;
-    }
-
-    private TextureType getTextureByName(String string) {
-        for (TextureType textureType : TextureType.values()) {
-            if (textureType.getImage().getUrl().equals(string))
-                return textureType;
-        }
-        return null;
     }
 
     private void handleDragTexture(MouseEvent mouseEvent) {

@@ -4,7 +4,6 @@ package Enums;
 import model.Building.*;
 import model.Kingdom;
 import model.Property.*;
-import model.map.TextureType;
 
 public enum BuildingType {
     SMALL_STONE_GATEHOUSE("Small stone gatehouse", Gate.class, 1000, 0, null, 0, 0, 0, true, null, null),//darvaze sangi koochak

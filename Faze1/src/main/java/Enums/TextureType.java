@@ -1,7 +1,8 @@
-package model.map;
+package Enums;
 
 import java.awt.*;
 import javafx.scene.image.Image;
+import model.map.Cell;
 
 
 public enum TextureType {

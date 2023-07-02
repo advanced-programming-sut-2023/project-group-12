@@ -2,6 +2,8 @@ package model.map;
 
 
 import Enums.BuildingImages;
+import Enums.TextureType;
+import Enums.Tree;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -16,7 +18,7 @@ public class Cell {
     private ImageView imageView;
     private final int xCoordinate;
     private final int yCoordinate;
-    private TextureType TextureType = model.map.TextureType.EARTH;
+    private TextureType TextureType = Enums.TextureType.EARTH;
     private final boolean isPassable;
     private Tree tree = null;
     private boolean isSick = false;
@@ -53,7 +55,7 @@ public class Cell {
         this.isInThePath = inThePath;
     }
 
-    public void setTextureType(model.map.TextureType textureType) {
+    public void setTextureType(Enums.TextureType textureType) {
         TextureType = textureType;
         setPane();
     }

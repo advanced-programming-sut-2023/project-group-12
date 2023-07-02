@@ -1,7 +1,7 @@
 package controller.mapmenu;
 
 
-import model.map.TextureType;
+import Enums.TextureType;
 
 import java.util.regex.Pattern;
 

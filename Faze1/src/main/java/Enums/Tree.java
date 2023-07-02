@@ -1,6 +1,7 @@
-package model.map;
+package Enums;
 
 import javafx.scene.image.Image;
+import model.map.Cell;
 
 public enum Tree {
     DESERT_SHRUB("/images/shrub.png"),

@@ -1,6 +1,6 @@
 package controller.mapmenu;
 
-import model.map.Tree;
+import Enums.Tree;
 
 import java.util.regex.Pattern;
 

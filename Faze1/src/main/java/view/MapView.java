@@ -359,6 +359,10 @@ public class MapView extends Application {
     private void setTooltipOnHover(Tooltip cellTooltip, Pane cell, int i, int j) {
         cell.setOnMouseEntered(mouseEvent -> {
             cellTooltip.setText(viewController.getCellDetail(i, j));
+            resetDetailText();
+            resetPopulationText();
+            resetCoinText();
+            resetSecondPopularityText();
         });
     }
 
