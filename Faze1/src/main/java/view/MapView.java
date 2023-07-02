@@ -185,6 +185,19 @@ public class MapView extends Application {
                         }
                     }
                 }
+            } else if (keyEvent.getCode().equals(KeyCode.A)) {
+                if (selectedPain != null) {
+                    for (Pane pane1 : selectedPain) {
+                        getCellByPane(pane1).setBuilding(null);
+                        game.getCurrentKingdom().setNumberOfWorkers(game.getCurrentKingdom().getNumberOfWorkers() - 1);
+                    }
+                }
+            } else if (keyEvent.getCode().equals(KeyCode.B)) {
+                try {
+                    (new PauseMenu(game, stage)).start(stage);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
