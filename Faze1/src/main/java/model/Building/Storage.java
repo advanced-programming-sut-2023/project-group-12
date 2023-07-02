@@ -1,5 +1,6 @@
 package model.Building;
 
+import Enums.BuildingType;
 import model.Kingdom;
 import model.Property.*;
 

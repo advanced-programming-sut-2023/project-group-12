@@ -1,7 +1,7 @@
 package controller;
 
 import javafx.stage.Stage;
-import model.Building.BuildingType;
+import Enums.BuildingType;
 import model.Building.Storage;
 import model.Game;
 import model.Kingdom;
@@ -10,6 +10,7 @@ import model.UserDatabase;
 import model.map.Map;
 import view.GameMenu;
 import view.MapView;
+import view.MapViewController;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -102,7 +103,7 @@ public class StartMenuController {
                     kingdom.getHeadSquare().getyCoordinate()));
             UserDatabase.getCurrentMap().getMap()[kingdom.getHeadSquare().getxCoordinate() - 1][kingdom.getHeadSquare().getyCoordinate()].setBuilding(kingdom.getStockPiles().get(0));
         }
-        MapView mapView = new MapView(new Game(UserDatabase.getCurrentMap(), players));
+        MapView mapView = new MapView(MapViewController.getInstance(new Game(UserDatabase.getCurrentMap(), players)));
         mapView.start(stage);
     }
 }

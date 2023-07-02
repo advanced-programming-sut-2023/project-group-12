@@ -1,9 +1,6 @@
 package view;
 
 import Enums.BuildingImages;
-import controller.GameController.BuildingController;
-import controller.GameController.GameMenuController;
-import controller.mapmenu.MapMenuController;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -27,13 +24,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.Building.Building;
-import model.Building.BuildingType;
-import model.Game;
-import model.Kingdom;
-import model.User;
-import model.map.Cell;
-import model.map.Map;
+import Enums.BuildingType;
 
 
 import java.awt.*;
@@ -69,8 +60,6 @@ public class MapView extends Application {
 
     public ArrayList<Pane> selectedPain = new ArrayList<>();
     public Stage stage;
-    public Map currentMap;
-    public Game game;
 
     public ScrollPane scrollPane;
     public Pane pane;
@@ -78,12 +67,10 @@ public class MapView extends Application {
     public GridPane showMap;
     private BuildingType selectedBuilding = null;
     private Scene scene;
-    private BuildingController buildingController;
+    private MapViewController viewController;
 
-    public MapView(Game game) {
-        this.game = game;
-        this.currentMap = game.getCurrentMap();
-        buildingController = new BuildingController(game);
+    public MapView(MapViewController viewController) {
+        this.viewController = viewController;
     }
 
     @Override
@@ -101,7 +88,8 @@ public class MapView extends Application {
         showMap = new GridPane();
         scrollPane = new ScrollPane();
         pane.setPrefSize(stageWidth, stageHeight);
-        showMap.setPrefSize(30 * currentMap.getDimension(), 30 * currentMap.getDimension());
+        showMap.setPrefSize(30 * viewController.getCurrentMapDimension(),
+                30 * viewController.getCurrentMapDimension());
         scrollPane.setPrefSize(stageWidth, stageHeight * 4 / 5);
 
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -166,20 +154,19 @@ public class MapView extends Application {
         scene.setOnKeyPressed(keyEvent -> {
             if (keyEvent.getCode().equals(KeyCode.C) && keyEvent.isControlDown()) {
                 if (selectedPain != null && selectedPain.size() == 1) {
-                    StringSelection stringSelection = new StringSelection(getCellByPane(selectedPain.get(0)).getBuilding().getBuildingType().getBuildingName());
-                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    StringSelection stringSelection = new StringSelection(viewController.getPaneBuildingName(selectedPain.get(0)));
+                    java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     clipboard.setContents(stringSelection, null);
                 }
             } else if (keyEvent.getCode().equals(KeyCode.V) && keyEvent.isControlDown()) {
                 if (selectedPain != null && selectedPain.size() == 1) {
-                    Cell cell = getCellByPane(selectedPain.get(0));
-                    GameMenuController controller = new GameMenuController(game);
                     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                     Transferable transferable = clipboard.getContents(null);
                     if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                         try {
-                            (new Alert(Alert.AlertType.INFORMATION, controller.dropBuilding(String.valueOf(cell.getxCoordinate()),
-                                    String.valueOf(cell.getyCoordinate()), (String) transferable.getTransferData(DataFlavor.stringFlavor)))).show();
+                            (new Alert(Alert.AlertType.INFORMATION,
+                                    viewController.getDropBuildingAlert(viewController.getCellXCoordinateByPane(selectedPain.get(0)),
+                                            viewController.getCellYCoordinateByPane(selectedPain.get(0)), viewController.getPaneBuildingName(pane)))).show();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -188,19 +175,18 @@ public class MapView extends Application {
             } else if (keyEvent.getCode().equals(KeyCode.A)) {
                 if (selectedPain != null) {
                     for (Pane pane1 : selectedPain) {
-                        getCellByPane(pane1).setBuilding(null);
-                        game.getCurrentKingdom().setNumberOfWorkers(game.getCurrentKingdom().getNumberOfWorkers() - 1);
+                        viewController.setBuildingNullByPane(pane1);
+                        viewController.minusNumberOfWorkers();
                     }
                 }
             } else if (keyEvent.getCode().equals(KeyCode.B)) {
                 try {
-                    (new PauseMenu(game, stage)).start(stage);
+                    viewController.goToPauseMenu(stage);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
         });
-
     }
 
 
@@ -256,7 +242,7 @@ public class MapView extends Application {
                     if (bounds.intersects(rect.getBoundsInParent())) {
                         Pane pane = (Pane) child;
                         selectedPain.add((Pane) child);
-                        getCellByPane(pane).getImage().setOpacity(0.5);
+                        viewController.getCellImageByPane(pane).setOpacity(0.5);
 //                        BorderStroke borderStroke = new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2));
 //                        Rectangle clip = new Rectangle();
 //                        clip.setWidth(pane.getWidth());
@@ -277,7 +263,7 @@ public class MapView extends Application {
 
     private void resetSelected() {
         for (Pane pane1 : selectedPain) {
-            getCellByPane(pane1).getImage().setOpacity(1);
+            viewController.getCellImageByPane(pane1).setOpacity(1);
         }
         selectedPain.clear();
     }
@@ -306,7 +292,7 @@ public class MapView extends Application {
                     double contentHeight = showMap.getBoundsInParent().getHeight();
 
                     // Calculate the new scroll position based on the current zoom level
-                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get());
+                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get()) ;
                     double vValue = (translateY.get() + viewportBounds.getHeight() / 2) / (contentHeight * scale.get());
 
                     // Set the new scroll position and content
@@ -354,30 +340,25 @@ public class MapView extends Application {
 
 
     private void createCell() {
-        for (int i = 0; i < currentMap.getDimension(); i++) {
-            for (int j = 0; j < currentMap.getDimension(); j++) {
-                Pane cell = currentMap.getMap()[i][j].getPane();
+        for (int i = 0; i < viewController.getCurrentMapDimension(); i++) {
+            for (int j = 0; j < viewController.getCurrentMapDimension(); j++) {
+                Pane cell = viewController.getCellPane(i, j);
                 showMap.add(cell, i, j);
                 dragAndDrop(cell);
                 dragEntered(cell);
                 dragExited(cell);
                 dragOver(cell);
                 selectEvent(cell, i, j);
-                MapMenuController controller = new MapMenuController(game.getCurrentMap());
-                Tooltip cellTooltip = new Tooltip(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
-                setTooltipOnHover(cellTooltip, cell, controller, i, j);
+                Tooltip cellTooltip = new Tooltip(viewController.getCellDetail(i, j));
+                setTooltipOnHover(cellTooltip, cell, i, j);
                 Tooltip.install(cell, cellTooltip);
             }
         }
     }
 
-    private void setTooltipOnHover(Tooltip cellTooltip, Pane cell, MapMenuController controller, int i, int j) {
+    private void setTooltipOnHover(Tooltip cellTooltip, Pane cell, int i, int j) {
         cell.setOnMouseEntered(mouseEvent -> {
-            cellTooltip.setText(controller.showDetail(String.valueOf(i + 1), String.valueOf(j + 1)));
-            resetPopulationText();
-            resetCoinText();
-            resetSecondPopularityText();
-            resetDetailText();
+            cellTooltip.setText(viewController.getCellDetail(i, j));
         });
     }
 
@@ -385,8 +366,7 @@ public class MapView extends Application {
         cell.setOnMouseClicked(mouseEvent -> {
             if (selectedBuilding != null) {
                 (new Alert(Alert.AlertType.INFORMATION,
-                        (new GameMenuController(game)).dropBuilding(String.valueOf(i),
-                                String.valueOf(j), selectedBuilding.getBuildingName()))).show();
+                        viewController.getDropBuildingAlert(i, j, selectedBuilding.getBuildingName()))).show();
                 mouseEvent.consume();
             }
             selectedBuilding = null;
@@ -394,25 +374,14 @@ public class MapView extends Application {
     }
 
     private void createMiniMap() {
-        for (int i = 0; i < currentMap.getDimension(); i++) {
-            for (int j = 0; j < currentMap.getDimension(); j++) {
-                ImageView imageView = new ImageView(currentMap.getMap()[i][j].getTheImage());
+        for (int i = 0; i < viewController.getCurrentMapDimension(); i++) {
+            for (int j = 0; j < viewController.getCurrentMapDimension(); j++) {
+                ImageView imageView = new ImageView(viewController.getCellImage(i, j));
                 imageView.setFitWidth(1);
                 imageView.setFitHeight(1);
                 miniMap.add(imageView, i, j);
             }
         }
-    }
-
-    public Cell getCellByPane(Pane pane) {
-        for (Cell[] cells : currentMap.getMap()) {
-            for (Cell cell : cells) {
-                if (cell.getPane() == pane) {
-                    return cell;
-                }
-            }
-        }
-        return null;
     }
 
     private void setMapBar() {
@@ -428,13 +397,13 @@ public class MapView extends Application {
         Circle briefingButton = new Circle(12);
         Circle optionButton = new Circle(12);
         undoButton.setFill(new ImagePattern(
-                new Image(Cell.class.getResource("/images/chatBack.png").toExternalForm())));
+                new Image(MapView.class.getResource("/images/chatBack.png").toExternalForm())));
         deleteButton.setFill(new ImagePattern(
-                new Image(Cell.class.getResource("/images/blackCross.png").toExternalForm())));
+                new Image(MapView.class.getResource("/images/blackCross.png").toExternalForm())));
         briefingButton.setFill(new ImagePattern(
-                new Image(Cell.class.getResource("/images/search.png").toExternalForm())));
+                new Image(MapView.class.getResource("/images/search.png").toExternalForm())));
         optionButton.setFill(new ImagePattern(
-                new Image(Cell.class.getResource("/images/settings.png").toExternalForm())));
+                new Image(MapView.class.getResource("/images/settings.png").toExternalForm())));
         buttomVBox = new VBox();
         buttomVBox.setSpacing(10);
         buttomVBox.getChildren().addAll(undoButton, deleteButton, briefingButton, optionButton);
@@ -442,24 +411,19 @@ public class MapView extends Application {
         deleteButton.setOnMouseClicked(mouseEvent -> {
             if (selectedPain != null) {
                 for (Pane pane1 : selectedPain) {
-                    getCellByPane(pane1).setBuilding(null);
-                    game.getCurrentKingdom().setNumberOfWorkers(game.getCurrentKingdom().getNumberOfWorkers() - 1);
+                    viewController.setBuildingNullByPane(pane1);
+                    viewController.minusNumberOfWorkers();
                 }
             }
         });
 
         briefingButton.setOnMouseClicked(mouseEvent -> {
-            String text = "";
-            for (Kingdom kingdom : game.getPlayers()) {
-                text += "kingdom name = " + kingdom.getOwner().getUsername() + "\n" +
-                        "kingdom gold = " + kingdom.getGold() + "\n";
-            }
-            Tooltip tooltip = new Tooltip(text);
+            Tooltip tooltip = new Tooltip(viewController.getGameBriefing());
             Tooltip.install(briefingButton, tooltip);
         });
         optionButton.setOnMouseClicked(mouseEvent -> {
             try {
-                (new PauseMenu(game, stage)).start(stage);
+                viewController.goToPauseMenu(stage);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -467,49 +431,44 @@ public class MapView extends Application {
     }
 
     private void setDetailText() {
-        ArrayList<Cell> cells = new ArrayList<>();
-        for (Pane pane1 : selectedPain)
-            cells.add(getCellByPane(pane1));
-        detailText = new Text((new MapMenuController(currentMap)).showDetails(cells, game.getCurrentKingdom()));
+        detailText = new Text(viewController.getDetailText(selectedPain));
         detailText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
-        detailText.setFill(Color.GREEN);
+        detailText.setFill(Color.BLUE);
     }
     private void resetDetailText() {
-        ArrayList<Cell> cells = new ArrayList<>();
-        for (Pane pane1 : selectedPain)
-            cells.add(getCellByPane(pane1));
-        detailText.setText((new MapMenuController(currentMap)).showDetails(cells, game.getCurrentKingdom()));
+        detailText.setText(viewController.getDetailText(selectedPain));
     }
 
     private void setPopulationText() {
         populationText = new Text(String.format("popularity / population = %d/%d",
-                game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
+                viewController.getNumberOfWorkers(), viewController.getCurrentKingdomPopulation()));
         populationText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         populationText.setFill(Color.GREEN);
     }
 
     private void setCoinText() {
-        coinText = new Text(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
+        coinText = new Text(String.format("gold = %.0f", viewController.getCurrentKingdomGold()));
         coinText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         coinText.setFill(Color.RED);
     }
 
     private void setSecondPopularityText() {
-        secondPopularityText = new Text(String.format("scribes report = %d", game.getCurrentKingdom().getPopularity()));
+        secondPopularityText = new Text(String.format("scribes report = %d", viewController.getCurrentKingdomPopularity()));
         secondPopularityText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         secondPopularityText.setFill(Color.GREEN);
     }
 
     private void resetSecondPopularityText() {
-        secondPopularityText.setText(String.format("scribes report = %d", game.getCurrentKingdom().getPopularity()));
+        secondPopularityText.setText(String.format("scribes report = %d", viewController.getCurrentKingdomPopularity()));
     }
 
     private void resetPopulationText() {
-        populationText.setText(String.format("popularity / population = %d/%d", game.getCurrentKingdom().getNumberOfWorkers(), game.getCurrentKingdom().getPopulation()));
+        populationText.setText(String.format("popularity / population = %d/%d", viewController.getNumberOfWorkers(),
+                viewController.getCurrentKingdomPopulation()));
     }
 
     private void resetCoinText() {
-        coinText.setText(String.format("gold = %.0f", game.getCurrentKingdom().getGold()));
+        coinText.setText(String.format("gold = %.0f", viewController.getCurrentKingdomGold()));
     }
 
     private void handleDragBuilding(MouseEvent mouseEvent) {
@@ -667,13 +626,12 @@ public class MapView extends Application {
             Dragboard dragboard = dragEvent.getDragboard();
             dragEvent.setDropCompleted(true);
             if (dragboard.hasString()) {
-                Cell cell = getCellByPane(thisPane);
                 String buildingName = BuildingImages.getBuildingTypeByName(
                         BuildingImages.getNameOfBuildingByImage(dragboard.getString())).getBuildingName();
 
                 (new Alert(Alert.AlertType.INFORMATION,
-                        (new GameMenuController(game)).dropBuilding(String.valueOf(cell.getxCoordinate()),
-                                String.valueOf(cell.getyCoordinate()),
+                        viewController.getDropBuildingAlert(viewController.getCellXCoordinateByPane(pane),
+                                viewController.getCellYCoordinateByPane(pane),
                                 buildingName))).show();
             }
 
@@ -683,47 +641,45 @@ public class MapView extends Application {
     public Pane createPopUp() {
         HBox hBox = new HBox();
         hBox.setSpacing(10);
-//        Kingdom kingdom = game.getCurrentKingdom();
-        Kingdom kingdom = new Kingdom(new User("mmd", "mmd", "mmd", "mmd", "mmd"), new Cell(10, 10));
         GridPane pane = new GridPane();
         Text food = new Text();
         food.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if (kingdom.getFoodRate() > 0) {
-            food.setText("food: " + "+" + kingdom.getFoodRate() + " :)");
+        if(viewController.getCurrentKingdomFoodRate() > 0){
+            food.setText("food: " + "+" + viewController.getCurrentKingdomFoodRate() + " :)");
             food.setFill(Color.GREEN);
-        } else {
-            food.setText("food: " + kingdom.getFoodRate() + " :(");
+        }else {
+            food.setText("food: " + viewController.getCurrentKingdomFoodRate() + " :(");
             food.setFill(Color.RED);
         }
         hBox.getChildren().add(food);
         Text tax = new Text();
         tax.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if (kingdom.getTaxRate() > 0) {
-            tax.setText("tax: " + "+" + kingdom.getTaxRate() + " :)");
+        if(viewController.getCurrentKingdomTaxRate() > 0){
+            tax.setText("tax: " + "+" + viewController.getCurrentKingdomTaxRate() + " :)");
             tax.setFill(Color.GREEN);
-        } else {
-            tax.setText("tax: " + kingdom.getTaxRate() + " :(");
+        }else {
+            tax.setText("tax: " + viewController.getCurrentKingdomTaxRate() + " :(");
             tax.setFill(Color.RED);
         }
         hBox.getChildren().add(tax);
         Text religion = new Text();
         religion.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
 
-        if (kingdom.getReligiousPeople() > 0) {
-            religion.setText("religion: " + "+" + kingdom.getReligiousPeople() + " :)");
+        if(viewController.getCurrentKingdomReligiousPeople() > 0){
+            religion.setText("religion: " + "+" + viewController.getCurrentKingdomReligiousPeople() + " :)");
             religion.setFill(Color.GREEN);
-        } else {
-            religion.setText("religion: " + kingdom.getReligiousPeople() + " :(");
+        }else {
+            religion.setText("religion: " + viewController.getCurrentKingdomReligiousPeople() + " :(");
             religion.setFill(Color.RED);
         }
         hBox.getChildren().add(religion);
         Text population = new Text();
         population.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if (kingdom.getPopulation() > 0) {
-            population.setText("population: " + "+" + kingdom.getPopulation() + " :)");
+        if(viewController.getCurrentKingdomPopulation() > 0){
+            population.setText("population: " + "+" + viewController.getCurrentKingdomPopulation() + " :)");
             population.setFill(Color.GREEN);
-        } else {
-            population.setText("population: " + kingdom.getPopulation() + " :(");
+        }else {
+            population.setText("population: " + viewController.getCurrentKingdomPopulation() + " :(");
             population.setFill(Color.RED);
         }
         hBox.getChildren().add(population);
@@ -733,11 +689,11 @@ public class MapView extends Application {
         HBox hBox1 = new HBox();
         Text fear = new Text();
         fear.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if (kingdom.getFearRate() > 0) {
-            fear.setText("fear: " + "+" + kingdom.getFearRate() + " :)");
+        if(viewController.getCurrentKingdomFearRate() > 0){
+            fear.setText("fear: " + "+" + viewController.getCurrentKingdomFearRate() + " :)");
             fear.setFill(Color.GREEN);
-        } else {
-            fear.setText("fear: " + kingdom.getFearRate() + " :(");
+        }else {
+            fear.setText("fear: " + viewController.getCurrentKingdomFearRate() + " :(");
             fear.setFill(Color.RED);
         }
         Slider slider = new Slider();
@@ -753,7 +709,7 @@ public class MapView extends Application {
         return pane;
     }
     public void repairBuilding(){
-        String respond = buildingController.repair();
+        String respond = viewController.getBuildingControllerRepairText();
         Alert alert;
         if (respond.equals("this building is repaired!")) {
             alert = new Alert(Alert.AlertType.INFORMATION);

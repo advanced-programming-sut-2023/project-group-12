@@ -54,7 +54,7 @@ public class PauseMenu extends Application {
 
         resumeButton.setOnMouseClicked(mouseEvent -> {
             try {
-                (new MapView(game)).start(stage);
+                (new MapView(MapViewController.getInstance(game))).start(stage);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

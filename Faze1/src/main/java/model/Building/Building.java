@@ -1,5 +1,6 @@
 package model.Building;
 
+import Enums.BuildingType;
 import model.Equipment.EquipmentType;
 import model.Kingdom;
 import model.people.Unit;

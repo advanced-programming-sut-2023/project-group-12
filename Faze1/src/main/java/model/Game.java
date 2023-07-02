@@ -1,5 +1,6 @@
 package model;
 
+import Enums.BuildingType;
 import controller.GameController.GameMenuController;
 import model.Building.*;
 import model.map.Cell;

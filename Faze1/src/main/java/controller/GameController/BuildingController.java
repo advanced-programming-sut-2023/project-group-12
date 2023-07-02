@@ -1,7 +1,7 @@
 package controller.GameController;
 
 import model.Building.Building;
-import model.Building.BuildingType;
+import Enums.BuildingType;
 import model.Game;
 import model.Property.DefensiveWeapon;
 import model.Property.ResourceType;

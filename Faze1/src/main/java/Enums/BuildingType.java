@@ -1,6 +1,7 @@
-package model.Building;
+package Enums;
 
 
+import model.Building.*;
 import model.Kingdom;
 import model.Property.*;
 import model.map.TextureType;

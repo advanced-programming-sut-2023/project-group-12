@@ -1,7 +1,6 @@
 package Enums;
 
 import javafx.scene.image.Image;
-import model.Building.BuildingType;
 
 import java.util.HashMap;
 
