@@ -1,6 +1,7 @@
 package view;
 
 import Enums.BuildingImages;
+import Enums.Tree;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -25,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import Enums.BuildingType;
+import model.people.UnitType;
 
 
 import java.awt.*;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapView extends Application {
+    private ScrollPane unitScrollPane;
 
     private Pane soldierMode;
     private Text detailText;
@@ -99,6 +102,7 @@ public class MapView extends Application {
 
         createCell();
         createBarMenu();
+        setUnitScrollPane();
 //        zoomHandler();
         selectCellsHandler();
 
@@ -142,6 +146,7 @@ public class MapView extends Application {
         barMenu.getChildren().add(textVBox);
         barMenu.getChildren().add(soldierMode);
         barMenu.getChildren().add(detailText);
+        barMenu.getChildren().add(unitScrollPane);
 
 
         scrollPane.setContent(showMap);
@@ -292,7 +297,7 @@ public class MapView extends Application {
                     double contentHeight = showMap.getBoundsInParent().getHeight();
 
                     // Calculate the new scroll position based on the current zoom level
-                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get()) ;
+                    double hValue = (translateX.get() + viewportBounds.getWidth() / 2) / (contentWidth * scale.get());
                     double vValue = (translateY.get() + viewportBounds.getHeight() / 2) / (contentHeight * scale.get());
 
                     // Set the new scroll position and content
@@ -439,6 +444,7 @@ public class MapView extends Application {
         detailText.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 18));
         detailText.setFill(Color.BLUE);
     }
+
     private void resetDetailText() {
         detailText.setText(viewController.getDetailText(selectedPain));
     }
@@ -648,20 +654,20 @@ public class MapView extends Application {
         GridPane pane = new GridPane();
         Text food = new Text();
         food.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(viewController.getCurrentKingdomFoodRate() > 0){
+        if (viewController.getCurrentKingdomFoodRate() > 0) {
             food.setText("food: " + "+" + viewController.getCurrentKingdomFoodRate() + " :)");
             food.setFill(Color.GREEN);
-        }else {
+        } else {
             food.setText("food: " + viewController.getCurrentKingdomFoodRate() + " :(");
             food.setFill(Color.RED);
         }
         hBox.getChildren().add(food);
         Text tax = new Text();
         tax.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(viewController.getCurrentKingdomTaxRate() > 0){
+        if (viewController.getCurrentKingdomTaxRate() > 0) {
             tax.setText("tax: " + "+" + viewController.getCurrentKingdomTaxRate() + " :)");
             tax.setFill(Color.GREEN);
-        }else {
+        } else {
             tax.setText("tax: " + viewController.getCurrentKingdomTaxRate() + " :(");
             tax.setFill(Color.RED);
         }
@@ -669,20 +675,20 @@ public class MapView extends Application {
         Text religion = new Text();
         religion.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
 
-        if(viewController.getCurrentKingdomReligiousPeople() > 0){
+        if (viewController.getCurrentKingdomReligiousPeople() > 0) {
             religion.setText("religion: " + "+" + viewController.getCurrentKingdomReligiousPeople() + " :)");
             religion.setFill(Color.GREEN);
-        }else {
+        } else {
             religion.setText("religion: " + viewController.getCurrentKingdomReligiousPeople() + " :(");
             religion.setFill(Color.RED);
         }
         hBox.getChildren().add(religion);
         Text population = new Text();
         population.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(viewController.getCurrentKingdomPopulation() > 0){
+        if (viewController.getCurrentKingdomPopulation() > 0) {
             population.setText("population: " + "+" + viewController.getCurrentKingdomPopulation() + " :)");
             population.setFill(Color.GREEN);
-        }else {
+        } else {
             population.setText("population: " + viewController.getCurrentKingdomPopulation() + " :(");
             population.setFill(Color.RED);
         }
@@ -693,10 +699,10 @@ public class MapView extends Application {
         HBox hBox1 = new HBox();
         Text fear = new Text();
         fear.setStyle("-fx-font-family: Garamond; -fx-font-size: 15px;");
-        if(viewController.getCurrentKingdomFearRate() > 0){
+        if (viewController.getCurrentKingdomFearRate() > 0) {
             fear.setText("fear: " + "+" + viewController.getCurrentKingdomFearRate() + " :)");
             fear.setFill(Color.GREEN);
-        }else {
+        } else {
             fear.setText("fear: " + viewController.getCurrentKingdomFearRate() + " :(");
             fear.setFill(Color.RED);
         }
@@ -712,20 +718,37 @@ public class MapView extends Application {
 
         return pane;
     }
-    public void repairBuilding(){
+
+    public void repairBuilding() {
         String respond = viewController.getBuildingControllerRepairText();
         Alert alert;
         if (respond.equals("this building is repaired!")) {
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("this building is repaired!");
             alert.show();
-        }else{
+        } else {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(respond);
             alert.show();
         }
     }
-    public void createUnit(){
 
+    public void createUnit() {
+
+    }
+
+    private void setUnitScrollPane() {
+        for (UnitType unitType : UnitType.values()) {
+            HBox unitHBox = new HBox();
+            unitHBox.setSpacing(10);
+            ImageView imageView = new ImageView(unitType.getImage());
+            imageView.setFitHeight(80);
+            imageView.setFitWidth(80);
+            unitHBox.getChildren().add(imageView);
+            unitScrollPane.setContent(unitHBox);
+
+            Tooltip tooltip = new Tooltip(unitType.name());
+            Tooltip.install(imageView, tooltip);
+        }
     }
 }
